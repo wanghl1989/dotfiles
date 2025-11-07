@@ -65,11 +65,11 @@ for item in "${ITEMS[@]}"; do
   echo "✅ 已创建软链接：$link_path → $source_path"
 done
 
-RIME_PATH=("$HOME/Library/Rime", "$HOME/.local/share/fcitx5/Rime")
+RIME_PATH=("$HOME/Library/Rime", "$HOME/.local/share/fcitx5/rime")
 
 for item in "$RIME_PATH[@]"; do
   if [ -d "$item" ]; then
-    echo "Rime path is $item"
+    echo "🔄  Rime 配置文件路径为: $item"
     rm -rf "$item"
     source_path="$SCRIPT_DIR/Rime"
     ln -sf "$source_path" "$item"
