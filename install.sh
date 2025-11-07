@@ -65,14 +65,16 @@ for item in "${ITEMS[@]}"; do
   echo "✅ 已创建软链接：$link_path → $source_path"
 done
 
-#  #  tmux link
-#  TMUX_SOURCE="$SCRIPT_DIR/tmux/tmux.conf"
-#  TMUX_TARGET="$DEST_DIR/.tmux.conf"
-#  if [ -e "$TMUX_TARGET" ]; then
-#    echo "🔄 替换旧软链接：$TMUX_TARGET"
-#    rm -f "$TMUX_TARGET"
-#  fi
-#  ln -sf "$SCRIPT_DIR" "$TMUX_TARGET"
-#  echo "✅ 已创建软链接：$TMUX_TARGET → $TMUX_SOURCE"
+RIME_PATH=("$HOME/Library/Rime", "$HOME/.local/share/fcitx5/Rime")
 
-echo -e "\n🎉 所有可处理的软链接创建完成！"n -sf ./starship.toml ~/.config/
+for item in "$RIME_PATH[@]"; do
+  if [ -d "$item" ]; then
+    echo "Rime path is $item"
+    rm -rf "$item"
+    source_path="$SCRIPT_DIR/Rime"
+    ln -sf "$source_path" "$item"
+    echo "✅ 已创建软链接：$item → $source_path"
+  fi
+done
+
+echo -e "\n🎉 所有可处理的软链接创建完成！"
