@@ -44,17 +44,3 @@ map("n", "<leader>md", ":delmarks ", { noremap = true, silent = true, desc = "De
 map("n", "<S-j>", function()
   vim.diagnostic.oepn_float()
 end, opts)
-
-map(
-  "n",
-  "<leader>ft",
-  ":ToggleTerm direction=horizontal<CR>",
-  { noremap = true, silent = true, desc = "Open horizontal terminal" }
-)
-map(
-  "n",
-  "<leader>vt",
-  ":ToggleTerm direction=vertical size=20<CR>",
-  { noremap = true, silent = true, desc = "Open verticle terminal" }
-)
-map("n", "<c-/>", ":ToggleTerm direction=float<CR>", { noremap = true, silent = true, desc = "Open float terminal" })
