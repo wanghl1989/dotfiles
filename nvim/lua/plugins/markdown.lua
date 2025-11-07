@@ -1,2 +1,9 @@
--- install without yarn or npm
-return {}
+-- For `plugins/markview.lua` users.
+return {
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+
+    -- Completion for `blink.cmp`
+  },
+}
