@@ -44,3 +44,7 @@ map("n", "<leader>md", ":delmarks ", { noremap = true, silent = true, desc = "De
 map("n", "<S-j>", function()
   vim.diagnostic.oepn_float()
 end, opts)
+
+map({ "n", "t" }, "<c-t>", function()
+  Snacks.terminal(nil, { cwd = LazyVim.root() })
+end, { desc = "Terminal (Root Dir)" })
