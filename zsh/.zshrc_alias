@@ -1,0 +1,21 @@
+
+# file
+alias df="duf"
+alias ls="ls -alF --color=auto"
+alias ll="lsd --header --long --git"
+alias nv="nvim"
+alias cat="bat"
+alias du="dust"
+
+# git 
+alias git-log="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "
+alias git-commit="git commit -m"
+alias git-add="git add -A"
+
+
+# kitty
+alias icat="kitten icat"
+alias kssh="kitten ssh"
+alias kdiff="kitten diff"
+
+alias nv="nvim"
