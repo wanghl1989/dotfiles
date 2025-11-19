@@ -12,7 +12,7 @@ SCRIPT_DIR=$(dirname $(dirname "$SCRIPT_PATH"))
 # 定义软链接的目标目录（~/.config/）
 DEST_DIR="$HOME"
 
-ITEMS=(".zshrc_plugin" ".zshrc_alias")
+ITEMS=(".zshrc_plugin" ".zshrc_alias" ".zshrc_images")
 
 ZSHRC_FILE="$HOME/.zshrc"
 

@@ -22,7 +22,16 @@ echo "✅ 已获取当前脚本所在目录：$SCRIPT_DIR"
 # --------------------------
 # 2. 定义文件
 # --------------------------
-ITEMS=("zed" "nvim" "kitty" "wezterm" "uv" "starship.toml", "tmux", "ghostty")
+
+os_kernel=$(uname -s)
+
+ITEMS=("zed" "nvim" "kitty" "wezterm" "uv" "starship.toml" "tmux" "ghostty" "lazygit" "bat" "yazi" "newsboat")
+if [ "$os_kernel" = "Darwin" ]; then
+  echo " 当前系统是 macOS"
+  ITEMS+=("aerospace")
+else
+  echo " 当前系统是 Linux"
+fi
 
 # 定义软链接的目标目录（~/.config/）
 DEST_DIR="$HOME/.config"
