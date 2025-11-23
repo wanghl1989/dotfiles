@@ -16,11 +16,12 @@ map("i", "<A-k>", "", { desc = "" })
 map("v", "<A-j>", "", { desc = "Move Down" })
 map("v", "<A-k>", "", { desc = "Move Up" })
 -- safe file and quit
-map("n", "<Leader>wb", ":update<Return>", { noremap = true, silent = true, desc = "Save windows" })
+map("n", "<Leader>ww", ":update<Return>", { noremap = true, silent = true, desc = "Save windows" })
 map("n", "<Leader>wc", "<C-W>w", { noremap = true, silent = true, desc = "Switch windows" })
 map("n", "<leader>q", function()
   Snacks.bufdelete()
 end, { desc = "Delete Buffer" })
+
 map("n", "<Leader>Q", ":qa<Return>", opts)
 
 map("n", "gl", "$", opts)
@@ -52,3 +53,6 @@ end, { desc = "Terminal (Root Dir)" })
 map("n", "<leader>fH", function()
   Snacks.picker.help()
 end, { noremap = true, silent = true, desc = "Show help." })
+
+map({ "n", "v" }, "<leader>yy", [["+y]], { noremap = true, desc = "Copy to clipboard" })
+map({ "n", "v" }, "<leader>yl", [["+Y]], { noremap = true, desc = "Copy lines to clipboard" })
