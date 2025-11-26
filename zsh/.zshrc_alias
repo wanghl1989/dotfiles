@@ -1,11 +1,29 @@
 
 # file
-alias df="duf"
-alias ls="ls -alF --color=auto"
-alias ll="lsd --header --long --git"
-alias nv="nvim"
-alias cat="bat"
-alias du="dust"
+
+if command -v duf &> /dev/null; then
+  alias df="duf"
+fi
+
+if command -v lsd &> /dev/null; then
+  alias ls="lsd"
+  alias ll="lsd --header --long --git"
+else
+  alias ls="ls --color=auto"
+  alias ll="ls -alF --color=auto"
+fi
+
+if command -v nvim &> /dev/null; then
+  alias vim="nvim"
+fi
+
+if command -v bat &> /dev/null; then
+  alias cat="bat"
+fi
+
+if command -v dust &> /dev/null; then
+  alias du="dust"
+fi
 
 # git 
 alias git-log="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "
@@ -18,4 +36,3 @@ alias icat="kitten icat"
 alias kssh="kitten ssh"
 alias kdiff="kitten diff"
 
-alias nv="nvim"
