@@ -178,6 +178,8 @@ down = 'volume down'
 up = 'volume up'
 shift-down = ['volume set 0', 'mode main']
 
+cmd-q  = ['close --quit-if-last-window', 'mode main']
+
 [[on-window-detected]]
 if.app-id = 'net.kovidgoyal.kitty'
 run = 'move-node-to-workspace 1'
