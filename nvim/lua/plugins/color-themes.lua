@@ -6,19 +6,19 @@ return {
   --   opts = {},
   -- },
   {
-    "folke/tokyonight.nvim",
+    "scottmckendry/cyberdream.nvim",
+    lazy = false,
+    priority = 1000,
     opts = {
       transparent = true,
-      styles = {
-        sidebars = "transparent",
-        floats = "transparent",
-      },
+      saturation = 1,
+      terminal_color = false,
     },
   },
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "tokyonight",
+      colorscheme = "cyberdream",
     },
   },
 }

@@ -35,8 +35,8 @@ gui:
       - ⣟
       - ⣯
       - ⣷
-# os:
-#   editPreset: "nvim-remote"
+os:
+  editPreset: "nvim-remote"
 # promptToReturnFromSubprocess:
 #   false
 # universal:
