@@ -1,7 +1,8 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+
 format = """
-[](red)\
+[░▒▓](red)\
 $os\
 $username\
 [](bg:peach fg:red)\
@@ -16,21 +17,30 @@ $rust\
 $golang\
 $nodejs\
 $java\
-$kotlin\
+$docker_context\
 $python\
 [](fg:green bg:sapphire)\
 $conda\
 [](fg:sapphire bg:lavender)\
-[ ](fg:lavender)\
-$cmd_duration\
+[](fg:lavender)\
 $line_break\
-$character"""
+$cmd_duration\
+$character
+"""
+
+# right_format = """
+# $cmd_duration\
+# $time
+# """
+add_newline = true
 
 palette = 'catppuccin_mocha'
+
 
 [os]
 disabled = false
 style = "bg:red fg:crust"
+format = "[ $symbol ]($style)"
 
 [os.symbols]
 Windows = ""
@@ -57,13 +67,17 @@ RedHatEnterprise = "󱄛"
 show_always = true
 style_user = "bg:red fg:crust"
 style_root = "bg:red fg:crust"
-format = '[ $user]($style)'
+format = '[ $user ]($style)'
 
 [directory]
 style = "bg:peach fg:crust"
-format = "[ $path ]($style)"
-truncation_length = 3
+# format = "[ $path ]($style)"
+read_only = "  "
+truncation_length = 6
 truncation_symbol = "…/"
+home_symbol = " "
+
+format = "($style)[$read_only]($read_only_style)[ $path ]($style)"
 
 [directory.substitutions]
 "Documents" = "󰈙 "
@@ -154,6 +168,7 @@ vimcmd_symbol = '[❮](bold fg:green)'
 vimcmd_replace_one_symbol = '[❮](bold fg:lavender)'
 vimcmd_replace_symbol = '[❮](bold fg:lavender)'
 vimcmd_visual_symbol = '[❮](bold fg:yellow)'
+format = '[ $symbol ]($style)'
 
 [cmd_duration]
 show_milliseconds = true

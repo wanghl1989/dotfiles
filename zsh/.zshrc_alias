@@ -40,3 +40,9 @@ alias icat="kitten icat"
 alias kssh="kitten ssh"
 alias kdiff="kitten diff"
 
+# default app
+export EDITOR=nvim visudo
+export VISUAL=nvim visudo
+export SUDO_EDITOR=nvim
+export FCEDIT=nvim
+export TERMINAL=kitty

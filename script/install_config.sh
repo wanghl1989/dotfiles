@@ -25,7 +25,7 @@ echo "✅ 已获取当前脚本所在目录：$SCRIPT_DIR"
 
 os_kernel=$(uname -s)
 
-ITEMS=("zed" "nvim" "kitty" "wezterm" "uv" "starship.toml" "tmux" "ghostty" "lazygit" "bat" "yazi" "btop")
+ITEMS=("zed" "nvim" "kitty" "wezterm" "uv" "starship.toml" "tmux" "ghostty" "lazygit" "bat" "yazi" "btop" "atuin")
 if [ "$os_kernel" = "Darwin" ]; then
   echo " 当前系统是 macOS"
   ITEMS+=("aerospace")
