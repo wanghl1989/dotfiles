@@ -4,3 +4,4 @@
 local opt = vim.opt
 vim.g.lazyvim_python_lsp = "basedpyright"
 
+opt.wrap = true

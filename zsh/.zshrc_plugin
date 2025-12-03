@@ -40,7 +40,30 @@ zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
 zinit light Aloxaf/fzf-tab
 
+zinit load ellie/atuin
+
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#82AAFF,bold,underline"
 
 # 补全快捷键重设
-bindkey ',' autosuggest-accept
+bindkey -v # Enable Vi Key binding
+bindkey '^Y' autosuggest-accept #Ctrl+Y accept
+bindkey '^P' up-line-or-search #Ctrl+P select next
+bindkey '^N' down-line-or-search #Ctrl+N select previous
+
+# add snippet
+zinit snippet OMZP::git
+zinit snippet OMZP::sudo
+zinit snippet OMZP::command-not-found
+
+#zsh basic option
+setopt autocd # change directory just typing its name
+setopt correct # auto correct mistake
+setopt interactivecomments # allow comments in interactive mode
+setopt magicequalsubst # enable filename expansion for arguments of the form 'anything=expression'
+setopt nonomatch # hide error message if there is no match for the pattern
+setopt notify # report the status of background job immediately
+setopt promptsubst # enable command subsition in prompt
+setopt extendedglob # 启用扩展通配符
+
+
+

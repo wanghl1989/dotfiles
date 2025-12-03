@@ -29,6 +29,9 @@ brew install dust
 # duf: https://github.com/muesli/duf
 brew install duf
 
+# autin: https://github.com/atuinsh/atuin
+brew install atuin
+
 # others
 brew install neovim tmux ffmpeg git clangd
 
