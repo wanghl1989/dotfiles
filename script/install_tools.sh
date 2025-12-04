@@ -32,8 +32,14 @@ brew install duf
 # autin: https://github.com/atuinsh/atuin
 brew install atuin
 
+# lazydocker: https://github.com/jesseduffield/lazydocker
+brew install jesseduffield/lazydocker/lazydocker
+
+# lazyssh: https://github.com/Adembc/lazyssh
+brew install Adembc/homebrew-tap/lazyssh
+
 # others
-brew install neovim tmux ffmpeg git clangd
+brew install neovim tmux ffmpeg git clangd trash-cli
 
 # starship
 curl -sS https://starship.rs/install.sh | sh
