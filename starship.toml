@@ -22,16 +22,15 @@ $python\
 [](fg:green bg:sapphire)\
 $conda\
 [](fg:sapphire bg:lavender)\
+$time\
 [](fg:lavender)\
 $line_break\
-$cmd_duration\
 $character
 """
 
-# right_format = """
-# $cmd_duration\
-# $time
-# """
+right_format = """
+$cmd_duration
+"""
 add_newline = true
 
 palette = 'catppuccin_mocha'
@@ -172,11 +171,12 @@ format = '[ $symbol ]($style)'
 
 [cmd_duration]
 show_milliseconds = true
-format = " in $duration "
+format = "  in $duration "
 style = "bg:lavender"
 disabled = false
 show_notifications = true
 min_time_to_notify = 45000
+
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
