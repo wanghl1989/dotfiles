@@ -20,7 +20,7 @@ update_check = false
 
 style = "compact"
 
-invert = true
+invert = false
 
 #The initial keymap mode of the interactive Atuin search (e.g. started by the keybindings in the shells). There are four supported values: "emacs", "vim-normal", "vim-insert", and "auto". The keymap mode "emacs" is the most basic one. In the keymap mode "vim-normal", you may use k and j to navigate the history list as in Vim, whilst pressing
 keymap_mode = "vim-normal"

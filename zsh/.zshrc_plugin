@@ -36,13 +36,33 @@ zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma/fast-syntax-highlighting
 
+if command -v fzf &> /dev/null; then
+  zinit light Aloxaf/fzf-tab
+fi
+
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
-zinit light Aloxaf/fzf-tab
 
-zinit load ellie/atuin
 
+function atuin_init() {
+  eval "$(atuin init zsh --disable-up-arrow)"
+}
+
+
+
+
+
+# some config
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#82AAFF,bold,underline"
+
+# zsh-vi-mode use system clipboard
+ZVM_SYSTEM_CLIPBOARD_ENABLED=true
+ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
+ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+if command -v atuin &> /dev/null; then
+  zvm_after_init_commands+=(atuin_init)
+fi
+
 
 # 补全快捷键重设
 bindkey -v # Enable Vi Key binding
@@ -63,7 +83,6 @@ setopt magicequalsubst # enable filename expansion for arguments of the form 'an
 setopt nonomatch # hide error message if there is no match for the pattern
 setopt notify # report the status of background job immediately
 setopt promptsubst # enable command subsition in prompt
-setopt extendedglob # 启用扩展通配符
 
 
 
