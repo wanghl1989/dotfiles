@@ -49,11 +49,6 @@ brew install dust
 echo ">>>>>>>>>> Install duf"
 brew install duf
 
-# autin: https://github.com/atuinsh/atuin
-echo ">>>>>>>>>> Install autin"
-brew install atuin
-echo 'eval "$(autin init zsh)"' >>~/.zshrc
-
 # lazydocker: https://github.com/jesseduffield/lazydocker
 echo ">>>>>>>>>> Install lazydocker"
 brew install jesseduffield/lazydocker/lazydocker
