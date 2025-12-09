@@ -34,7 +34,7 @@ if command -v trash &> /dev/null; then
   alias rm='trash'
 fi
 
-# git 
+# git
 alias git-log="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "
 alias git-commit="git commit -m"
 alias git-add="git add -A"
@@ -44,6 +44,12 @@ alias git-add="git add -A"
 alias icat="kitten icat"
 alias kssh="kitten ssh"
 alias kdiff="kitten diff"
+
+# tmux 
+alias ta="tmux attach"
+alias tks="tmux kill-session"
+alias tkl="tmux list-session"
+
 
 # default app
 export EDITOR=nvim visudo

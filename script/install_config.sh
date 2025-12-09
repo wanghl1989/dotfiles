@@ -25,7 +25,7 @@ echo "✅ 已获取当前脚本所在目录：$SCRIPT_DIR"
 
 os_kernel=$(uname -s)
 
-ITEMS=("zed" "nvim" "kitty" "wezterm" "uv" "starship.toml" "tmux" "ghostty" "lazygit" "bat" "yazi" "btop")
+ITEMS=("zed" "nvim" "kitty" "wezterm" "uv" "starship.toml" "tmux" "ghostty" "lazygit" "bat" "yazi" "btop" "lazydocker" "lsd")
 if [ "$os_kernel" = "Darwin" ]; then
   echo " 当前系统是 macOS"
   ITEMS+=("aerospace")
@@ -81,5 +81,10 @@ for item in "$RIME_PATH[@]"; do
     echo "✅ 已创建软链接：$item → $source_path"
   fi
 done
+
+if command -v fzf &>/dev/null; then
+  echo "构建batcat theme"
+  bat cache --build
+fi
 
 echo -e "\n🎉 所有可处理的软链接创建完成！"
