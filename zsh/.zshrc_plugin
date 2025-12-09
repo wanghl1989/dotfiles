@@ -47,11 +47,6 @@ zinit light jeffreytse/zsh-vi-mode
 
 
 
-
-
-
-
-
 # some config
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#82AAFF,bold,underline"
 
@@ -75,7 +70,7 @@ zinit snippet OMZP::command-not-found
 
 #zsh basic option
 setopt autocd # change directory just typing its name
-setopt correct # auto correct mistake
+# setopt correct # auto correct mistake
 setopt interactivecomments # allow comments in interactive mode
 setopt magicequalsubst # enable filename expansion for arguments of the form 'anything=expression'
 setopt nonomatch # hide error message if there is no match for the pattern
