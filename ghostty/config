@@ -1,12 +1,16 @@
-theme = Catppuccin Mocha
+theme = hackerman.conf
 background-blur = 20
 
 window-padding-x = 10
 window-padding-y = 10
 window-padding-balance = true
 
-font-family = FiraCode Nerd Font Mono
+font-family = GoogleSansCode Nerd Font Mono
+
 font-size = 13
+
+background-opacity = 0.8
+background-blur = 20
 
 clipboard-write=allow
 
