@@ -42,6 +42,13 @@ if command -v fzf &> /dev/null; then
   zinit light joshskidmore/zsh-fzf-history-search
 fi
 
+# 补全快捷键重设
+bindkey -v # Enable Vi Key binding
+bindkey '^P' up-line-or-search #Ctrl+P select next
+bindkey '^N' down-line-or-search #Ctrl+N select previous
+ 
+
+
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
 
@@ -55,13 +62,15 @@ ZVM_SYSTEM_CLIPBOARD_ENABLED=true
 ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
 ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
 
+function after_zvm_init() {
+  [ -f ~/.fzf ] && source ~/.fzf
+  bindkey '^Y' autosuggest-accept #Ctrl+Y accept
+}
 
 
-# 补全快捷键重设
-bindkey -v # Enable Vi Key binding
-bindkey '^Y' autosuggest-accept #Ctrl+Y accept
-bindkey '^P' up-line-or-search #Ctrl+P select next
-bindkey '^N' down-line-or-search #Ctrl+N select previous
+zvm_after_init_commands+=(after_zvm_init)
+
+
 
 # add snippet
 zinit snippet OMZP::git

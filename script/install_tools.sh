@@ -27,6 +27,7 @@ brew install fd
 # yazi:  https://yazi-rs.github.io/docs/installation
 echo ">>>>>>>>>> Install yazi"
 brew install yazi ffmpeg sevenzip jq poppler fd ripgrep fzf zoxide resvg imagemagick font-symbols-only-nerd-font
+echo 'source <(fzf --zsh)' >>~/.zshrc
 
 # lazygit: https://github.com/jesseduffield/lazygit#debian-and-ubuntu
 echo ">>>>>>>>>> Install lazygit"
