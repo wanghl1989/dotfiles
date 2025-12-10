@@ -33,6 +33,10 @@ return {
         },
       },
       sources = {
+        files = {
+          hidden = true,
+          ignored = false,
+        },
         explorer = {
           ignored = true,
         },
@@ -67,7 +71,7 @@ return {
           Snacks.notifier.show_history()
         end
       end,
-      desc = "Notification History"
+      desc = "Notification History",
     },
     {
       "<C-p>",
