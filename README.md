@@ -1,12 +1,32 @@
 ## Usage
 
-1. git clone this repo
-2. creat soft link to `~/.config/` by using `install.sh`
+this project is for storing my basic dev config of bundle of mordern tools
 
-```shell
-sudo chmod +x install.sh
-./install.sh
-```
+steps:
+
+1. clone this project
+2. run `script/install_tools.sh` to install `homebrew`, and several tools i use.
+3. run `install.sh` only set configs,
+
+script only test in Macos and Ubuntu,
+
+## tools
+
+- neovim: use LazyVim for basic configure package
+- starship: terminal prompt
+- tmux: use `tpm` for plugin management
+- zsh: use `zinit` for plugin management
+- lsd: better `ls` command
+- zxoide: better `cd` command
+- lazygit and lazydocker: tui tool for git and docker
+- btop: terminal monitor
+- dust: better `df` command
+- ripgrep: better `grep` command
+- yazi: tui file explorer
+- Rime: chinese input method
+- kitty: terminal emulator
+- ghossty: terminal emulator
+- zed: modern code editor
 
 ## issue
 
