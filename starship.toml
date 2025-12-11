@@ -1,80 +1,66 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
+$os\
 $directory\
 $git_branch\
 $git_status\
 $git_commit\
+$package\
 $c\
+$cpp\
 $rust\
 $golang\
 $nodejs\
-$php\
-$java\
-$kotlin\
-$haskell\
 $python\
 $conda\
+$docker_context\
 $character"""
 
-
-[aws]
-symbol = "  "
-
-[buf]
-symbol = " "
+[username]
+disabled = true
+format = '[$user]($style) '
+show_always = false
 
 [bun]
 symbol = " "
 
 [c]
 symbol = " "
+format = '[$symbol($version(-$name) )]($style)'
 
 [cpp]
 symbol = " "
+format = '[$symbol($version(-$name) )]($style)'
+
 
 [cmake]
 symbol = " "
+format = '[$symbol($version )]($style)'
 
 [conda]
-symbol = " "
+symbol = " "
+format = '[$symbol$environment]($style) '
 
-[crystal]
-symbol = " "
-
-[dart]
-symbol = " "
 
 [deno]
 symbol = " "
 
-# [directory]
+[directory]
 # read_only = "[󰌾]"
 # home_symbol = ""
 # truncation_length = 3
 # truncation_symbol = ""
-# format = "[$path]($style)[$read_only]($read_only_style) "
+format = "[$path]($style) "
 
 [docker_context]
 symbol = " "
+format = '[$symbol$context]($style) '
 
-[elixir]
-symbol = " "
-
-[elm]
-symbol = " "
-
-[fennel]
-symbol = " "
-
-[fossil_branch]
-symbol = " "
-
-[gcloud]
-symbol = "  "
 
 [git_branch]
-symbol = ""
+symbol = " "
+format = '[$symbol$branch(:$remote_branch)]($style) '
 # format = '[ $symbol $branch]($style)'
 
 [git_status]
@@ -85,6 +71,7 @@ tag_symbol = '  '
 
 [golang]
 symbol = " "
+format = '[$symbol($version )]($style)'
 
 [guix_shell]
 symbol = " "
@@ -116,23 +103,18 @@ symbol = " "
 [memory_usage]
 symbol = "󰍛 "
 
-[meson]
-symbol = "󰔷 "
-
-[nim]
-symbol = "󰆥 "
 
 [nix_shell]
 symbol = " "
 
 [nodejs]
 symbol = " "
+format = '[$symbol($version )]($style)'
 
-[ocaml]
-symbol = " "
 
 [os]
 disabled = false
+format = '[$symbol]($style)'
 
 [os.symbols]
 Alpaquita = " "
@@ -183,42 +165,20 @@ Windows = "󰍲 "
 
 [package]
 symbol = "󰏗 "
+format = '[$symbol$version]($style) '
 
-[perl]
-symbol = " "
-
-[php]
-symbol = " "
-
-[pijul_channel]
-symbol = " "
-
-[pixi]
-symbol = "󰏗 "
 
 [python]
 symbol = " "
-
-[rlang]
-symbol = "󰟔 "
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 
 [ruby]
 symbol = " "
 
 [rust]
 symbol = "󱘗 "
+format = '[$symbol($version )]($style)'
 
-[scala]
-symbol = " "
-
-[swift]
-symbol = " "
-
-[zig]
-symbol = " "
-
-[gradle]
-symbol = " "
 
 [character]
 disabled = false

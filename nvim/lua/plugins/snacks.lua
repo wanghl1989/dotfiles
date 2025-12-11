@@ -73,12 +73,5 @@ return {
       end,
       desc = "Notification History",
     },
-    {
-      "<C-p>",
-      function()
-        Snacks.picker.files({ hidden = true })
-      end,
-      desc = "Find Files (Root Dir)",
-    },
   },
 }

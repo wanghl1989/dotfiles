@@ -18,7 +18,7 @@ map("v", "<A-k>", "", { desc = "Move Up" })
 -- safe file and quit
 map("n", "<Leader>ww", ":update<Return>", { noremap = true, silent = true, desc = "Save windows" })
 map("n", "<Leader>wc", "<C-W>w", { noremap = true, silent = true, desc = "Switch windows" })
-map("n", "<leader>q", function()
+map("n", "<leader>wq", function()
   Snacks.bufdelete()
 end, { desc = "Delete Buffer" })
 
