@@ -1,3 +1,23 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$git_commit\
+$c\
+$rust\
+$golang\
+$nodejs\
+$php\
+$java\
+$kotlin\
+$haskell\
+$python\
+$conda\
+$character"""
+
+
 [aws]
 symbol = "  "
 
@@ -28,8 +48,12 @@ symbol = " "
 [deno]
 symbol = " "
 
-[directory]
-read_only = " 󰌾"
+# [directory]
+# read_only = "[󰌾]"
+# home_symbol = ""
+# truncation_length = 3
+# truncation_symbol = ""
+# format = "[$path]($style)[$read_only]($read_only_style) "
 
 [docker_context]
 symbol = " "
@@ -50,7 +74,11 @@ symbol = " "
 symbol = "  "
 
 [git_branch]
-symbol = " "
+symbol = ""
+# format = '[ $symbol $branch]($style)'
+
+[git_status]
+# format = '[\[($all_status$ahead_behind)\]]($style)'
 
 [git_commit]
 tag_symbol = '  '
@@ -102,6 +130,9 @@ symbol = " "
 
 [ocaml]
 symbol = " "
+
+[os]
+disabled = false
 
 [os.symbols]
 Alpaquita = " "
@@ -188,3 +219,13 @@ symbol = " "
 
 [gradle]
 symbol = " "
+
+[character]
+disabled = false
+# format = ' $symbol '
+# success_symbol = '[](bold green) '
+# error_symbol = '[](bold red) '
+# vimcmd_symbol = '[](bold green)'
+# vimcmd_replace_one_symbol = '[](bold purple)'
+# vimcmd_replace_symbol = '[](bold purple)'
+# vimcmd_visual_symbol = '[](bold yellow)'

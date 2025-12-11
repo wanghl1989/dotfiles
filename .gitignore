@@ -1,12 +1,11 @@
 .vscode
+.marscode
 Rime/user.yaml
 Rime/easy_en.userdb
 Rime/luna_pinyin.userdb
 Rime/easy_en.userdb/*
 Rime/luna_pinyin.userdb/*
-.marscode
 btop/btop.conf
 
 tmux/plugins
 auin/atuin-receipt.json
-.marscode

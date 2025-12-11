@@ -7,7 +7,7 @@ fi
 
 if command -v lsd &> /dev/null; then
   alias ls="lsd"
-  alias ll="lsd --long --git"
+  alias ll="lsd -l -h -a"
 else
   alias ls="ls --color=auto"
   alias ll="ls -alF --color=auto"
