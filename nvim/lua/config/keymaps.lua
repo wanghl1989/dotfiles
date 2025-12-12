@@ -46,10 +46,6 @@ map("n", "<S-j>", function()
   vim.diagnostic.oepn_float()
 end, opts)
 
-map({ "n", "t" }, "<c-t>", function()
-  Snacks.terminal(nil, { cwd = LazyVim.root() })
-end, { desc = "Terminal (Root Dir)" })
-
 map("n", "<leader>fH", function()
   Snacks.picker.help()
 end, { noremap = true, silent = true, desc = "Show help." })
