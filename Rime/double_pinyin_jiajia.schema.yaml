@@ -15,13 +15,13 @@
 
 # 方案说明
 schema:
-  schema_id: double_pinyin_flypy
-  name: 小鹤双拼
+  schema_id: double_pinyin_jiajia
+  name: 拼音加加双拼
   version: "1"
   author:
-    - Dvel
+    - Owen
   description: |
-    雾凇拼音 - 小鹤双拼
+    雾凇拼音 - 拼音加加双拼
     https://github.com/iDvel/rime-ice
   dependencies:
     - melt_eng        # 英文输入，作为次翻译器挂载到拼音方案
@@ -126,7 +126,7 @@ reduce_english_filter:
   # 自定义的单词列表，示例列表没有降低部分常用单词，如 and cat mail Mac but bad shit ……
   words: [
     aid, ann,
-    bail, bait, bam, band, bans, bat, bay, bend, bent, benz, bib, bid, bien, biz, boc, bop, bos, bud, buf, bach, bench, bush,
+    bail, bait, bam, band, bans, bat, bay, bend, bent, bib, bid, bien, biz, boc, bop, bos, bud, buf, bach, bench, bush,
     cab, cad, cain, cam, cans, cap, cef, chad, chan, chap, chef, cher, chew, chic, chin, chip, chit, coup, cum, cunt, cur, couch,
     dab, dag, dal, dam, dent, dew, dial, diet, dim, din, dip, dis, dit, doug, dub, dug, dunn,
     fab, fax, fob, fog, foul, fur,
@@ -158,7 +158,7 @@ pin_cand_filter:
 translator:
   dictionary: rime_ice          # 挂载词库 rime_ice.dict.yaml
   enable_word_completion: true  # 大于 4 音节的词条自动补全，librime > 1.11.2
-  prism: double_pinyin_flypy    # 多方案共用一个词库时，为避免冲突，需要用 prism 指定一个名字。
+  prism: double_pinyin_jiajia   # 多方案共用一个词库时，为避免冲突，需要用 prism 指定一个名字。
   spelling_hints: 8             # corrector.lua ：为了让错音错字提示的 Lua 同时适配全拼双拼，将拼音显示在 comment 中
   always_show_comments: true    # corrector.lua ：Rime 默认在 preedit 等于 comment 时取消显示 comment，这里强制一直显示，供 corrector.lua 做判断用。
   initial_quality: 1.2          # 拼音的权重应该比英文大
@@ -166,39 +166,41 @@ translator:
     - xform/^/［/
     - xform/$/］/
   preedit_format:               # preedit_format 影响到输入框的显示和“Shift+回车”上屏的字符
-    - xform/(^|[ '])aa/$1a/
-    - xform/(^|[ '])ee/$1e/
-    - xform/(^|[ '])oo/$1o/
-    - xform/([bpmfdtnljqx])n/$1iao/
-    - xform/(\w)g/$1eng/
-    - xform/(\w)q/$1iu/
-    - xform/(\w)w/$1ei/
-    - xform/([dtnlgkhjqxyvuirzcs])r/$1uan/
-    - xform/(\w)t/$1ve/
-    - xform/(\w)y/$1un/
-    - xform/([dtnlgkhvuirzcs])o/$1uo/
-    - xform/(\w)p/$1ie/
-    - xform/([jqx])s/$1iong/
-    - xform/(\w)s/$1ong/
-    - xform/(\w)d/$1ai/
-    - xform/(\w)f/$1en/
-    - xform/(\w)h/$1ang/
-    - xform/(\w)j/$1an/
-    - xform/([gkhvuirzcs])k/$1uai/
-    - xform/(\w)k/$1ing/
-    - xform/([jqxnlb])l/$1iang/
-    - xform/(\w)l/$1uang/
-    - xform/(\w)z/$1ou/
-    - xform/([gkhvuirzcs])x/$1ua/
-    - xform/(\w)x/$1ia/
-    - xform/(\w)c/$1ao/
-    - xform/([dtgkhvuirzcs])v/$1ui/
-    - xform/(\w)b/$1in/
-    - xform/(\w)m/$1ian/
-    - xform/([aoe])\1(\w)/$1$2/
+    - xform/([aoe])(\w)/0$2/
+    - xform/([bpmnljqxy])l/$1𝐼𝑁/
+    - xform/(\w)t/$1𝐸𝑁𝐺/
+    - xform/(\w)n/$1𝐼𝑈/
+    - xform/([gkhvuirzcs])b/$1𝑈𝐴/
+    - xform/(\w)b/$1𝐼𝐴/
+    - xform/([dtnlgkhjqxyvuirzcs])c/$1𝑈𝐴𝑁/
+    - xform/0r/𝐸𝑅/
+    - xform/([dtgkhvuirzcs])v/$1𝑈𝐼/
+    - xform/(\w)v/$1𝑉/
+    - xform/([gkhvuirzcs])x/$1𝑈𝐴𝐼/
+    - xform/(\w)x/$1𝑉𝐸/
+    - xform/([dtnlgkhvuirzcs])o/$1𝑈𝑂/
+    - xform/(\w)z/$1𝑈𝑁/
+    - xform/([jqx])y/$1𝐼𝑂𝑁𝐺/
+    - xform/(\w)y/$1𝑂𝑁𝐺/
+    - xform/([jqxnlb])h/$1𝐼𝐴𝑁𝐺/
+    - xform/(\w)h/$1𝑈𝐴𝑁𝐺/
+    - xform/(\w)r/$1𝐸𝑁/
+    - xform/(\w)g/$1𝐴𝑁𝐺/
+    - xform/(\w)f/$1𝐴𝑁/
+    - xform/(\w)d/$1𝐴𝑂/
+    - xform/(\w)s/$1𝐴𝐼/
+    - xform/(\w)w/$1𝐸𝐼/
+    - xform/(\w)m/$1𝐼𝐸/
+    - xform/(\w)k/$1𝐼𝐴𝑂/
+    - xform/(\w)p/$1𝑂𝑈/
+    - xform/(\w)j/$1𝐼𝐴𝑁/
+    - xform/(0)q/$1𝐸𝑅/
+    - xform/(\w)q/$1𝐼𝑁𝐺/
+    - xform/0(\w)/$1/
+    - xlit/𝑄𝑊𝑅𝑇𝑌𝑈𝐼𝑂𝑃𝑆𝐷𝐹𝐺𝐻𝑀𝐽𝐶𝐾𝐿𝑍𝑋𝑉𝐵𝑁𝐴𝐸𝐼𝑂𝑈/qwrtyuiopsdfghmjcklzxvbnaeiou/
     - "xform/(^|[ '])v/$1zh/"
-    - "xform/(^|[ '])i/$1ch/"
-    - "xform/(^|[ '])u/$1sh/"
+    - "xform/(^|[ '])u/$1ch/"
+    - "xform/(^|[ '])i/$1sh/"
     - xform/([jqxy])v/$1u/
     - xform/([nl])v/$1ü/
     - xform/ü/v/  # ü 显示为 v
@@ -218,7 +220,7 @@ melt_eng:
 # 中英混合词汇
 cn_en:
   dictionary: ""
-  user_dict: en_dicts/cn_en_flypy
+  user_dict: en_dicts/cn_en_jiajia
   db_class: stabledb
   enable_completion: true
   enable_sentence: false
@@ -332,32 +334,32 @@ speller:
   algebra:
     - erase/^xx$/
     - derive/^([jqxy])u$/$1v/
-    - derive/^([aoe])([ioun])$/$1$1$2/
-    - xform/^([aoe])(ng)?$/$1$1$2/
-    - xform/iu$/Ⓠ/
-    - xform/(.)ei$/$1Ⓦ/
-    - xform/uan$/Ⓡ/
-    - xform/[uv]e$/Ⓣ/
-    - xform/un$/Ⓨ/
-    - xform/^sh/Ⓤ/
-    - xform/^ch/Ⓘ/
+    - derive/^([aoe].*)$/o$1/
+    - xform/^([ae])(.*)$/$1$1$2/
+    - xform/iu$/Ⓝ/
+    - xform/[iu]a$/Ⓑ/
+    - xform/er$|ing$/Ⓠ/
+    - xform/[uv]an$/Ⓒ/
+    - xform/[uv]e$|uai$/Ⓧ/
+    - xform/^sh/Ⓘ/
+    - xform/^ch/Ⓤ/
     - xform/^zh/Ⓥ/
     - xform/uo$/Ⓞ/
-    - xform/ie$/Ⓟ/
-    - xform/(.)i?ong$/$1Ⓢ/
-    - xform/ing$|uai$/Ⓚ/
-    - xform/(.)ai$/$1Ⓓ/
-    - xform/(.)en$/$1Ⓕ/
-    - xform/(.)eng$/$1Ⓖ/
-    - xform/[iu]ang$/Ⓛ/
-    - xform/(.)ang$/$1Ⓗ/
-    - xform/ian$/Ⓜ/
-    - xform/(.)an$/$1Ⓙ/
-    - xform/(.)ou$/$1Ⓩ/
-    - xform/[iu]a$/Ⓧ/
-    - xform/iao$/Ⓝ/
-    - xform/(.)ao$/$1Ⓒ/
+    - xform/[uv]n$/Ⓩ/
+    - xform/i?ong$/Ⓨ/
+    - xform/[iu]ang$/Ⓗ/
+    - xform/(.)en$/$1Ⓡ/
+    - xform/(.)eng$/$1Ⓣ/
+    - xform/(.)ang$/$1Ⓖ/
+    - xform/ian$/Ⓙ/
+    - xform/(.)an$/$1Ⓕ/
+    - xform/iao$/Ⓚ/
+    - xform/(.)ao$/$1Ⓓ/
+    - xform/(.)ai$/$1Ⓢ/
+    - xform/(.)ei$/$1Ⓦ/
+    - xform/ie$/Ⓜ/
     - xform/ui$/Ⓥ/
-    - xform/in$/Ⓑ/
-    - xlit/ⓆⓌⓇⓉⓎⓊⒾⓄⓅⓈⒹⒻⒼⒽⒿⓀⓁⓏⓍⒸⓋⒷⓃⓂ/qwrtyuiopsdfghjklzxcvbnm/
+    - xform/(.)ou$/$1Ⓟ/
+    - xform/in$/Ⓛ/
+    - xlit/ⓆⓌⓇⓉⓎⓊⒾⓄⓅⓈⒹⒻⒼⒽⓂⒿⒸⓀⓁⓏⓍⓋⒷⓃ/qwrtyuiopsdfghmjcklzxvbn/
     # - abbrev/^(.).+$/$1/  # 首字母简拼，开启后会导致 3 个字母时 kj'x 变成 k'jx 的问题
