@@ -1,6 +1,8 @@
-build
-sync
-easy_en.userdb
-luna_pinyin.userdb
-user.yaml
-installation.yaml
+.DS_Store
+**/.idea/
+.vscode/
+dist/
+
+build/
+sync/
+*.userdb/
