@@ -6,7 +6,12 @@ $os\
 $directory\
 $git_branch\
 $git_status\
-$git_commit\
+$git_commit\n\
+[ └─](bold green)\
+$character"""
+
+right_format = """
+$cmd_duration\
 $package\
 $c\
 $cpp\
@@ -16,11 +21,6 @@ $nodejs\
 $python\
 $conda\
 $docker_context\n\
-[ └─](bold green)\
-$character"""
-
-right_format = """
-$cmd_duration\
 $time\
 """
 
