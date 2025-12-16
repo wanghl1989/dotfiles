@@ -1,8 +1,10 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
+[\\[](fg:#4fe88f)\
 $os\
 $directory\
+[\\] ](fg:#4fe88f)\
 $git_branch\
 $git_status\
 $git_commit\
@@ -16,6 +18,10 @@ $python\
 $conda\
 $docker_context\
 $character"""
+
+right_format = """
+$cmd_duration\
+""""
 
 [username]
 disabled = true
@@ -51,7 +57,7 @@ symbol = " "
 # home_symbol = ""
 # truncation_length = 3
 # truncation_symbol = ""
-format = "[$path]($style) "
+format = "[$path]($style)"
 
 [docker_context]
 symbol = " "
@@ -64,7 +70,7 @@ format = '[$symbol$branch(:$remote_branch)]($style) '
 # format = '[ $symbol $branch]($style)'
 
 [git_status]
-# format = '[\[($all_status$ahead_behind)\]]($style)'
+format = '[\(($all_status$ahead_behind)\)]($style)'
 
 [git_commit]
 tag_symbol = '  '
@@ -115,7 +121,7 @@ format = '[$symbol($version )]($style)'
 [os]
 disabled = false
 style = "fg:#50f872"
-format = '[ $symbol]($style)'
+format = '[$symbol]($style)'
 
 [os.symbols]
 Alpaquita = " "
@@ -183,10 +189,22 @@ format = '[$symbol($version )]($style)'
 
 [character]
 disabled = false
-# format = ' $symbol '
+format = ' $symbol '
 # success_symbol = '[](bold green) '
 # error_symbol = '[](bold red) '
 # vimcmd_symbol = '[](bold green)'
 # vimcmd_replace_one_symbol = '[](bold purple)'
 # vimcmd_replace_symbol = '[](bold purple)'
 # vimcmd_visual_symbol = '[](bold yellow)'
+#
+#
+#
+
+
+[cmd_duration]
+show_milliseconds = true
+format = "[󰗕 in $duration]($style)"
+style = "fg:#50f872"
+disabled = false
+show_notifications = true
+min_time_to_notify = 45000
