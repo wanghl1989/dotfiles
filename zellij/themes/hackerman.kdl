@@ -1,0 +1,15 @@
+themes {
+    hackerman {
+        bg "#0B0C16"
+        fg "#ddf7ff"
+        black "#0B0C16"
+        red "#50f872"
+        green "#4fe88f"
+        yellow "#50f7d4"
+        blue "#829dd4"
+        magenta "#86a7df"
+        cyan "#7cf8f7"
+        white "#85E1FB"
+        orange "#ddf7ff"
+    }
+}
