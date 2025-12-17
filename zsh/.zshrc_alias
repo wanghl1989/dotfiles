@@ -15,6 +15,7 @@ fi
 
 if command -v nvim &> /dev/null; then
   alias vim="nvim"
+  alias v="nvim"
 fi
 
 if command -v rg &> /dev/null; then
@@ -32,6 +33,13 @@ fi
 if command -v trash &> /dev/null; then
   alias rm_real="rm"
   alias rm='trash'
+fi
+
+if command -v zellij &> /dev/null; then
+  alias zij="zellij"
+  alias zija='zellij attach'
+  alias zijk='zellij kill-session'
+  alias zijl='zellij list-sessions'
 fi
 
 

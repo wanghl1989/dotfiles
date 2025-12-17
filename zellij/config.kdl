@@ -25,16 +25,15 @@ keybinds clear-defaults=true {
     }
 
     tmux {
-        bind "left" { MoveFocus "left"; SwitchToMode "normal"; }
-        bind "down" { MoveFocus "down"; SwitchToMode "normal"; }
-        bind "up" { MoveFocus "up"; SwitchToMode "normal"; }
-        bind "right" { MoveFocus "right"; SwitchToMode "normal"; }
+        bind "Ctrl s" { SwitchToMode "search"; }
+        bind "Ctrl r" { SwitchToMode "resize"; }
+        bind "Ctrl m" { SwitchToMode "move"; }
         bind "space" { NextSwapLayout; }
+        bind "c" { NewTab; SwitchToMode "normal"; }
         bind "-" { NewPane "down"; SwitchToMode "normal"; }
         bind "\\" { NewPane "right"; SwitchToMode "normal"; }
         bind "," { SwitchToMode "renametab"; }
         bind "Ctrl b" { Write 2; SwitchToMode "normal"; }
-        bind "c" { NewTab; SwitchToMode "normal"; }
         bind "h" { MoveFocus "left"; SwitchToMode "normal"; }
         bind "j" { MoveFocus "down"; SwitchToMode "normal"; }
         bind "k" { MoveFocus "up"; SwitchToMode "normal"; }
@@ -44,14 +43,26 @@ keybinds clear-defaults=true {
         bind "p" { GoToPreviousTab; SwitchToMode "normal"; }
         bind "z" { ToggleFocusFullscreen; SwitchToMode "normal"; }
         bind "f" { ToggleFloatingPanes; SwitchToMode "normal";}
+        bind "i" { TogglePanePinned; SwitchToMode "normal"; }
         bind "e" { TogglePaneEmbedOrFloating; SwitchToMode "normal"; }
         bind "s" { NewPane "stacked"; SwitchToMode "normal"; }
-        bind "Ctrl s" { SwitchToMode "search"; }
-        bind "Ctrl r" { SwitchToMode "resize"; }
         bind "u" { HalfPageScrollUp; SwitchToMode "normal";}
         bind "d" { HalfPageScrollDown; SwitchToMode "normal";}
         bind "Ctrl X" { Detach; }
         bind "X" { CloseTab; SwitchToMode "normal"; }
+        bind "1" { GoToTab 1; SwitchToMode "normal"; }
+        bind "2" { GoToTab 2; SwitchToMode "normal"; }
+        bind "3" { GoToTab 3; SwitchToMode "normal"; }
+        bind "4" { GoToTab 4; SwitchToMode "normal"; }
+        bind "5" { GoToTab 5; SwitchToMode "normal"; }
+        bind "6" { GoToTab 6; SwitchToMode "normal"; }
+        bind "7" { GoToTab 7; SwitchToMode "normal"; }
+        bind "8" { GoToTab 8; SwitchToMode "normal"; }
+        bind "9" { GoToTab 9; SwitchToMode "normal"; }
+        bind "left" { MovePane "left"; }
+        bind "down" { MovePane "down"; }
+        bind "up" { MovePane "up"; }
+        bind "right" { MovePane "right"; }
     }
     
 
@@ -124,20 +135,20 @@ keybinds clear-defaults=true {
         bind "l" { Resize "Increase right"; }
         bind "Ctrl n" { SwitchToMode "normal"; }
     }
-    // move {
-    //     bind "left" { MovePane "left"; }
-    //     bind "down" { MovePane "down"; }
-    //     bind "up" { MovePane "up"; }
-    //     bind "right" { MovePane "right"; }
-    //     bind "h" { MovePane "left"; }
-    //     bind "Ctrl h" { SwitchToMode "normal"; }
-    //     bind "j" { MovePane "down"; }
-    //     bind "k" { MovePane "up"; }
-    //     bind "l" { MovePane "right"; }
-    //     bind "n" { MovePane; }
-    //     bind "p" { MovePaneBackwards; }
-    //     bind "tab" { MovePane; }
-    // }
+    move {
+        bind "left" { MovePane "left"; }
+        bind "down" { MovePane "down"; }
+        bind "up" { MovePane "up"; }
+        bind "right" { MovePane "right"; }
+        bind "h" { MovePane "left"; }
+        bind "Ctrl h" { SwitchToMode "normal"; }
+        bind "j" { MovePane "down"; }
+        bind "k" { MovePane "up"; }
+        bind "l" { MovePane "right"; }
+        bind "n" { MovePane; }
+        bind "p" { MovePaneBackwards; }
+        bind "tab" { MovePane; }
+    }
     // scroll {
     //     bind "e" { EditScrollback; SwitchToMode "normal"; }
     //     bind "s" { SwitchToMode "entersearch"; SearchInput 0; }
@@ -164,7 +175,7 @@ keybinds clear-defaults=true {
             }
             SwitchToMode "normal"
         }
-        bind "Ctrl o" { SwitchToMode "normal"; }
+        bind "Ctrl a" { SwitchToMode "normal"; }
         bind "p" {
             LaunchOrFocusPlugin "plugin-manager" {
                 floating true
