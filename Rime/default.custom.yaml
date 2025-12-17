@@ -1,8 +1,8 @@
 patch:
   schema_list:
-    - schema: rime_ice 
+    - schema: luna_pinyin_simp
+    - schema: rime_ice
     - schema: numbers
-    
 
   menu/page_size: 9 # 候选词个数
   # 若 caps 切换大小写无效, 打开 Mac 系统偏好设置 > 键盘 > 输入法 > 取消勾选[使用大写锁定键切换“美国”输入模式]
