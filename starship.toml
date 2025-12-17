@@ -121,8 +121,8 @@ format = '[$symbol($version )]($style)'
 
 [os]
 disabled = false
-style = "fg:#50f872 bold"
-format = ' [\[$symbol\]]($style)'
+style = "fg:#50f872"
+format = '[ $symbol ]($style)'
 
 [os.symbols]
 Alpaquita = ""
