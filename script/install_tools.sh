@@ -1,3 +1,4 @@
+#!/bin/bash
 os_kernel=$(uname -s)
 # homebrew
 echo ">>>>>>>>>> Install homebrew"
