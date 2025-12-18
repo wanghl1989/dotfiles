@@ -42,6 +42,13 @@ if command -v zellij &> /dev/null; then
   alias zijl='zellij list-sessions'
 fi
 
+# tmux 
+if command -v zellij &> /dev/null; then
+  alias tx"tmux"
+  alias txa="tmux attach -t"
+  alias txk="tmux kill-session"
+  alias txl="tmux list-session"
+fi
 
 
 # git
@@ -55,10 +62,7 @@ alias icat="kitten icat"
 alias kssh="kitten ssh"
 alias kdiff="kitten diff"
 
-# tmux 
-alias ta="tmux attach"
-alias tks="tmux kill-session"
-alias tkl="tmux list-session"
+
 
 
 # default app
