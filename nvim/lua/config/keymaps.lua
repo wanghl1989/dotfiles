@@ -48,7 +48,15 @@ end, opts)
 
 map("n", "<leader>fH", function()
   Snacks.picker.help()
-end, { noremap = true, silent = true, desc = "Show help." })
+end, { noeemap = true, silent = true, desc = "Show help." })
 
 map({ "n", "v" }, "<leader>yy", [["+y]], { noremap = true, desc = "Copy to clipboard" })
 map({ "n", "v" }, "<leader>yl", [["+Y]], { noremap = true, desc = "Copy lines to clipboard" })
+
+map({ "n", "x", "o" }, "f", function()
+  require("flash").jump()
+end, opts)
+
+map({ "n", "o", "x" }, "F", function()
+  require("flash").treesitter()
+end, opts)
