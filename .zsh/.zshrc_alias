@@ -1,5 +1,4 @@
-
-# file
+# ZSH ALIAS 
 
 if command -v duf &> /dev/null; then
   alias df="duf"
@@ -16,6 +15,11 @@ fi
 if command -v nvim &> /dev/null; then
   alias vim="nvim"
   alias v="nvim"
+
+  export EDITOR=nvim visudo
+  export VISUAL=nvim visudo
+  export SUDO_EDITOR=nvim
+  export FCEDIT=nvim
 fi
 
 if command -v rg &> /dev/null; then
@@ -34,40 +38,43 @@ if command -v trash &> /dev/null; then
   alias rm_real="rm"
   alias rm='trash'
 fi
-
+# zellij
 if command -v zellij &> /dev/null; then
   alias zij="zellij"
   alias zija='zellij attach'
   alias zijk='zellij kill-session'
+  alias zijka='zellij kill-all-sessions'
   alias zijl='zellij list-sessions'
 fi
 
 # tmux 
-if command -v zellij &> /dev/null; then
-  alias tx"tmux"
+if command -v tmux &> /dev/null; then
+  alias tx="tmux"
   alias txa="tmux attach -t"
-  alias txk="tmux kill-session"
+  alias txk="tmux kill-session -t"
+  alias txka="tmux kill-session -a"
   alias txl="tmux list-session"
 fi
 
 
 # git
-alias git-log="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "
-alias git-commit="git commit -m"
-alias git-add="git add -A"
+if command -v git &> /dev/null; then
+  alias git-log="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "
+  alias git-commit="git commit -m"
+  alias git-add="git add -A"
+fi
 
 
 # kitty
-alias icat="kitten icat"
-alias kssh="kitten ssh"
-alias kdiff="kitten diff"
+#
+if command -v kitten &> /dev/null; then
+  alias icat="kitten icat"
+  alias kssh="kitten ssh"
+  alias kdiff="kitten diff"
+  export TERMINAL=kitty
+fi
 
 
 
 
-# default app
-export EDITOR=nvim visudo
-export VISUAL=nvim visudo
-export SUDO_EDITOR=nvim
-export FCEDIT=nvim
-export TERMINAL=kitty
+

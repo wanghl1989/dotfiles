@@ -1,3 +1,4 @@
+# zsh plugin
 # zinit
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
@@ -86,5 +87,17 @@ setopt nonomatch # hide error message if there is no match for the pattern
 setopt notify # report the status of background job immediately
 setopt promptsubst # enable command subsition in prompt
 
+# zsh history file
+export HISTFILE="$HOME/.zsh_history"
 
+# saved history size in each session
+export HISTSIZE=100000
 
+# max size in history saving
+export SAVEHIST=100000
+
+setopt APPEND_HISTORY        # 会话退出时追加历史，而非覆盖
+setopt INC_APPEND_HISTORY    # 执行命令后立即写入历史，而非会话结束时
+setopt SHARE_HISTORY        # 多个终端会话共享历史记录
+setopt HIST_IGNORE_SPACE    # 忽略以空格开头的命令（可选，隐私保护）
+setopt HIST_IGNORE_DUPS     # 忽略重复的命令（可选）

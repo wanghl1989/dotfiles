@@ -45,9 +45,9 @@ keybinds clear-defaults=true {
         bind "i" { TogglePanePinned; SwitchToMode "normal"; }
         bind "e" { TogglePaneEmbedOrFloating; SwitchToMode "normal"; }
         bind "s" { NewPane "stacked"; SwitchToMode "normal"; }
-        bind "u" { HalfPageScrollUp; SwitchToMode "normal";}
-        bind "d" { HalfPageScrollDown; SwitchToMode "normal";}
-        bind "Ctrl x" { Detach; }
+        bind "U" { HalfPageScrollUp; SwitchToMode "normal";}
+        bind "D" { HalfPageScrollDown; SwitchToMode "normal";}
+        bind "d" { Detach; }
         bind "X" { CloseTab; SwitchToMode "normal"; }
         bind "1" { GoToTab 1; SwitchToMode "normal"; }
         bind "2" { GoToTab 2; SwitchToMode "normal"; }
