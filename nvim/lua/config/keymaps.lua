@@ -16,11 +16,11 @@ map("i", "<A-k>", "", { desc = "" })
 map("v", "<A-j>", "", { desc = "Move Down" })
 map("v", "<A-k>", "", { desc = "Move Up" })
 -- safe file and quit
-map("n", "<Leader>ww", ":update<Return>", { noremap = true, silent = true, desc = "Save windows" })
+map("n", "<Leader>ww", ":update<Return>", { noremap = true, desc = "Save windows" })
 map("n", "<Leader>wc", "<C-W>w", { noremap = true, silent = true, desc = "Switch windows" })
 map("n", "<leader>wq", function()
   Snacks.bufdelete()
-end, { desc = "Delete Buffer" })
+end, { desc = "Delete Buffer", noremap = true })
 
 map("n", "<Leader>Q", ":qa<Return>", opts)
 
@@ -41,6 +41,7 @@ map({ "i", "n", "x" }, "<A-u>", "", opts)
 -- mark
 map("n", "<leader>ml", ":marks<cr>", { noremap = true, silent = true, desc = "Show all marks" })
 map("n", "<leader>md", ":delmarks ", { noremap = true, silent = true, desc = "Delete mark" })
+map("n", "<leader>ma", ":delmarks a-zA-Z0-9<CR>", { noremap = true, silent = true, desc = "Delete all marks" })
 
 map("n", "<S-j>", function()
   vim.diagnostic.oepn_float()
@@ -53,6 +54,7 @@ end, { noeemap = true, silent = true, desc = "Show help." })
 map({ "n", "v" }, "<leader>yy", [["+y]], { noremap = true, desc = "Copy to clipboard" })
 map({ "n", "v" }, "<leader>yl", [["+Y]], { noremap = true, desc = "Copy lines to clipboard" })
 
+-- flash
 map({ "n", "x", "o" }, "f", function()
   require("flash").jump()
 end, opts)

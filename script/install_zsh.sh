@@ -8,11 +8,22 @@ fi
 
 # 提取脚本所在目录（即目标文件/文件夹的父目录）
 SCRIPT_DIR=$(dirname $(dirname "$SCRIPT_PATH"))
+SOURCE_DIR="$SCRIPT_DIR/.zsh"
 
-# 定义软链接的目标目录（~/.config/）
-DEST_DIR="$HOME"
+LINK_PATH="$HOME/.zsh"
+
+if [ -L "$LINK_PATH" ]; then
+  rm -f "$LINK_PATH"
+elif [ -f "$LINK_PATH" ]; then
+  rm -f "$LINK_PATH"
+elif [ -d "$LINK_PATH" ]; then
+  rm -rf "$LINK_PATH"
+fi
 
 ITEMS=(".zshrc_plugin" ".zshrc_alias" ".zshrc_images")
+
+ln -sf "$SOURCE_DIR" "$LINK_PATH"
+echo "✅ 已创建软链接：$LINK_PATH → $SOURCE_DIR"
 
 ZSHRC_FILE="$HOME/.zshrc"
 
@@ -21,33 +32,10 @@ if [ ! -f "$ZSHRC_FILE" ]; then
   echo "创建了新的.zshrc文件"
 fi
 
-echo -e "\n开始创建zsh软链接..."
 for item in "${ITEMS[@]}"; do
-  # 源文件/文件夹的绝对路径
-  source_path="$SCRIPT_DIR/zsh/$item"
-  # 软链接的路径（~/.config/item）
-  link_path="$DEST_DIR/$item"
+  zsh_source="$LINK_PATH/$item"
 
-  # 检查源是否存在
-  if [ ! -e "$source_path" ]; then
-    echo "⚠️ 跳过, 源路径不存在 → $source_path"
-    continue
-  fi
-
-  # 处理已存在的软链接/文件
-  if [ -L "$link_path" ]; then
-    rm -f "$link_path"
-  elif [ -f "$link_path" ]; then
-    rm -f "$link_path"
-  elif [ -d "$link_path" ]; then
-    rm -rf "$link_path"
-  fi
-
-  # 创建软链接
-  ln -sf "$source_path" "$link_path"
-  echo "✅ 已创建软链接：$link_path → $source_path"
-
-  source_line="source $link_path"
+  source_line="source $zsh_source"
 
   if ! grep -Fxq "$source_line" "$ZSHRC_FILE"; then
     echo "$source_line" >>"$ZSHRC_FILE"
