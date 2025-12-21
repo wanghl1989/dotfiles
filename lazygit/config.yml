@@ -1,11 +1,11 @@
 gui:
   theme: # catppuccin palette of course
     activeBorderColor:
-      - "#5ef1ff"
+      - "#7cf8f7"
     inactiveBorderColor:
       - "#7b8496"
     searchingActiveBorderColor:
-      - "#ff5ef1"
+      - "##4fe88f"
     optionsTextColor:
       - "#3c4048"
     selectedLineBgColor:
@@ -17,10 +17,10 @@ gui:
     unstagedChangesColor:
       - "#ffbd5e"
     defaultFgColor:
-      - "#ffffff"
+      - "#ddf7ff"
 
   authorColors:
-    "*": "#b4befe"
+    "*": "#829dd4"
   showBottomLine: false
   border: rounded
   nerdFontsVersion: "3"

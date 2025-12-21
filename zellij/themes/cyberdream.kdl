@@ -1,16 +1,16 @@
 
 themes {
     cyberdream {
-        bg "#16181a"
-        fg "#ffffff"
+        bg "#0B0C16"
+        fg "#ddf7ff"
         black "#7b8496"
         red "#ff6e5e"
-        green "#5eff6c"
+        green "#50f872"
         yellow "#f1ff5e"
-        blue "#5ea1ff"
+        blue "#829dd4"
         magenta "#ff5ef1"
-        cyan "#5ef1ff"
-        white "#ffffff"
+        cyan "#7cf8f7"
+        white "#ddf7ff"
         orange "#ffbd5e"
     }
 }

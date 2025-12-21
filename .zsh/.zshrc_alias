@@ -4,7 +4,12 @@ if command -v duf &> /dev/null; then
   alias df="duf"
 fi
 
-if command -v lsd &> /dev/null; then
+
+
+if command -v eza &> /dev/null; then
+  alias ls="eza --icons=auto"
+  alias ll="eza --icons=auto --git -h -H -l"
+elif command -v lsd &> /dev/null; then
   alias ls="lsd"
   alias ll="lsd -l -h -a"
 else
@@ -73,8 +78,3 @@ if command -v kitten &> /dev/null; then
   alias kdiff="kitten diff"
   export TERMINAL=kitty
 fi
-
-
-
-
-
