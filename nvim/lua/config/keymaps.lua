@@ -2,7 +2,7 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
-local map = LazyVim.safe_keymap_set
+local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 -- #map("n", "<esc>k", "", { noremap = true, silent = true })
@@ -16,7 +16,7 @@ map("i", "<A-k>", "", { desc = "" })
 map("v", "<A-j>", "", { desc = "Move Down" })
 map("v", "<A-k>", "", { desc = "Move Up" })
 -- safe file and quit
-map("n", "<Leader>ww", ":update<Return>", { noremap = true, desc = "Save windows" })
+map("n", "<Leader>ww", ":update<CR>", { noremap = true, desc = "Save windows" })
 map("n", "<Leader>wc", "<C-W>w", { noremap = true, silent = true, desc = "Switch windows" })
 map("n", "<leader>wq", function()
   Snacks.bufdelete()
@@ -49,7 +49,7 @@ end, opts)
 
 map("n", "<leader>fH", function()
   Snacks.picker.help()
-end, { noeemap = true, silent = true, desc = "Show help." })
+end, { noremap = true, silent = true, desc = "Show help." })
 
 map({ "n", "v" }, "<leader>yy", [["+y]], { noremap = true, desc = "Copy to clipboard" })
 map({ "n", "v" }, "<leader>yl", [["+Y]], { noremap = true, desc = "Copy lines to clipboard" })

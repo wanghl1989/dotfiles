@@ -41,8 +41,7 @@ return {
     -- end
 
     table.insert(opts.sections.lualine_z, { wordcount, cond = is_textfile })
-    -- table.insert(opts.sections.lualine_x, { venvSelect, cond = is_pythonfile,  icon = "\u{1f332}", color = { fg = "#7fb55e" }  })
-    table.insert(opts.sections.lualine_x, { "venv-selector", icon = "\u{1f332}", color = { fg = "#7fb55e" } })
+    table.insert(opts.sections.lualine_x, { "venv-selector", icon = "\u{e606}", color = { fg = "#50f872" } })
 
     -- Update the pretty_path component to not truncate filenames
     -- Replace the existing pretty_path component in lualine_c

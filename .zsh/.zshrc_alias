@@ -78,3 +78,10 @@ if command -v kitten &> /dev/null; then
   alias kdiff="kitten diff"
   export TERMINAL=kitty
 fi
+
+
+
+
+# python
+alias vat="source .venv/bin/activate" # source python venv
+
