@@ -17,4 +17,10 @@ return {
       { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
     },
   },
+  {
+    "fresh2dev/zellij.vim",
+    -- Pin version to avoid breaking changes.
+    -- tag = '0.3.*',
+    lazy = false,
+  },
 }
