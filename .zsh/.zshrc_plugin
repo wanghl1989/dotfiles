@@ -44,6 +44,7 @@ if command -v fzf &> /dev/null; then
 fi
 
 # 补全快捷键重设
+
 bindkey -v # Enable Vi Key binding
 bindkey '^P' up-line-or-search #Ctrl+P select next
 bindkey '^N' down-line-or-search #Ctrl+N select previous
@@ -79,7 +80,7 @@ zinit snippet OMZP::sudo
 zinit snippet OMZP::command-not-found
 
 #zsh basic option
-setopt autocd # change directory just typing its name
+# setopt autocd # change directory just typing its name
 # setopt correct # auto correct mistake
 setopt interactivecomments # allow comments in interactive mode
 setopt magicequalsubst # enable filename expansion for arguments of the form 'anything=expression'
