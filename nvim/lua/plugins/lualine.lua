@@ -39,6 +39,8 @@ return {
     --   local output = "🐍 " .. venv_name .. " " -- Changes only the icon but you can change colors or use powerline symbols here.
     --   return output
     -- end
+    opts.component_separators = { left = "", right = "" }
+    opts.section_separators = { left = "", right = "" }
 
     table.insert(opts.sections.lualine_z, { wordcount, cond = is_textfile })
     table.insert(opts.sections.lualine_x, { "venv-selector", icon = "\u{e606}", color = { fg = "#50f872" } })
