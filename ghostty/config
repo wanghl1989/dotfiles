@@ -5,9 +5,10 @@ window-padding-x = 10
 window-padding-y = 10
 window-padding-balance = true
 
-font-family = GoogleSansCode Nerd Font Mono
+# font-family = GoogleSansCode Nerd Font Mono
+font-family = ComicShannsMono Nerd Font Mono
 
-font-size = 13
+font-size = 15
 
 background-opacity = 0.8
 background-blur = 20
@@ -18,14 +19,16 @@ keybind = ctrl+shift+c=copy_to_clipboard
 keybind = ctrl+shift+v=paste_from_clipboard
 
 keybind = ctrl+w>ctrl+w=new_window
-keybind = ctrl+w>t=new_tab
+keybind = ctrl+w>c=new_tab
 keybind = ctrl+w>Q=close_window
 keybind = ctrl+w>ctrl+r=reload_config
 
 
-keybind = ctrl+w>X=close_tab
+keybind = ctrl+w>shift+x=close_tab
 keybind = ctrl+w>]=next_tab
+keybind = ctrl+w>tab=next_tab
 keybind = ctrl+w>[=previous_tab
+keybind = ctrl+w>shift+tab=previous_tab
 
 keybind = ctrl+w>1=goto_tab:1
 keybind = ctrl+w>2=goto_tab:2
@@ -43,7 +46,7 @@ keybind = ctrl+-=decrease_font_size:1
 keybind = ctrl+w>\=new_split:right
 keybind = ctrl+w>-=new_split:down
 
-# keybind = ctrl+w>x=close_surface
+keybind = ctrl+w>x=close_surface
 
 keybind = shift+right=resize_split:right,10
 keybind = shift+left=resize_split:left,10
@@ -58,5 +61,5 @@ keybind = ctrl+w>j=goto_split:bottom
 
 keybind = ctrl+w>z=toggle_fullscreen
 keybind = ctrl+w>s=toggle_secure_input
-keybind = ctrl+w>c=clear_screen
+# keybind = ctrl+w>shift+c=clear_screen
 

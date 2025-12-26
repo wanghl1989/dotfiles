@@ -35,5 +35,5 @@ fi
 
 FONT_SRC="$(dirname $(dirname "$SCRIPT_PATH"))/font"
 
-cp -R "$FONT_SRC/*" "$FONTBASE/"
+cp "$FONT_SRC/*" "$FONTBASE/"
 echo "✅ 成功安装字体"
