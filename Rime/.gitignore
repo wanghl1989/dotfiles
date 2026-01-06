@@ -6,3 +6,4 @@ dist/
 build/
 sync/
 *.userdb/
+installation.yaml
