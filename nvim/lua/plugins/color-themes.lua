@@ -1,12 +1,4 @@
 return {
-  -- {
-  --   "catppuccin/nvim",
-  --   name = "catppuccin",
-  --   priority = 1000,
-  --   opts = {},
-  -- }
-  --,
-
   {
     "scottmckendry/cyberdream.nvim",
     lazy = false,
@@ -17,16 +9,14 @@ return {
       saturation = 1,
       terminal_color = false,
       borderless_pickers = false,
-
       highlights = {
-        Comment = { fg = "#898989", bg = "NONE", italic = true },
+        Comment = { fg = "#7c8088", bg = "NONE", italic = true },
       },
-
       colors = {
-        bg = "#282A36",
+        bg = "#181A26",
         dark = {
           bg_alt = "#1e2124",
-          bg_highlight = "#3c4048",
+          bg_highlight = "#3c5868",
           fg = "#ddf7ff",
           green = "#50f872",
           blue = "#829dd4",

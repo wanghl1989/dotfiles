@@ -1,0 +1,9 @@
+include "~/.config/newsboat/keybinds.conf"
+
+datetime-format "%Y-%m-%d"
+
+save-path ~/doc/newsboat
+
+
+refresh-on-startup no
+reload-threads 100 # loading feeds in parallel
