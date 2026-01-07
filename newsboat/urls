@@ -1,0 +1,28 @@
+"query:Unread Articles:unread = \"yes\""
+
+
+# [blog]
+https://lukesmith.xyz/rss.xml "~Luke Smith" blog
+https://web.dev/feed.xml "~web.dev" blog
+https://tech.meituan.com/feed/ "~美图技术团队" blog
+http://feeds.feedburner.com/ruanyifeng "~阮一峰的网络日志" blog
+https://rsshub.app/juejin/posts/1838039172387262  "~掘金字节专栏" blog
+
+# [news]
+http://www.fsf.org/news/aggregator/RSS "~FSF News" news
+https://plink.anyfeeder.com/fortunechina "~财富中文网" news
+
+
+# [software]
+https://www.python.org/downloads/feed.rss ~python python
+https://github.com/astral-sh/ruff/releases.atom ~ruff python
+https://github.com/astral-sh/uv/releases.atom ~uv python
+https://github.com/astral-sh/ty/releases.atom ~ty python
+
+https://github.com/neovim/neovim/releases.atom ~neovim neovim
+
+
+https://github.com/rust-lang/rust/releases.atom ~rust rust
+
+
+
