@@ -14,6 +14,7 @@ set cursorline
 set wrap
 set showcmd
 set showmode
+set showtabline=2
 set linebreak
 set laststatus=2
 set t_Co=256
@@ -40,9 +41,11 @@ let mapleader = " "
 nnoremap <leader>w :w<CR>
 nnoremap <leader>q :q<CR>
 nnoremap <leader>x :x<CR>
-nnoremap gl $ 
+nnoremap gl $
 nnoremap gh ^
 
 nnoremap <leader>nh :noh<CR>
-
+nnoremap <leader>e :e .<CR>
+nnoremap <S-h> :bprevious<CR>
+nnoremap <S-l>l :bnext<CR>
 
