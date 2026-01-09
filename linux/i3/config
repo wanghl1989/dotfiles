@@ -1,0 +1,247 @@
+font pango:GoogleSansCode Nerd Font Mono 14
+# use win key
+set $mod Mod4
+# define names for workspaces
+
+set $ws1    "1"
+set $ws2    "2"
+set $ws3    "3"
+set $ws4    "4"
+set $ws5    "5"
+set $ws6    "6"
+set $ws7    "7"
+set $ws8    "8"
+set $ws9    "9"
+set $ws10   "10"
+
+# workspace 1 output HDMI-A-0
+# workspace 2 output HDMI-A-0
+# workspace 3 output HDMI-A-0
+# workspace 4 output HDMI-A-0
+# workspace 5 output eDp
+# workspace 6 output eDp
+# workspace 7 output eDp
+# workspace 8 output eDp
+
+# use $mod+Mouse to drag floating windows to their wanted position
+floating_modifier $mod
+
+# control focused window when follows the mouse movements
+focus_follows_mouse no
+
+
+# window border settings
+#1default_border          none
+default_border          pixel 1
+#default_border          none 
+default_floating_border pixel 1
+
+# smart_borders on
+
+# hiding borders adjacent to the screen edges
+hide_edge_borders both
+
+# set popups during fullscreen mode
+popup_during_fullscreen smart
+
+# start a terminal
+bindsym $mod+Return workspace $ws1; exec --no-startup-id kitty
+
+# bindsym $mod+w exec --no-startup-id rofi -show drun
+
+# bindsym $mod+b exec --no-startup-id dmenu-bluetooth
+# bindsym $mod+b exec --no-startup-id rofi-bluetooth
+# switching window with win+tab
+
+
+bindsym $mod+n exec --no-startup-id "~/.config/networkmanager-dmenu/networkmanager_dmenu --config ~/.config/networkmanager-dmenu/config.ini"
+# show_marks yes
+# kill focused window
+bindsym $mod+q kill
+
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+h   focus left
+bindsym $mod+j   focus down
+bindsym $mod+k   focus up
+bindsym $mod+l   focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+h     move left
+bindsym $mod+Shift+j     move down
+bindsym $mod+Shift+k       move up
+bindsym $mod+Shift+l    move right
+
+# split in horizontal orientation
+bindsym $mod+backslash split h
+
+# split in vertical orientation
+bindsym $mod+minus split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+z fullscreen toggle
+
+# change container layout
+bindsym $mod+s layout stacking
+bindsym $mod+t layout tabbed
+bindsym $mod+x layout toggle split
+
+
+# change focus between tiling / floating windows
+bindsym $mod+f focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+bindsym $mod+Shift+a focus child
+
+# move the currently focused window to the scratchpad
+
+# how the next scratchpad window or hide the focused scratchpad window
+bindsym $mod+equal scratchpad show
+
+# move focused floating window to the center of all outputs
+bindsym $mod+Shift+c move absolute position center
+
+# move focused floating window to the current position of the cursor
+bindsym $mod+Shift+m move position mouse
+
+# set a window to stick to the glass
+bindsym $mod+Shift+s sticky toggle
+
+# sticky preview for media
+#bindsym $mod+Shift+p fullscreen disable; floating enable; resize set 350 px 197 px; sticky enable; move window to position 1006 px 537 px
+
+# shortcut to change window border
+# bindsym $mod+t border normal    0
+# bindsym $mod+y border pixel     1
+# bindsym $mod+u border none
+
+# switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# move focused container to workspace
+# bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+bindsym Mod1+Shift+h workspace prev_on_output
+bindsym Mod1+Shift+l workspace next_on_output
+
+bindsym $mod+Mod1+l exec --no-startup-id "sh ~/.config/i3/lock.sh"
+bindsym $mod+space exec --no-startup-id "bash ~/.config/rofi/launcher.sh"
+bindsym $mod+Shift+q exec --no-startup-id "bash ~/.config/rofi/powermenu.sh"
+bindsym $mod+Tab exec --no-startup-id "bash ~/.config/rofi/tab.sh"
+# volume
+bindsym XF86AudioLowerVolume    exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -2%
+bindsym XF86AudioRaiseVolume    exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +2%
+bindsym XF86AudioMute           exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute        exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+bindsym XF86MonBrightnessUp exec --no-startup-id light -A 22
+bindsym XF86MonBrightnessDown exec --no-startup-id light -U 2
+
+# notification
+
+# reload the configuration file
+bindsym $mod+Shift+r reload
+bindsym $mod+e   exec --no-startup-id nautilus
+
+# manage i3 session
+
+# resize window
+bindsym $mod+r mode " 󰹑 "
+mode " 󰹑 " {
+
+    # same bindings, but for the arrow keys
+    bindsym h    resize shrink width 4 px or 4 ppt
+    bindsym j    resize grow height 4 px or 4 ppt
+    bindsym k      resize shrink height 4 px or 4 ppt
+    bindsym l   resize grow width 4 px or 4 ppt
+
+    # back to normal: Enter or win+r
+    bindsym Return mode "default"
+    bindsym $mod+r mode "default"
+}
+
+# set specific windows to floating mode
+for_window [window_role="app"]                      floating enable
+for_window [window_role="pop-up"]                   floating enable
+for_window [window_role="task_dialog"]              floating enable
+for_window [title="Preferences$"]                   floating enable
+
+# class                 border  backgr. text    indicator child_border
+# set specific windows to floating mode
+for_window [window_role="app"]                      floating enable
+for_window [window_role="pop-up"]                   floating enable
+for_window [window_role="task_dialog"]              floating enable
+for_window [title="Preferences$"]                   floating enable
+
+# #546735 -> #81a1c1
+# class                 border  backgr. text    indicator child_border
+client.focused          #81a1c1 #81a1c1 #F8F8F2 #81a1c1   #81a1c1
+client.focused_inactive #2E3440 #2E3440 #F8F8F2 #2E3440   #2E3440
+client.unfocused        #2E3440 #2E3440 #BFBFBF #2E3440   #2E3440
+client.urgent           #2E3440 #FF5555 #F8F8F2 #FF5555   #FF5555
+client.placeholder      #2E3440 #2E3440 #F8F8F2 #2E3440   #2E3440
+client.background       #F8F8F2
+
+for_window [class="xdman-Main"] floating enable
+for_window [class="python"] floating enable
+for_window [class="VirtualBox Manager"] floating enable
+for_window [class="Qq"] floating enable
+for_window [class="Lxappearance"] floating enable
+for_window [class="Qalculate-gtk"] floating enable
+for_window [class="Steam"] floating enable
+for_window [class="steam"] floating enable
+for_window [class="icalingua"] floating enable
+for_window [class="stacer"] floating enable
+for_window [class="Virt-manager"] floating enable
+for_window [class="TelegramDesktop"] floating enable
+for_window [class="Quickgui"] floating enable
+for_window [class="R_x11"] floating enable
+for_window [class="Pavucontrol"] floating enable
+for_window [class="mpv"] floating enable
+for_window [class="zoom"] floating enable
+for_window [class="fsearch"] floating enable
+for_window [class="Fsearch"] floating enable
+for_window [class="cmake-gui"] floating enable
+for_window [class="CMakeSetup"] floating enable
+for_window [class="feh"] floating enable
+for_window [class="Tlp-UI"] floating enable
+for_window [class="steamwebhelper"] floating enable
+# for_window [class="wechat"] floating enable
+# i3-gaps
+# smart_gaps off
+gaps inner 8
+#:w
+gaps outer 2
+
+# local config file
+# startup applications
+# exec --no-startup-id xautolock -time 5 -locker '~/.config/i3/lock.sh'
+exec --no-startup-id dunst
+exec_always --no-startup-id xrandr --auto --output HDMI-0 --pos 0x0 --mode 3840x2160 --primary --scale 0.666x0.666
+# exec_always --no-startup-id xrandr --output HDMI-0 --mode 3840x2160 --scale 0.667x0.667 --panning 3840x2160+0+0
+
+exec_always --no-startup-id feh --bg-fill ~/Pictures/wallpaper.jpg
+exec_always --no-startup-id picom --config ~/.config/picom/picom.conf
+exec_always --no-startup-id fcitx5
+exec_always --no-startup-id bash ~/.config/polybar/launch.sh --shapes
