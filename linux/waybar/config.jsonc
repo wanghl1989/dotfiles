@@ -5,7 +5,7 @@
   "height": 34,
   // "width": 1366,
   "modules-left": ["niri/workspaces"],
-  // "modules-center": ["niri/workspaces"],
+  "modules-center": ["clock"],
   "modules-right": [
     "wireplumber",
     "bluetooth",
@@ -76,7 +76,7 @@
   "wireplumber": {
     "format": "{icon}  {volume}%   ",
     "format-muted": "  ",
-    "on-click": "pwvucontrol",
+    "on-click": "pvucontrol",
     "format-icons": ["", " "],
   },
   "bluetooth": {
