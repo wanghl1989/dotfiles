@@ -129,7 +129,7 @@ gestures {
 
 
 
-include "niri/window.kdl"
-include "niri/layout.kdl"
-include "niri/colors.kdl"
-include "niri/binds.kdl"
+include "window.kdl"
+include "layout.kdl"
+include "colors.kdl"
+include "binds.kdl"

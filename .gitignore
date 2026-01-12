@@ -1,5 +1,6 @@
 .vscode
 .marscode
+.claude
 Rime/user.yaml
 Rime/*.userdb
 Rime/*.userdb/*
@@ -7,12 +8,10 @@ Rime/easy_en.userdb
 Rime/luna_pinyin.userdb
 Rime/easy_en.userdb/*
 Rime/luna_pinyin.userdb/*
-Rime/installation.yaml;
-
-
-
-btop/btop.conf
-
-tmux/plugins
-auin/atuin-receipt.json
 Rime/installation.yaml
+
+
+
+config/btop/btop.conf
+
+config/tmux/plugins

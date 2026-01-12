@@ -1,31 +1,48 @@
 ## Usage
 
-this project is for storing my basic dev config of bundle of mordern tools
+this project is for storing my basic dev configure of bundle of modern tools.
 
-steps:
+Steps:
 
-1. clone this project
-2. run `script/install_tools.sh` to install `homebrew`, and several tools i use.
-3. run `install.sh` only set configs,
+- clone this project
+- if `homebrew` is used, run `./script/install_tools.sh` to install tools
+- run `install.sh` to set configure for each tool,
+- run `script/install_font.sh` to install font.
 
-script only test in Macos and Ubuntu,
+## Tools
 
-## tools
+### TUI tools
 
-- neovim: use LazyVim for basic configure package
-- starship: terminal prompt
-- tmux: use `tpm` for plugin management
-- zsh: use `zinit` for plugin management
-- lsd: better `ls` command
-- zxoide: better `cd` command
-- lazygit and lazydocker: tui tool for git and docker
-- btop: terminal monitor
-- dust: better `df` command
-- ripgrep: better `grep` command
-- yazi: tui file explorer
-- Rime: chinese input method
-- kitty: terminal emulator
-- ghossty: terminal emulator
+- `neovim`: use `LazyVim` for basic configure package
+- `starship`: terminal prompt
+- `tmux`: terminal multiplier, and use `tpm` for plugin management
+- `zellij`: a new terminal multiplier write in Rust
+- `zsh`: use `zinit` for plugin management
+- `lsd`: better `ls` command
+- `eza`: another better `ls` command
+- `zxoide`: better `cd` command
+- `lazygit` and `lazydocker`: tui tool for git and docker
+- `btop`: terminal monitor
+- `dust`: better `df` command
+- `ripgrep`: better `grep` command
+- `yazi`: tui file explorer
+
+### Terminal
+
+- `kitty`: terminal emulator
+- `ghossty`: terminal emulator
+
+### Input method
+
+`Rime` is the chinese input method, the configuration of Rime is in `./Rime/`
+[Download link](https://rime.im/download/)
+
+- For macos, use `squirrel`
+- For windows, use `weasel`
+- For linux, use `fcitx5-rime`
+
+### Other
+
 - zed: modern code editor
 
 ## issue
