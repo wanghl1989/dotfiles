@@ -69,8 +69,10 @@ if command -v git &> /dev/null; then
 fi
 
 
+if command -v lazygit &> /dev/null; then
+  alias lg="lazygit"
+fi
 # kitty
-#
 if command -v kitten &> /dev/null; then
   alias icat="kitten icat"
   alias kssh="kitten ssh"

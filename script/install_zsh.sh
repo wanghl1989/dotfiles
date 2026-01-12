@@ -1,4 +1,6 @@
 #!/bin/bash
+
+echo "=========== 设置zsh ==============="
 if command -v readlink &>/dev/null; then
   SCRIPT_PATH=$(readlink -f "$0")
 else
@@ -8,7 +10,7 @@ fi
 
 # 提取脚本所在目录（即目标文件/文件夹的父目录）
 SCRIPT_DIR=$(dirname $(dirname "$SCRIPT_PATH"))
-SOURCE_DIR="$SCRIPT_DIR/.zsh"
+SOURCE_DIR="$SCRIPT_DIR/zsh"
 
 LINK_PATH="$HOME/.zsh"
 
@@ -41,11 +43,10 @@ for item in "${ITEMS[@]}"; do
     echo "$source_line" >>"$ZSHRC_FILE"
     echo "已添加: $source_line"
   else
-    echo "已存在，跳过: $source_line"
+    echo "已存在 \" $source_line \"  语句, 跳过"
   fi
 
 done
 
 # 使配置生效
-echo "使用 source ~/.zshrc 重新加载zsh配置..."
-echo "操作完成！"
+echo "🎉 操作完成！使用 source ~/.zshrc 重新加载zsh配置..."
