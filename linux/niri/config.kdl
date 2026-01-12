@@ -5,31 +5,30 @@
 config-notification {
     disable-failed
 }
-// Outputs from existing configuration
-output "DP-3" {
-    // 取消注释以禁用此显示器。
-    // off
 
-    // 默认聚焦在这个显示器
-    focus-at-startup
-
-    // 格式为"<width>x<height>" 或者 "<width>x<height>@<refresh rate>".
-    // 如果省略了刷新率，niri将为分辨率选择最高的刷新率。
-    mode "3840x2160@60.000"
-
-    // 您可以使用整数或分数量表，例如，比例为150％。
-    scale 1.5
-
-    // transform允许逆时针旋转显示，有效值为:
-    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
-    transform "normal"
-
-    // 输出在所有显示器坐标空间中的位置。未明确配置位置的显示器将放置在所有已放置的显示器右侧。
-    // position x=1280 y=0
-}
-
-
-
+include "monitor.kdl"
+// 创建monitor.kdl文件， 文件内容如下
+// output "HDMI-0" {
+//     // 取消注释以禁用此显示器。
+//     // off
+//
+//     // 默认聚焦在这个显示器
+//     focus-at-startup
+//
+//     // 格式为"<width>x<height>" 或者 "<width>x<height>@<refresh rate>".
+//     // 如果省略了刷新率，niri将为分辨率选择最高的刷新率。
+//     mode "3840x2160@60.000"
+//
+//     // 您可以使用整数或分数量表，例如，比例为150％。
+//     scale 1.5
+//
+//     // transform允许逆时针旋转显示，有效值为:
+//     // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+//     transform "normal"
+//
+//     // 输出在所有显示器坐标空间中的位置。未明确配置位置的显示器将放置在所有已放置的显示器右侧。
+//     // position x=1280 y=0
+// }
 
 // Input device configuration.
 // Find the full list of options on the wiki:
@@ -88,11 +87,14 @@ environment {
 // This line starts waybar, a commonly used bar for Wayland compositors.
 
 // 启动niri时自动启动的软件
+//// 自动启动设置
+// 询问管理员权限功能（身份验证）
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+
 spawn-at-startup "/usr/bin/fcitx5"
-// spawn-at-startup "/usr/bin/v2rayn"
 spawn-at-startup "/usr/bin/waybar"
-spawn-at-startup "~/.local/bin/vicinae" "server"
-// spawn-at-startup "~/.cargo/bin/soteria"
+spawn-at-startup "mako"
+spawn-sh-at-startup "clipse --listen"
 
 // 壁纸swww用于overview背景，swaybg用于workspace背景
 // spawn-at-startup "/usr/bin/swww-daemon"

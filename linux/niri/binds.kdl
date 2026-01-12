@@ -1,8 +1,20 @@
 binds {
-    // Mod+W  hotkey-overlay-title="Files"  { spawn-sh  "open ~"; }
-    Mod+Space  hotkey-overlay-title="Vicinae"  { spawn  "~/.local/bin/vicinae" "toggle"; }
+    // 打开快捷键说明
+    Mod+Shift+Slash { show-hotkey-overlay; }
+    // 启动程序
+    Mod+Space  hotkey-overlay-title="App launcher"  { spawn  "fuzzel" ; }
     Mod+E  hotkey-overlay-title="Browser"  { spawn  "microsoft-edge"; }
+    Mod+Shift+Q  hotkey-overlay-title="Lock"  { spawn  "swaylock"; }
+    Mod+W hotkey-overlay-title="File Explorer" {spawn-sh "env GSK_RENDERER=gl GTK_IM_MODULE=fcitx  nautilus";}
+    Mod+Return hotkey-overlay-title="Open Terminal" { spawn "~/.local/bin/kitty"; }
+    Mod+Q repeat=false hotkey-overlay-title="Close window" { close-window; }
+    Ctrl+Alt+Delete hotkey-overlay-title="Powermenu" { spawn "wlogout"; }
+    Mod+Shift+F8 hotkey-overlay-title="Quit Niri" { quit; }
+    Mod+Shift+P hotkey-overlay-title="Close Monitors" { power-off-monitors; }
 
+
+
+    Mod+Tab repeat=false { toggle-overview; }
 
     Mod+1 { focus-workspace 1; }
     Mod+2 { focus-workspace 2; }
@@ -13,10 +25,7 @@ binds {
     Mod+7 { focus-workspace 7; }
     Mod+8 { focus-workspace 8; }
     Mod+9 { focus-workspace 9; }
-    // Mod+Ctrl+Down { move-column-to-workspace-down; }
-    // Mod+Ctrl+I { move-column-to-workspace-up; }
-    // Mod+Ctrl+U { move-column-to-workspace-down; }
-    // Mod+Ctrl+Up { move-column-to-workspace-up; }
+
     Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
     Mod+Ctrl+WheelScrollUp cooldown-ms=150 { move-column-to-workspace-up; }
     Mod+Page_Down { focus-workspace-down; }
@@ -38,29 +47,20 @@ binds {
 
     Mod+BracketLeft { consume-or-expel-window-left; }
     Mod+BracketRight { consume-or-expel-window-right; }
-    Mod+C { center-column; }
-    Mod+Ctrl+C { center-visible-columns; }
 
-    Mod+Ctrl+End { move-column-to-last; }
-    Mod+Ctrl+Home { move-column-to-first; }
+
+    // Mod+Ctrl+End { move-column-to-last; }
+    // Mod+Ctrl+Home { move-column-to-first; }
 
     // Mod+Ctrl+Left { focus-monitor-left; }
-    Mod+Ctrl+R { reset-window-height; }
-    Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
-    Mod+Ctrl+Shift+WheelScrollUp { move-column-left; }
-    Mod+Ctrl+WheelScrollLeft { move-column-left; }
-    Mod+Ctrl+WheelScrollRight { move-column-right; }
-    Mod+Down { focus-window-down; }
+    // Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
+    // Mod+Ctrl+Shift+WheelScrollUp { move-column-left; }
+    // Mod+Ctrl+WheelScrollLeft { move-column-left; }
+    // Mod+Ctrl+WheelScrollRight { move-column-right; }
     Mod+End { focus-column-last; }
-    Mod+Equal { set-column-width "+10%"; }
-    Mod+Z { maximize-column; }
     Mod+Home { focus-column-first; }
-    Mod+Left { focus-column-left; }
-    Mod+Minus { set-column-width "-10%"; }
     Mod+Period { expel-window-from-column; }
-    Mod+Q repeat=false { close-window; }
-    Mod+R { switch-preset-column-width; }
-    Mod+Right { focus-column-right; }
+
     // Mod+Shift+Ctrl+Down { move-column-to-monitor-down; }
     // Mod+Shift+Ctrl+H { move-column-to-monitor-left; }
     // Mod+Shift+Ctrl+J { move-column-to-monitor-down; }
@@ -69,77 +69,82 @@ binds {
     // Mod+Shift+Ctrl+Left { move-column-to-monitor-left; }
     // Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
     // Mod+Shift+Ctrl+Up { move-column-to-monitor-up; }
-    Mod+Shift+Down { move-window-down; }
-    Mod+Shift+Equal { set-window-height "+10%"; }
+    //调整窗口大小
+    Mod+Z { maximize-column; }
     Mod+Shift+Z { fullscreen-window; }
-    Mod+Shift+H { move-column-left; }
-    Mod+Shift+J { move-window-down; }
-    Mod+Shift+K { move-window-up; }
-    Mod+Shift+L { move-column-right; }
-    Mod+Shift+Left { move-column-left; }
+    Mod+Equal { set-column-width "+10%"; }
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Shift+Equal { set-window-height "+10%"; }
     Mod+Shift+Minus { set-window-height "-10%"; }
+    Mod+R { switch-preset-column-width; }
     Mod+Shift+R { switch-preset-window-height; }
-    Mod+Shift+Right { move-column-right; }
-    Mod+F { toggle-window-floating; }
-    Mod+Shift+Up { move-window-up; }
-    Mod+SHIFT+F { switch-focus-between-floating-and-tiling; }
-    Mod+Shift+WheelScrollDown { focus-column-right; }
-    Mod+Shift+WheelScrollUp { focus-column-left; }
-    Mod+Up { focus-window-up; }
-    Mod+T { toggle-column-tabbed-display; }
-    Mod+WheelScrollLeft { focus-column-left; }
-    Mod+WheelScrollRight { focus-column-right; }
-    Mod+Shift+P { power-off-monitors; }
+    Mod+Ctrl+R { reset-window-height; }
+    Mod+C { center-column; }
+    Mod+Ctrl+C { center-visible-columns; }
 
-    Mod+Return hotkey-overlay-title="Open Terminal" { spawn "~/.local/bin/kitty"; }
-    Mod+SHIFT+Escape { toggle-keyboard-shortcuts-inhibit; }
-    Mod+Shift+Slash { show-hotkey-overlay; }
-    Mod+Tab repeat=false { toggle-overview; }
+    Mod+F { toggle-window-floating; }
+    Mod+SHIFT+F { switch-focus-between-floating-and-tiling; }
+
+    Mod+T { toggle-column-tabbed-display; }
+    
+
     // navigate
-    Mod+H  { focus-column-left; }
-    Mod+J  { focus-window-down; }
-    Mod+K    { focus-window-up; }
-    Mod+L { focus-column-right; }
+    Mod+H hotkey-overlay-title="Focus left" { focus-column-left; }
+    Mod+J hotkey-overlay-title="Focus down" { focus-window-down; }
+    Mod+K hotkey-overlay-title="Focus up" { focus-window-up; }
+    Mod+L hotkey-overlay-title="Focus right" { focus-column-right; }
+
     
     // workspace焦点切换，窗口在workspace之间移动
-    ALT+SHIFT+J      { focus-workspace-down; }
-    ALT+SHIFT+K        { focus-workspace-up; }
-    Mod+Ctrl+J { move-column-to-workspace-down; }
-    Mod+Ctrl+K   { move-column-to-workspace-up; }
+    ALT+SHIFT+J hotkey-overlay-title="Focus next workspace" { focus-workspace-down; }
+    ALT+SHIFT+K hotkey-overlay-title="Focus prev workspace" { focus-workspace-up; }
+
     // 上下移动整个workspace
     ALT+CTRL+J { move-workspace-down; }
     ALT+CTRL+K   { move-workspace-up; }
+    // 移动window
+    Mod+Shift+H  hotkey-overlay-title="Move window to left" { move-column-left; }
+    Mod+Shift+J  hotkey-overlay-title="Move window to down" { move-window-down; }
+    Mod+Shift+K  hotkey-overlay-title="Move window to up" { move-window-up; }
+    Mod+Shift+L  hotkey-overlay-title="Move window to right" { move-column-right; }
+    Mod+Ctrl+J  hotkey-overlay-title="Move window to next workspace" { move-column-to-workspace-down; }
+    Mod+Ctrl+K  hotkey-overlay-title="Move window to prev workspace" { move-column-to-workspace-up; }
 
-        // 显示器焦点切换
-    Mod+Ctrl+Left  { focus-monitor-left; }
-    Mod+Ctrl+Down  { focus-monitor-down; }
-    Mod+Ctrl+Up    { focus-monitor-up; }
-    Mod+Ctrl+Right { focus-monitor-right; }
+
+    // 显示器焦点切换
+    Mod+Left  { focus-monitor-left; }
+    Mod+Down  { focus-monitor-down; }
+    Mod+Up    { focus-monitor-up; }
+    Mod+Right { focus-monitor-right; }
 
 
-        // 跨显示器移动窗口
-    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
-    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
-    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
-    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
+    // 跨显示器移动窗口
+    Mod+Shift+Left  { move-column-to-monitor-left; }
+    Mod+Shift+Down  { move-column-to-monitor-down; }
+    Mod+Shift+Up    { move-column-to-monitor-up; }
+    Mod+Shift+Right { move-column-to-monitor-right; }
+    
+    // 跨显示器移动工作区
+    Mod+Shift+Alt+Up  { move-workspace-to-monitor-up; }
+    Mod+Shift+Alt+Down  { move-workspace-to-monitor-down; }
+    Mod+Shift+Alt+Right  { move-workspace-to-monitor-right; }
+    Mod+Shift+Alt+Left  { move-workspace-to-monitor-left; }
+    // 调节音量
+    Mod+Shift+TouchpadScrollDown { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.02+"; }
+    Mod+Shift+TouchpadScrollUp   { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.02-"; }
+    Mod+Shift+F9 { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.02+"; }
+    Mod+Shift+F10   { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.02-"; }
 
-    Mod+TouchpadScrollDown { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.02+"; }
-    Mod+TouchpadScrollUp   { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.02-"; }
 
     // 截图
-    Alt+SHIFT+A { screenshot; }
-    // Alt+Shift+S { spawn "flameshot" "gui"; }
-    Print { screenshot show-pointer=false; }
-    Ctrl+Print { screenshot-screen; }
-    Alt+Print { screenshot-window write-to-disk=true; }
-    Alt+XF86Launch1 { screenshot-window; }
-    XF86Launch1 { screenshot; }
+    Alt+Shift+A  hotkey-overlay-title="选取区域截图 Select screenshot"  {screenshot;}
+    Alt+Shift+S  hotkey-overlay-title="截取聚焦窗口 Focus-window screenshot" { screenshot-window; }
+    Mod+Alt+Shift+A  hotkey-overlay-title="截取显示器 Monitor screenshot" { screenshot-screen; }
+    //Mod+Shift+S { spawn "~/.config/niri/scripts/satty-screenshot.sh";}
+    Mod+Shift+A  hotkey-overlay-title="截图后按下此键进行编辑 Edit the image after screenshot" { spawn-sh "wl-paste | satty -f -";}
+
 
     // 针对虚拟机软件可能需要键盘控制权。allow-inhibiting=false 忽略当前快捷键本身
     Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-
-    // 退出niri将显示一个确认对话框，以避免意外退出。
-    Mod+Shift+F12 { quit; }
-
 
 }
