@@ -1,85 +1,178 @@
-//可能要安装字体noto-fonts-emoji
 {
-  "layer": "top",
-  "position": "top",
-  "height": 34,
-  // "width": 1366,
-  "modules-left": ["niri/workspaces"],
-  "modules-center": ["clock"],
-  "modules-right": [
-    "wireplumber",
-    "bluetooth",
-    "disk",
-    "cpu",
-    "memory",
-    "battery",
-    "clock",
-    "tray",
-  ],
-  "wlr/taskbar": {
-    "format": "{icon}",
-    "tooltip-format": "{title} | {app_id}",
-    "on-click": "activate",
-    "on-click-middle": "close",
-    "on-click-right": "fullscreen",
-  },
-  "niri/workspaces": {
-    "disable-scroll": true,
-    "all-outputs": false,
-    "format": "{icon}",
-    "format-icons": {
-      "1:term": "",
-      "2:web": "",
-      "3:code": "",
-      "4:work": "",
-      "5:music": "",
-      "6:docs": "",
-    },
-  },
-  "disk": {
-    "format": "󰉉  {percentage_free}%",
-  },
+    "layer": "top",
+    "position": "top",
+    "height": 35,
+    "spacing": 1,
+    "margin": 0,
+    "modules-left": ["niri/workspaces", "niro/mode", "custom/weather", "custom/quote"],
+        "modules-center": ["clock"],                                                                  
+    "modules-right": ["tray","pulseaudio", "backlight", "network", "cpu", "memory", "temperature", "battery", "disk", "custom/uptime"],
 
-  "tray": {
-    // "icon-size": 21,
-    "spacing": 10,
-  },
-  "clock": {
-    "format": "  {:%Y-%m-%d    󰅐  %H:%M}",
-  },
-  "cpu": {
-    "format": "󰻠  {usage}%",
-  },
-  //
-  "memory": {
-    "format": "  {}%",
-  },
-  "battery": {
-    "states": {
-      "warning": 20,
-      "critical": 10,
+    "niri/workspaces": {
+			"disable-scroll": true,
+			"all-outputs": false,
+			"format": "{icon}",
+			"format-icons": {
+					"1:web": "",
+					"2:code": "",
+					"3:term": "",
+					"4:work": "",
+					"5:music": "",
+					"6:docs": "",
+			}
+	},
+
+
+    "niri/mode": {
+        "format": "<span style=\"italic\">{}</span>"
     },
-    "format": "<span color='#ffffff'>{icon}</span>   {capacity}%",
-    "format-charging": "<span color='#e88939'> </span> {capacity}%{time}",
-    "format-plugged": "<span color='#e88939'>{icon}  </span>   {capacity}%",
-    "format-discharging": "<span color='#e88939'>{icon}</span>   {capacity}% ({time})",
-    "format-icons": ["", "", "", "", ""],
-  },
-  "network": {
-    // "interface": "wlp2s0",
-    "format-wifi": "   {essid}: {ipaddr}/{cidr}",
-    "format-ethernet": "  {ifname}: {ipaddr}/{cidr}",
-    "format-disconnected": "⚠ Disconnected ",
-  },
-  "wireplumber": {
-    "format": "{icon}  {volume}%   ",
-    "format-muted": "  ",
-    "on-click": "pvucontrol",
-    "format-icons": ["", " "],
-  },
-  "bluetooth": {
-    "format": " {status}  ",
-    "format-connected-battery": " {device_battery_percentage}%  ",
-    "on-click": "blueberry",
-  },
+
+    "custom/playerctl": {
+        "format": " 󰐊 {}",
+        "return-type": "json",
+        "max-length": 40,
+        "exec": "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{artist}} - {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+        "on-click": "playerctl play-pause",
+        "on-click-right": "playerctl next",
+    },
+
+    "custom/weather": {
+        "exec": "curl 'https://wttr.in/?format=1'",
+        "interval": 3600,
+        "format": "{}",
+        "tooltip": true
+    },
+
+    "custom/quote": {
+        "format": "󰚛 {}",
+        "interval": 3600,
+        "exec": "fortune -s",
+        "on-click": "fortune | yad --text-info --width=400 --height=200 --title='Fortune'",
+        "tooltip": true
+    },
+
+
+
+    "custom/uptime": {
+        "format": "󰔟 {}",
+        "exec": "uptime -p | sed 's/up //; s/ days/d/; s/ hours/h/; s/ minutes/m/'",
+        "interval": 60
+    },
+
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "󰈈",
+            "deactivated": "󰈉"
+        },
+        "tooltip": true
+    },
+
+    "clock": {
+        "format": "󰃮  {:%Y-%m-%d %H:%M}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode"          : "month",
+            "mode-mon-col"  : 3,
+            "weeks-pos"     : "right",
+            "on-scroll"     : 1,
+            "on-click-right": "mode",
+            "format": {
+                "months":     "<span color='#d3c6aa'><b>{}</b></span>",
+                "days":       "<span color='#e67e80'>{}</span>",
+                "weeks":      "<span color='#a7c080'><b>W{}</b></span>",
+                "weekdays":   "<span color='#7fbbb3'><b>{}</b></span>",
+                "today":      "<span color='#dbbc7f'><b><u>{}</u></b></span>"
+            }
+        },
+        "actions": {
+            "on-click-right": "mode",
+            "on-click-forward": "tz_up",
+            "on-click-backward": "tz_down",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
+    },
+
+    "cpu": {
+        "format": "󰘚 {usage}%",
+        "tooltip": true,
+        "interval": 1,
+        "on-click": "kitty -e htop"
+    },
+
+    "memory": {
+        "format": "󰍛 {}%",
+        "interval": 1,
+        "on-click": "kitty -e htop"
+    },
+
+    "temperature": {
+        "critical-threshold": 80,
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["󱃃", "󰔏", "󱃂"],
+        "on-click": "kitty -e s-tui"
+    },
+
+    "battery": {
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰚥 {capacity}%",
+        "format-alt": "{icon} {time}",
+        "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+    },
+
+    "network": {
+        "format-wifi": "󰖩 {essid} ({signalStrength}%)",
+        "format-ethernet": "󰈀 {ifname}",
+        "format-linked": "󰈀 {ifname} (No IP)",
+        "format-disconnected": "󰖪 Disconnected",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "tooltip-format": "{ifname}: {ipaddr}",
+        "on-click": "kitty -e nmtui"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "󰂰 {volume}%",
+        "format-bluetooth-muted": "󰂲 {icon}",
+        "format-muted": "󰝟",
+        "format-icons": {
+            "headphone": "󰋋",
+            "hands-free": "󰥰",
+            "headset": "󰋎",
+            "phone": "󰏲",
+            "portable": "󰄝",
+            "car": "󰄋",
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "on-click": "pavucontrol",
+        "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +2%",
+        "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -2%"
+    },
+
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": ["󰃞", "󰃟", "󰃠"],
+        "on-scroll-up": "brightnessctl set +5%",
+        "on-scroll-down": "brightnessctl set 5%-"
+    },
+
+    "disk": {
+        "interval": 30,
+        "format": "󰋊 {percentage_used}%",
+        "path": "/",
+        "on-click": "kitty -e gdu /"
+    },
+
+    "tray": {
+        "icon-size": 18,
+        "spacing": 5
+    }
 }
