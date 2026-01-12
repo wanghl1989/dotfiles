@@ -1,259 +1,261 @@
-/* Define colors */
-@define-color background1 rgba(45, 31, 76, 1);
-@define-color background2 rgba(0, 0, 0, 0);
-@define-color separator #282236;
-@define-color warning #FF79C6;
-@define-color caution #282236;
-@define-color performance #FF92DF;
-@define-color audio #aca1cf;
-@define-color dubious #542da1;
-@define-color date #e3a81f;
-@define-color work #bba4fe;
-@define-color raincheck rgba(45, 30, 103, 0.4);
-@define-color love #cbb6fe;
-@define-color lovergirl rgba(187, 164, 254, 0.7);
-@define-color heartbreak rgba(187, 164, 254, 0.2);
-@define-color sand #ebcab6;
-@define-color sandtomb rgba(235, 202, 182, 0.7);
-@define-color somber #829dd4;
-@define-color pain rgba(71, 57, 95, 0.4);
-@define-color death rgba(49, 20, 86, 0.4);
-@define-color grief #e3b872;
-@define-color text #ffffff;
+/*Colorschemes, there are Gruvbox, Tokyo Night, and Everforest by default. The way it works is whichever colorscheme section is defined last will be used. Here everforest is last, but put any one you want to use as the last one.*/
+
+
+@define-color background #1e2124;
+@define-color background-light #24283b;
+@define-color foreground #ddf7ff;
+@define-color black #15161e;
+@define-color red #ff6e5e;
+@define-color green #50f872;
+@define-color yellow #f1ff5e;
+@define-color blue #829dd4;
+@define-color magenta #ff92df;
+@define-color cyan #7cf8f7;
+@define-color white #ddf7ff;
+@define-color orange #ffbd5e;
+
+
+/* Module-specific colors */
+@define-color workspaces-color @foreground;
+@define-color workspaces-focused-bg @green;
+@define-color workspaces-focused-fg @green;
+@define-color workspaces-urgent-bg @red;
+@define-color workspaces-urgent-fg @black;
+
+/* Text and border colors for modules */
+@define-color mode-color @orange;
+@define-color mpd-color @magenta;
+@define-color weather-color @magenta;
+@define-color playerctl-color @magenta;
+@define-color clock-color @green;
+@define-color cpu-color @green;
+@define-color memory-color @magenta;
+@define-color temperature-color @yellow;
+@define-color temperature-critical-color @red;
+@define-color battery-color @cyan;
+@define-color battery-charging-color @green;
+@define-color battery-warning-color @yellow;
+@define-color battery-critical-color @red;
+@define-color network-color @blue;
+@define-color network-disconnected-color @red;
+@define-color pulseaudio-color @orange;
+@define-color pulseaudio-muted-color @red;
+@define-color backlight-color @yellow;
+@define-color disk-color @cyan;
+@define-color uptime-color @green;
+@define-color updates-color @orange;
+@define-color quote-color @green;
+@define-color idle-inhibitor-color @foreground;
+@define-color idle-inhibitor-active-color @red;
 
 * {
-  font-family: "GoogleSansCode Nerd Font Mono";
-  font-size: 10pt;
-  font-weight: 600;
+    /* Base styling for all modules */
+    border: none;
+    border-radius: 0;
+    font-family: "GoogleSansCode Nerd Font Mono";
+    font-size: 15px;
+    min-height: 0;
 }
 
 window#waybar {
-  background-color: @background2;
-  color: @love;
-  border-radius: 6pt;
-}
-/* window.left#waybar {
-min-width: 4px;
-}
-window.left#waybar:hover {
-min-width: 64px;
-} */
-
-.modules-left,
-.modules-center,
-.modules-right {
-  background: @pain;
-  background-blend-mode: normal;
-  margin: 7px 5px;
-  padding: 4px 2px;
-  border-radius: 20px;
-  border: 2px solid @heartbreak;
-  box-shadow: 0px 0px 3px 4px @heartbreak;
+    background-color: @background;
+    color: @foreground;
 }
 
-.modules-left {
-  padding: 0;
+
+
+/* Common module styling with border-bottom */
+#mode, #mpd, #custom-weather, #custom-playerctl, #clock, #cpu,
+#memory, #temperature, #battery, #network, #pulseaudio, #wireplumber
+#backlight, #disk, #custom-uptime, #custom-updates, #custom-quote,
+#idle_inhibitor, #tray {
+    padding: 0 10px;
+    margin: 0 2px;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
 }
 
-.modules-center {
-  padding: 0 10px;
-}
-
-#workspaces {
-  padding: 2px 7px;
-}
-
+/* Workspaces styling */
 #workspaces button {
-  color: @work;
-  background: @raincheck;
-  border: 2px solid @lovergirl;
-  font-family: "Font Awesome 7 Brands";
-  border-radius: 20px;
-  /* box-shadow: 0px 0px 3px 4px @heartbreak; */
+    padding: 0 10px;
+    background-color: transparent;
+    color: @workspaces-color;
+    margin: 0;
 }
-#workspaces button.active {
-  color: @date;
-  border: 2px solid @sand;
-  font-family: "Font Awesome 7 Classic";
-  box-shadow: 0px 0px 3px 4px @sandtomb;
+
+#workspaces button:hover {
+    background: @background-light;
+    box-shadow: inherit;
 }
-#workspaces button.hidden {
-  color: @love;
-}
-#workspaces button.hidden.active {
-  color: @text;
-  border: 2px solid @sand;
+
+#workspaces button.focused {
+    box-shadow: inset 0 -2px @workspaces-focused-fg;
+    color: @workspaces-focused-fg;
+    font-weight: 900;
 }
 
 #workspaces button.urgent {
-  background-color: @date;
+    background-color: @workspaces-urgent-bg;
+    color: @workspaces-urgent-fg;
 }
 
-button:hover {
-  background: inherit;
-  box-shadow: inset 0px -1px 3px 4px #ba9887;
+/* Module-specific styling */
+#mode {
+    color: @mode-color;
+    border-bottom-color: @mode-color;
 }
 
-button.active:hover {
-  background: inherit;
-  box-shadow: inset 0 -1px 3px 4px #685da6;
+#mpd {
+    color: @mpd-color;
+    border-bottom-color: @mpd-color;
 }
 
-#custom-swaync {
-  font-family: "NotoSansMono Nerd Font";
+#mpd.disconnected,
+#mpd.stopped {
+    color: @foreground;
+    border-bottom-color: transparent;
 }
 
-#custom-btop,
-#dwl-window,
-#mpris,
-#cava,
-#custom-sys_upd,
-#tray,
-#cpu,
-#memory,
-#disk,
-#network,
-#bluetooth {
-  color: @love;
-  border: @love;
+
+#custom-weather {
+    color: @weather-color;
+    border-bottom-color: @weather-color;
 }
 
-#idle_inhibitor,
-#custom-wall_eng {
-  color: @grief;
-  font-family: "Font Awesome 7 Classic";
+#custom-playerctl {
+    color: @playerctl-color;
+    border-bottom-color: @playerctl-color;
 }
 
-#custom-todo,
-#custom-session-saver {
-  color: @grief;
-  font-family: "Font Awesome 7 Classic";
+#custom-playerctl.Playing {
+    color: @cyan;
+    border-bottom-color: @cyan;
 }
 
-/* #custom-remind {
-padding: 0 10px;
-margin: 0 0px;
-color: @love;
-background-color: @lovergirl;
-} */
-
-/* #dwl-window {
-padding-block-start: 2px;
-} */
-
-/* #dwl-window,
-#cava,
-#tray,
-#network,
-#bluetooth {
-background-color: @pain;
-} */
-
-#custom-spacer {
-  color: @separator;
+#custom-playerctl.Paused {
+    color: @orange;
+    border-bottom-color: @orange;
 }
 
-#custom-spacer1 {
-  background: @background2;
+#clock {
+    color: @clock-color;
+    border-bottom-color: @clock-color;
 }
 
-#custom-spacer2 {
-  background: @background2;
+#cpu {
+    color: @cpu-color;
+    border-bottom-color: @cpu-color;
 }
 
-#custom-spacer3 {
-  background: @background2;
+#wireplumber {
+    color: @orange;
+    border-bottom-color: @orange;
 }
 
-#custom-spacer4 {
-  background: @background2;
+#memory {
+    color: @memory-color;
+    border-bottom-color: @memory-color;
 }
 
-#custom-spacer5 {
-  background: @background2;
+#temperature {
+    color: @temperature-color;
+    border-bottom-color: @temperature-color;
 }
 
-#custom-spacer6 {
-  background: @background2;
+#temperature.critical {
+    color: @temperature-critical-color;
+    border-bottom-color: @temperature-critical-color;
 }
 
-#custom-spacer7 {
-  background: @background2;
+#battery {
+    color: @battery-color;
+    border-bottom-color: @battery-color;
 }
 
-.top#custom-spacer1,
-.top#custom-spacer2,
-.top#custom-spacer3,
-.top#custom-spacer4,
-.top#custom-spacer5,
-.top#custom-spacer6,
-.top#custom-spacer7 {
-  font-size: 22px;
-  padding: 0 0px;
-  color: @somber;
+#battery.charging, #battery.plugged {
+    color: @battery-charging-color;
+    border-bottom-color: @battery-charging-color;
 }
 
-#custom-jwilog {
-  color: @date;
+#battery.warning:not(.charging) {
+    color: @battery-warning-color;
+    border-bottom-color: @battery-warning-color;
 }
 
-.left#custom-spacer1,
-.left#custom-spacer2,
-.right#custom-spacer1,
-.right#custom-spacer2 {
-  font-size: 17px;
-  padding: 0 0px;
-  color: @somber;
+#battery.critical:not(.charging) {
+    color: @battery-critical-color;
+    border-bottom-color: @battery-critical-color;
 }
 
-#pulseaudio-slider {
-  padding: 0;
-  margin: 0;
-}
-#pulseaudio-slider slider {
-  min-height: 0px;
-  min-width: 0px;
-  opacity: 0.7;
-  background: @audio;
-  background-image: none;
-  border: none;
-  box-shadow: 0px 0px 3px 3px rgba(203, 166, 247, 0.4);
-}
-#pulseaudio-slider trough {
-  min-height: 80px;
-  min-width: 5px;
-  border-radius: 5px;
-  background: @pain;
-}
-#pulseaudio-slider highlight {
-  min-width: 10px;
-  border-radius: 5px;
-  background: @love;
+#network {
+    color: @network-color;
+    border-bottom-color: @network-color;
 }
 
-/* #backlight-slider slider {
-min-height: 0px;
-min-width: 0px;
-opacity: 0.7;
-background: @love;
-background-image: none;
-border: none;
-box-shadow: none;
-background: none;
+#network.disconnected {
+    color: @network-disconnected-color;
+    border-bottom-color: @network-disconnected-color;
 }
-#backlight-slider trough {
-min-height: 80px;
-min-width: 5px;
-border-radius: 5px;
-background: @love;
-}
-#backlight-slider highlight {
-min-width: 10px;
-border-radius: 5px;
-background: @pain;
-} */
 
-#custom-vpn {
-  font-family: "GoogleSansCode Nerd Font Mono";
-  color: @love;
+#pulseaudio {
+    color: @pulseaudio-color;
+    border-bottom-color: @pulseaudio-color;
+}
+
+#pulseaudio.muted {
+    color: @pulseaudio-muted-color;
+    border-bottom-color: @pulseaudio-muted-color;
+}
+
+#backlight {
+    color: @backlight-color;
+    border-bottom-color: @backlight-color;
+}
+
+#disk {
+    color: @disk-color;
+    border-bottom-color: @disk-color;
+}
+
+#custom-uptime {
+    color: @uptime-color;
+    border-bottom-color: @uptime-color;
+}
+
+#custom-updates {
+    color: @updates-color;
+    border-bottom-color: @updates-color;
+}
+
+#custom-quote {
+    color: @quote-color;
+    border-bottom-color: @quote-color;
+}
+
+#idle_inhibitor {
+    color: @idle-inhibitor-color;
+    border-bottom-color: transparent;
+}
+
+#idle_inhibitor.activated {
+    color: @idle-inhibitor-active-color;
+    border-bottom-color: @idle-inhibitor-active-color;
+}
+
+#tray {
+    background-color: transparent;
+    padding:  10px 10px 0 10px;
+    margin: 0 2px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    color: @red;
+    border-bottom-color: @red;
 }

@@ -92,9 +92,9 @@ environment {
 spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 
 spawn-at-startup "/usr/bin/fcitx5"
-spawn-at-startup "/usr/bin/waybar"
-spawn-at-startup "mako"
-spawn-sh-at-startup "clipse --listen"
+// spawn-at-startup "/usr/bin/waybar"
+// spawn-at-startup "mako"
+// spawn-sh-at-startup "clipse --listen"
 
 // 壁纸swww用于overview背景，swaybg用于workspace背景
 // spawn-at-startup "/usr/bin/swww-daemon"
