@@ -15,3 +15,6 @@ Rime/installation.yaml
 config/btop/btop.conf
 
 config/tmux/plugins
+
+clipse-gui.log
+linux/niri/monitor.kdl
