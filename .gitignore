@@ -18,3 +18,4 @@ config/tmux/plugins
 
 clipse-gui.log
 linux/niri/monitor.kdl
+config/uv/uv-receipt.json

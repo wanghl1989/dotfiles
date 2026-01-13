@@ -8,6 +8,9 @@ else
   FONTBASE="$HOME/.local/share/fonts"
 fi
 
+if [[ ! -e $FONTBASE ]]; then 
+  mkdir -p $FONTBASE
+fi 
 # FONT_DIR="$FONTBASE/ComicShannsMono"
 # if [[ ! -d "$FONT_DIR" ]]; then
 #   echo "Installing Nerd Fonts. If the download fails, you can try deleting the directory $FONT_DIR and restarting zsh."
@@ -34,6 +37,14 @@ else
 fi
 
 FONT_SRC="$(dirname $(dirname "$SCRIPT_PATH"))/font"
+find "$FONT_SRC/" -mindepth 1 -maxdepth 1 -print0 | while LFS= read -r -d '' src; do {
+   if [[ -d $src ]]; then 
+       cp -r $src $FONTBASE
+   fi
 
-cp "$FONT_SRC/*" "$FONTBASE/"
+   if [[ -f $src ]]; then 
+       cp  $src $FONTBASE
+   fi
+}
+done
 echo "✅ 成功安装字体"
