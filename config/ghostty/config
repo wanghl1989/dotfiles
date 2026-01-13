@@ -5,8 +5,8 @@ window-padding-x = 10
 window-padding-y = 10
 window-padding-balance = true
 
-# font-family = GoogleSansCode Nerd Font Mono
-font-family = ComicShannsMono Nerd Font Mono
+font-family = GoogleSansCode Nerd Font Mono
+#font-family = ComicShannsMono Nerd Font Mono
 
 font-size = 15
 

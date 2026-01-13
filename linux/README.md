@@ -41,3 +41,5 @@ output "HDMI-0" {
     // position x=1280 y=0
 }
 ```
+
+在ubuntu中升级后无法使用微信等程序，还是有bug，可能需要25.10后的版本
