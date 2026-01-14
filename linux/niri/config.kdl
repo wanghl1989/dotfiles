@@ -69,20 +69,19 @@ xwayland-satellite {
 // 覆盖由niri启动的进程的环境变量
 environment {
 
-  XDG_CURRENT_DESKTOP "niri"
-  STEAM_RUNTIME "1"
-  ELECTRON_OZONE_PLATFORM_HINT "auto"
+
   // ALL_PROXY "http://127.0.0.1:7897"
 
   // https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Sway
-  // QT_IM_MODULES "fcitx" // 针对微信，如果失效就老老实实改/etc/environment
-  // XMODIFIERS "@im=fcitx"
+  QT_IM_MODULES "fcitx" // 针对微信，如果失效就老老实实改/etc/environment
+  XMODIFIERS "@im=fcitx"
   // GTK_IM_MODULE null
   // SDL_IM_MODULE null
   // GLFW_IM_MODULE null
 
   // https://github.com/noctalia-dev/noctalia-shell/issues/437
-  // QT_QPA_PLATFORMTHEME "gtk3"
+  QT_QPA_PLATFORMTHEME "gtk3"
+  KITTY_ENABLE_WAYLAND=1
 }
 
 // Add lines like this to spawn processes at startup.
