@@ -64,11 +64,32 @@ GLFW_IM_MODULE=ibus
 ```
 
 wayland:
+1. 不要设置 GTK_IM_MODULE 环境变量！
+
+2. 对于 Gtk2，向 ~/.gtkrc-2.0 添加如下内容：
 
 ```
-XMODIFIERS=@im=fcitx
-QT_IM_MODULE=fcitx
-GTK_IM_MODULE=fcitx
+gtk-im-module="fcitx"
+```
+
+3. 对于 Gtk3，向 ~/.config/gtk-3.0/settings.ini 添加如下内容：
+
+```
+[Settings]
+gtk-im-module=fcitx
+```
+
+4. 对于 Gtk4。向 ~/.config/gtk-4.0/settings.ini 添加如下内容：
+```
+[Settings]
+gtk-im-module=fcitx
+
+```
+5. 如果你在用 GNOME 3 和以上版本，你还需要运行以下命令：
+
+```
+gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "{'Gtk/IMModule':<'fcitx'>}"
+
 ```
 
 ### Copy to clipboard in Neovim of Linux
