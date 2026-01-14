@@ -1,6 +1,6 @@
 ## Usage
 
-this project is for storing my basic dev configure of bundle of modern tools.
+This project is for storing my basic dev configure of bundle of modern tools.
 
 Steps:
 
@@ -37,9 +37,9 @@ Steps:
 `Rime` is the chinese input method, the configuration of Rime is in `./Rime/`
 [Download link](https://rime.im/download/)
 
-- For macos, use `squirrel`
-- For windows, use `weasel`
-- For linux, use `fcitx5-rime`
+- For MacOS, use `squirrel`
+- For Windows, use `weasel`
+- For Linux, use `fcitx5-rime`
 
 ### Other
 
@@ -47,9 +47,11 @@ Steps:
 
 ## issue
 
-### kitty无法输入中文
+### kitty chinese input method
 
-在debian系统上，在`/etc/environment`中加入以下设置, 并重启电脑
+In Debian/Ubuntu, add these lines to `/etc/environment`, then reboot.
+
+x11:
 
 ```config
 GTK_IM_MODULE=fcitx
@@ -58,7 +60,18 @@ XMODIFIERS=@im=fcitx
 SDL_IM_MODULE=fcitx
 INPUT_METHOD=fcitx
 GLFW_IM_MODULE=ibus
-# Wayland专属关键配置
-XDG_CURRENT_DESKTOP=GNOME
-GTK_USE_PORTAL=1
+
 ```
+
+wayland:
+
+```
+XMODIFIERS=@im=fcitx
+QT_IM_MODULE=fcitx
+GTK_IM_MODULE=fcitx
+```
+
+### Copy to clipboard in Neovim of Linux
+
+- x11: install `xclip`
+- wayland: install `wl-clipboard`
