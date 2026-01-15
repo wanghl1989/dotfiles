@@ -63,14 +63,22 @@ fi
 
 # git
 if command -v git &> /dev/null; then
-  alias git-log="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "
-  alias git-commit="git commit -m"
-  alias git-add="git add -A"
+  alias gl="git pull"
+  alias gp="git push"
+  alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "
+  alias gc="git commit -m"
+  alias ga="git add"
 fi
 
 
+
+
 if command -v lazygit &> /dev/null; then
-  alias lg="lazygit"
+  alias lzg="lazygit"
+fi
+
+if command -v lazydocker &> /dev/null; then
+  alias lzd="lazygit"
 fi
 # kitty
 if command -v kitten &> /dev/null; then
