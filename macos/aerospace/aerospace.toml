@@ -226,3 +226,7 @@ run = ['layout floating']
 [[on-window-detected]]
 if.app-id = 'com.apple.calculator'
 run = ['layout floating']
+# ghostty bug: https://ghostty.org/docs/help/macos-tiling-wms
+[[on-window-detected]]
+if.app-id = "com.mitchellh.ghostty"
+run = ["layout tiling"]

@@ -23,6 +23,9 @@ keybind = ctrl+w>c=new_tab
 keybind = ctrl+w>Q=close_window
 keybind = ctrl+w>ctrl+r=reload_config
 
+# quick shell
+quick-terminal-size = 30%,60%
+keybind = global:cmd+backquote=toggle_quick_terminal
 
 keybind = ctrl+w>shift+x=close_tab
 keybind = ctrl+w>]=next_tab

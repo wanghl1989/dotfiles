@@ -26,13 +26,13 @@ ICON = "  \uf489 " + os.uname().nodename + " "
 icon_fg = as_rgb(color_as_int(opts.color6))
 icon_bg = as_rgb(color_as_int(opts.color0))
 
-CLOCK = " \uf017 %H:%M "
-clock_fg = as_rgb(color_as_int(opts.color15))
-clock_bg = as_rgb(color_as_int(opts.color5))
+CLOCK = " \ue641 %H:%M "
+clock_fg = as_rgb(color_as_int(opts.foreground))
+clock_bg = as_rgb(color_as_int(opts.color0))
 
 DATE = " \uf073 %Y-%m-%d "
 date_fg = as_rgb(color_as_int(opts.color0))
-date_bg = as_rgb(color_as_int(opts.color2))
+date_bg = as_rgb(color_as_int(opts.color5))
 
 # Requires nerdfont: https://www.nerdfonts.com
 SEPARATOR_SYMBOL_LEFT = "\ue0b0"
@@ -196,8 +196,8 @@ def draw_tab(
     date = now.strftime(DATE)
     cells = []
 
+    cells.append((clock, clock_fg, clock_bg))
     cells.append((date, date_fg, date_bg))
-    # cells.append((clock, clock_fg, clock_bg))
 
     right_status_length = _cell_length(cells)
 
