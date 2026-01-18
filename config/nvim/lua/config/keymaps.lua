@@ -38,6 +38,9 @@ map("i", "jk", "<esc>", opts)
 
 map({ "i", "n", "x" }, "<A-u>", "", opts)
 
+map("v", "<leader>j", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
+map("v", "<leader>k", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+
 -- mark
 map("n", "<leader>ml", ":marks<cr>", { noremap = true, silent = true, desc = "Show all marks" })
 map("n", "<leader>md", ":delmarks ", { noremap = true, silent = true, desc = "Delete mark" })
@@ -47,9 +50,35 @@ map("n", "<S-j>", function()
   vim.diagnostic.oepn_float()
 end, opts)
 
-map("n", "<leader>fH", function()
+map("n", "<leader>fh", function()
   Snacks.picker.help()
 end, { noremap = true, silent = true, desc = "Show help." })
+
+map("n", "<leader>fs", function()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+  local function has_lsp_symbols()
+    for _, client in ipairs(clients) do
+      if client.server_capabilities.documentSymbolProvider then
+        return true
+      end
+    end
+    return false
+  end
+
+  if has_lsp_symbols() then
+    Snacks.picker.lsp_symbols({
+      layout = "dropdown",
+      tree = true,
+      -- on_show = function()
+      --   vim.cmd.stopinsert()
+      -- end,
+    })
+  else
+    Snacks.picker.treesitter()
+  end
+end, { desc = "Find symbol in current buffer" })
 
 map({ "n", "v" }, "<leader>yy", [["+y]], { noremap = true, desc = "Copy to clipboard" })
 map({ "n", "v" }, "<leader>yl", [["+Y]], { noremap = true, desc = "Copy lines to clipboard" })
