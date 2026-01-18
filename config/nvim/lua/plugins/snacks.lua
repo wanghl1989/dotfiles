@@ -4,6 +4,7 @@ return {
   "snacks.nvim",
   opts = {
     dashboard = {
+      enabled = false,
       preset = {
         header = [[
                                                 ───▐▀▄──────▄▀▌───▄▄▄▄▄▄▄          
@@ -23,6 +24,9 @@ return {
       animate = { enabled = false },
     },
     scroll = {
+      enabled = false,
+    },
+    explorer = {
       enabled = false,
     },
     picker = {
