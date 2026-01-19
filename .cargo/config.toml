@@ -1,0 +1,27 @@
+[source.crates-io]
+replace-with = 'ustc' # 选择ustc或者字节的源
+
+# 中科大
+[source.ustc]
+registry = "git://mirrors.ustc.edu.cn/crates.io-index"
+
+[registries.ustc]
+index = "https://mirrors.ustc.edu.cn/crates.io-index"
+
+# 稀疏索引，要求 cargo >= 1.68
+[source.ustc-sparse]
+registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
+
+# 字节
+[source.rsproxy]
+registry = "https://rsproxy.cn/crates.io-index"
+
+[registries.rsproxy]
+index = "https://rsproxy.cn/crates.io-index"
+
+[source.rsproxy-sparse]
+registry = "sparse+https://rsproxy.cn/index/"
+
+
+[net]
+git-fetch-with-cli = true

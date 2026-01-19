@@ -15,23 +15,11 @@ return {
   },
   opts = {
     keymap = {
-      -- ["<Tab>"] = { LazyVim.cmp.map({ "snippet_forward" }), "select_next", "fallback" },
-      -- ["<S-Tab>"] = { LazyVim.cmp.map({ "snippet_backward" }), "select_prev", "fallback" },
       ["<CR>"] = { "accept", "fallback" },
       ["<Esc>"] = { "hide", "fallback" },
-      ["<C-j>"] = { "select_and_accept" },
-      ["<Tab>"] = {
-        function(cmp)
-          if cmp.snippet_active() then
-            return cmp.accept()
-          else
-            return cmp.select_and_accept()
-          end
-        end,
-        "snippet_forward",
-        "fallback",
-      },
-      ["<S-Tab>"] = { "snippet_backward", "fallback" },
+      ["<C-j>"] = { "select_next", "fallback" },
+      ["<C-k>"] = { "select_prev", "fallback" },
+      ["<Tab>"] = { "select_and_accept" },
     },
     completion = {
       list = { selection = { preselect = false, auto_insert = false } },
@@ -61,4 +49,3 @@ return {
     },
   },
 }
-

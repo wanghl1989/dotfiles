@@ -87,7 +87,10 @@ echo "🔄  Rime 配置文件路径为: $RIME_PATH"
 create_symlink "$BASE_ROOT/Rime" "$RIME_PATH"
 
 # 在home目录下的配置
-HOME_ITEMS=(".vimrc")
+HOME_ITEMS=(
+  ".vimrc"             # vim config
+  ".cargo/config.toml" # cargo
+)
 
 for item in "${HOME_ITEMS[@]}"; do
   source_path="$BASE_ROOT/$item"

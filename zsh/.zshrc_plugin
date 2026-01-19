@@ -63,6 +63,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#82AAFF,bold,underline"
 ZVM_SYSTEM_CLIPBOARD_ENABLED=true
 ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
 ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+ZVM_READKEY_ENGINE=$ZVM_READKEY_ENGINE_ZLE # nex engine 
 
 function after_zvm_init() {
   [ -f ~/.fzf ] && source ~/.fzf
@@ -71,7 +72,6 @@ function after_zvm_init() {
 
 
 zvm_after_init_commands+=(after_zvm_init)
-
 
 
 # add snippet
