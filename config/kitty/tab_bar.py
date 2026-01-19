@@ -26,9 +26,9 @@ ICON = "  \uf489 " + os.uname().nodename + " "
 icon_fg = as_rgb(color_as_int(opts.color6))
 icon_bg = as_rgb(color_as_int(opts.color0))
 
-CLOCK = " \ue641 %H:%M "
-clock_fg = as_rgb(color_as_int(opts.foreground))
-clock_bg = as_rgb(color_as_int(opts.color0))
+# CLOCK = " \ue641 %H:%M "
+# clock_fg = as_rgb(color_as_int(opts.foreground))
+# clock_bg = as_rgb(color_as_int(opts.color0))
 
 DATE = " \uf073 %Y-%m-%d "
 date_fg = as_rgb(color_as_int(opts.color0))
@@ -192,11 +192,11 @@ def draw_tab(
     if timer_id is None:
         timer_id = add_timer(_redraw_tab_bar, REFRESH_TIME, True)
     now = datetime.now()
-    clock = now.strftime(CLOCK)
+    # clock = now.strftime(CLOCK)
     date = now.strftime(DATE)
     cells = []
 
-    cells.append((clock, clock_fg, clock_bg))
+    # cells.append((clock, clock_fg, clock_bg))
     cells.append((date, date_fg, date_bg))
 
     right_status_length = _cell_length(cells)

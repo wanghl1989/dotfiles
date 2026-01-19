@@ -34,10 +34,12 @@ symbol = " "
 
 [c]
 symbol = " "
+style = "bold fg:#ff6e5e"
 format = '[$symbol($version(-$name) )]($style)'
 
 [cpp]
 symbol = " "
+style = "bold fg:#ff6e5e"
 format = '[$symbol($version(-$name) )]($style)'
 
 
@@ -58,26 +60,32 @@ symbol = " "
 # home_symbol = ""
 # truncation_length = 3
 # truncation_symbol = ""
+style = "bold fg:#ff5ef1"
 format = " [ $path]($style) "
 
 [docker_context]
 symbol = " "
+style = "bold fg:#f1ff5e"
 format = '[$symbol$context]($style) '
 
 
 [git_branch]
 symbol = " "
+style = "bold fg:#7cf8f7"
 format = '[$symbol$branch(:$remote_branch)]($style) '
 # format = '[ $symbol $branch]($style)'
 
 [git_status]
+style = "bold fg:#7cf8f7"
 format = '[\[($all_status$ahead_behind)\]]($style)'
 
 [git_commit]
+style = "bold fg:#7cf8f7"
 tag_symbol = '  '
 
 [golang]
 symbol = " "
+style = "bold fg:#7cf8f7"
 format = '[$symbol($version )]($style)'
 
 [guix_shell]
@@ -116,6 +124,7 @@ symbol = " "
 
 [nodejs]
 symbol = " "
+style = "bold fg:#829dd4"
 format = '[$symbol($version )]($style)'
 
 
@@ -173,11 +182,13 @@ Windows = "󰍲"
 
 [package]
 symbol = "󰏗 "
+style = "bold fg:#f1ff5e"
 format = '[$symbol$version]($style) '
 
 
 [python]
 symbol = " "
+style = 'bold fg:#50f872'
 format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 
 [ruby]
@@ -185,6 +196,7 @@ symbol = " "
 
 [rust]
 symbol = "󱘗 "
+style = "bold fg:#ffbd5e"
 format = '[$symbol($version )]($style)'
 
 
@@ -202,13 +214,14 @@ format = '$symbol '
 #
 [time]
 disabled = false
+style = "bold fg:#829dd4"
 format = '[ $time ]($style) '
 time_format = "%H:%M"
 
 [cmd_duration]
 show_milliseconds = true
 format = "[󰗕 in $duration ]($style)"
-style = "fg:#50f872"
+style = "fg:#ddf7ff"
 disabled = false
 show_notifications = true
 min_time_to_notify = 45000
