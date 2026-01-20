@@ -3,12 +3,19 @@ https://www.python.org/downloads/feed.rss ~python python
 https://github.com/astral-sh/ruff/releases.atom ~ruff python
 https://github.com/astral-sh/uv/releases.atom ~uv python
 https://github.com/astral-sh/ty/releases.atom ~ty python
+https://github.com/pytorch/pytorch/releases.atom ~torch  python ai
+https://github.com/huggingface/transformers/releases.atom ~transformers python ai
+https://github.com/ultralytics/ultralytics/releases.atom ~ultralytics python ai
 
-https://github.com/neovim/neovim/releases.atom ~neovim neovim
+
+https://github.com/neovim/neovim/releases.atom ~neovim software
+https://github.com/clash-verge-rev/clash-verge-rev ~clash software
 
 
 https://github.com/rust-lang/rust/releases.atom ~rust rust
 
-https://github.com/ultralytics/ultralytics/releases.atom ~ultralytics python
 
+
+https://github.com/vuejs/core/releases.atom ~vue js
+https://github.com/microsoft/TypeScript/releases.atom ~typescript js
 
