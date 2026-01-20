@@ -30,7 +30,10 @@ return {
     },
     image = {},
     indent = {
-      scope = { enabled = false },
+      scope = {
+        enabled = false,
+        only_current = false, -- only show scope in the current window
+      },
       animate = { enabled = false },
     },
     scroll = {
