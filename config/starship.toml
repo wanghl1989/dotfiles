@@ -8,7 +8,8 @@ $git_branch\
 $git_status\
 $git_commit\n\
 [ └─](bold #50f872)\
-$character"""
+$character\
+"""
 
 right_format = """
 $cmd_duration\
@@ -16,12 +17,14 @@ $package\
 $c\
 $cpp\
 $rust\
+${custom.cargo_version}\
 $golang\
 $nodejs\
 $python\
 $conda\
 $docker_context\n\
 $time\
+${custom.emoji}\
 """
 
 [username]
@@ -60,7 +63,7 @@ symbol = " "
 # home_symbol = ""
 # truncation_length = 3
 # truncation_symbol = ""
-style = "bold fg:#ff5ef1"
+style = "bold fg:#7cf8f7"
 format = " [ $path]($style) "
 
 [docker_context]
@@ -69,18 +72,24 @@ style = "bold fg:#f1ff5e"
 format = '[$symbol$context]($style) '
 
 
+[custom.zvm]
+symbol = " "
+command = "echo $ZVM_MODE"
+style = "bold fg:#ff5ef1"
+format = '[$symbol ($output)]($style) '
+
 [git_branch]
 symbol = " "
-style = "bold fg:#7cf8f7"
+style = "bold fg:#ff5ef1"
 format = '[$symbol$branch(:$remote_branch)]($style) '
 # format = '[ $symbol $branch]($style)'
 
 [git_status]
-style = "bold fg:#7cf8f7"
+style = "bold fg:#ff5ef1"
 format = '[\[($all_status$ahead_behind)\]]($style)'
 
 [git_commit]
-style = "bold fg:#7cf8f7"
+style = "bold fg:#ff5ef1"
 tag_symbol = '  '
 
 [golang]
@@ -225,3 +234,19 @@ style = "fg:#ddf7ff"
 disabled = false
 show_notifications = true
 min_time_to_notify = 45000
+
+[custom.cargo_version]
+command = 'cat Cargo.toml|grep version|head -1|cut -f2 -d\"'
+detect_extensions = ['rs']
+detect_files = ['Cargo.toml']
+style = "bold fg:#ffbd5e"
+
+[custom.emoji]
+description = "Displays a (pseudo) random emoji for each prompt"
+# change the content of the EMOJIS array to your liking and replace the
+# number 12 with the number of items in the array, minus one
+command = "EMOJIS=(⛵️ 🛰 🪐 🚀 🧡 🔭 🌍 💫 ☄️ ✨ 🌠 🌌 ⭐️); EMOJI_INDEX=$(( $RANDOM % 12 + 0 )); echo ${EMOJIS[$EMOJI_INDEX]}"
+# if you are on windows, replace "true" with "1"
+when = "true"
+shell = ["bash", "--noprofile", "--norc"]
+format = " $output "

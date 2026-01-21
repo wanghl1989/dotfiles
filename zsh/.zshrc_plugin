@@ -61,13 +61,14 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#82AAFF,bold,underline"
 
 # zsh-vi-mode use system clipboard
 ZVM_SYSTEM_CLIPBOARD_ENABLED=true
-ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
+# ZVM_VI_INSERT_ESCAPE_BINDKEY=jk
 ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
 ZVM_READKEY_ENGINE=$ZVM_READKEY_ENGINE_ZLE # nex engine 
 
 function after_zvm_init() {
   [ -f ~/.fzf ] && source ~/.fzf
   bindkey '^Y' autosuggest-accept #Ctrl+Y accept
+  bindkey ':' undefined-key #禁用command模式
 }
 
 
@@ -75,8 +76,8 @@ zvm_after_init_commands+=(after_zvm_init)
 
 
 # add snippet
-zinit snippet OMZP::git
-zinit snippet OMZP::sudo
+# zinit snippet OMZP::git
+# zinit snippet OMZP::sudo
 zinit snippet OMZP::command-not-found
 
 #zsh basic option
