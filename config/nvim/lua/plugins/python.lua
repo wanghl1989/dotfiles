@@ -34,14 +34,10 @@ return {
   },
   {
     "linux-cultist/venv-selector.nvim",
-    dependencies = {
-      "neovim/nvim-lspconfig",
-      -- optional: you can also use fzf-lua, snacks, mini-pick instead.
-    },
+    cmd = "VenvSelect",
     ft = "python", -- Load when opening Python files
-    keys = {
-      { "<leader>vs", "<cmd>VenvSelect<cr>", { desc = "select python venv path" } }, -- Open picker on keymap
-    },
+    keys = { { "<leader>vs", "<cmd>:VenvSelect<cr>", desc = "Select VirtualEnv", ft = "python" } },
+
     opts = {
       search_venv_managers = true,
       search_workspace = true,
@@ -49,6 +45,20 @@ return {
       options = {
         notify_user_on_venv_activation = true,
         debug = true,
+        statusline_func = {
+          lualine = function()
+            local venv_path = require("venv-selector").venv()
+            if not venv_path or venv_path == "" then
+              return ""
+            end
+
+            local venv_name = vim.fn.fnamemodify(venv_path, ":t")
+            if not venv_name then
+              return ""
+            end
+            return venv_name
+          end,
+        },
       }, -- if you add plugin options, they go here.
     },
   },

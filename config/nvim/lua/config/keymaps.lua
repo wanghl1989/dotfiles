@@ -8,6 +8,7 @@ local opts = { noremap = true, silent = true }
 -- #map("n", "<esc>k", "", { noremap = true, silent = true })
 -- #map("n", "<esc>j", "", { noremap = true, silent = true })
 
+map("n", "<leader>n", "", { desc = "notification and highlights" })
 map("n", "<A-j>", "", { desc = "" })
 map("n", "<A-k>", "", { desc = "" })
 map("i", "<A-j>", "", { desc = "" })
