@@ -4,6 +4,7 @@
 local opt = vim.opt
 vim.g.lazyvim_python_lsp = "ty"
 vim.g.root_spec = { "cwd" }
+vim.o.jumpoptions = "stack"
 -- opt.wrap = true
 opt.swapfile = false
 opt.expandtab = true
