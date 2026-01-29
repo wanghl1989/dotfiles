@@ -13,8 +13,8 @@ Rime/installation.yaml
 
 
 config/btop/btop.conf
-
 config/tmux/plugins
+config/yazi/plugins
 
 clipse-gui.log
 linux/niri/monitor.kdl
@@ -23,3 +23,4 @@ tmux/plugins
 btop/btop.conf
 zed/prompts/prompts-library-db.0.mdb/data.mdb
 zed/prompts/prompts-library-db.0.mdb/lock.mdb
+
