@@ -94,3 +94,48 @@ fi
 # python
 alias vat="source .venv/bin/activate" # source python venv
 
+
+# source engine
+search_engine() {
+
+    if command -v microsoft-edge &> /dev/null; then
+      return 1
+    fi
+
+    if [ -z "$1" ] || [ -z "$2" ]; then
+        echo "请提供搜索引擎和关键词！"
+        echo "用法：search_engine <baidu/bing/google/github> 关键词"
+        return 1
+    fi
+
+    engine=$1
+    keyword=$2
+    encoded_keyword=$(python -c "import urllib.parse; print(urllib.parse.quote('$keyword'))")
+    url=""
+
+    case $engine in
+        "baidu")
+            url="https://www.baidu.com/s?wd=$encoded_keyword"
+            ;;
+        "bing")
+            url="https://www.bing.com/search?q=$encoded_keyword"
+            ;;
+        "google")
+            url="https://www.google.com/search?q=$encoded_keyword"
+            ;;
+        "github")
+            url="https://github.com/search?q=$encoded_keyword"
+            ;;
+        *)
+            echo "不支持的搜索引擎！支持的搜索引擎：baidu、bing、google、github"
+            return 1
+            ;;
+    esac
+
+    microsoft-edge "$url"
+}
+
+alias baidu="search_engine baidu"
+alias bing="search_engine bing"
+alias google="search_engine google"
+alias github="search_engine github"
