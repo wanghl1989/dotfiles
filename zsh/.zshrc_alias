@@ -78,7 +78,7 @@ if command -v lazygit &> /dev/null; then
 fi
 
 if command -v lazydocker &> /dev/null; then
-  alias lzd="lazygit"
+  alias lzd="lazydocker"
 fi
 # kitty
 if command -v kitten &> /dev/null; then
