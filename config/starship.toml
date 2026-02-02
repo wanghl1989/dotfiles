@@ -1,18 +1,13 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-[ ┌─](bold #50f872)\
+[ ┌─](bold #4fe88f)\
 $os\
 $directory\
 $git_branch\
 $git_status\
-$git_commit\n\
-[ └─](bold #50f872)\
-$character\
-"""
-
-right_format = """
-$cmd_duration\
+$git_commit\
+$fill\
 $package\
 $c\
 $cpp\
@@ -22,10 +17,18 @@ $golang\
 $nodejs\
 $python\
 $conda\
-$docker_context\n\
-$time\
+$docker_context\
+$time\n\
+[ └─](bold #4fe88f)\
+$character\
+"""
+
+right_format = """
+$cmd_duration\
 ${custom.emoji}\
 """
+
+continuation_prompt = '▶▶ '
 
 [username]
 disabled = true
@@ -34,6 +37,9 @@ show_always = false
 
 [bun]
 symbol = " "
+
+[line_break]
+disabled = true
 
 [c]
 symbol = " "
@@ -44,6 +50,31 @@ format = '[$symbol($version(-$name) )]($style)'
 symbol = " "
 style = "bold fg:#ff6e5e"
 format = '[$symbol($version(-$name) )]($style)'
+
+[custom.up_left]
+style = "bold fg:#4fe88f"
+when = true
+format = '[ ┌─]($style)'
+
+[custom.down_left]
+style = "bold fg:#4fe88f"
+when = true
+format = '[ └─]($style)'
+
+[custom.up_right]
+style = "bold fg:#4fe88f"
+when = true
+format = '[ ─┐]($style)'
+
+[custom.down_right]
+style = "bold fg:#4fe88f"
+when = true
+format = '[ ─┘]($style)'
+
+
+[fill]
+symbol = ' '
+style = 'bold #4fe88f'
 
 
 [cmake]
@@ -218,9 +249,8 @@ format = '$symbol '
 # vimcmd_replace_one_symbol = '[](bold purple)'
 # vimcmd_replace_symbol = '[](bold purple)'
 # vimcmd_visual_symbol = '[](bold yellow)'
-#
-#
-#
+
+
 [time]
 disabled = false
 style = "bold fg:#829dd4"
