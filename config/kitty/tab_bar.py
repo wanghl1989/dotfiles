@@ -22,6 +22,9 @@ right_status_length = -1
 
 opts = get_options()
 
+bar_fg = as_rgb(color_as_int(opts.foreground))
+bar_bg= as_rgb(color_as_int(opts.background))
+
 ICON = "  \uf489 " + os.uname().nodename + " "
 icon_fg = as_rgb(color_as_int(opts.color6))
 icon_bg = as_rgb(color_as_int(opts.color0))
@@ -132,18 +135,32 @@ def _draw_left_status(
 
     screen.draw(" ")
     screen.cursor.bg = tab_bg
+
     draw_title(draw_data, screen, tab, index)
-    if not needs_soft_separator:
+    screen.draw(" ")
+
+    screen.cursor.fg = tab_bg
+    screen.cursor.bg = bar_bg
+    screen.draw(SEPARATOR_SYMBOL_LEFT)
+
+    if not is_last:
         screen.draw(" ")
-        screen.cursor.fg = tab_bg
+        screen.cursor.fg = bar_bg
         screen.cursor.bg = next_tab_bg
         screen.draw(SEPARATOR_SYMBOL_LEFT)
-    else:
-        prev_fg = screen.cursor.fg
-        if tab_bg == tab_fg:
-            screen.cursor.fg = default_bg
-        screen.draw(" " + SOFT_SEPARATOR_SYMBOL_LEFT)
-        screen.cursor.fg = prev_fg
+
+    # if not needs_soft_separator:
+    #     screen.draw(" ")
+    #     screen.cursor.fg = tab_bg
+    #     screen.cursor.bg = next_tab_bg
+    #     screen.draw(SEPARATOR_SYMBOL_LEFT)
+    # else:
+    #     prev_fg = screen.cursor.fg
+    #     if tab_bg == tab_fg:
+    #         screen.cursor.fg = default_bg
+    #
+    #     screen.draw(" " + SOFT_SEPARATOR_SYMBOL_LEFT)
+    #     screen.cursor.fg = prev_fg
     end = screen.cursor.x
     return end
 

@@ -139,3 +139,6 @@ alias baidu="search_engine baidu"
 alias bing="search_engine bing"
 alias google="search_engine google"
 alias github="search_engine github"
+
+
+export PATH=$PATH:"$HOME/.devtools"

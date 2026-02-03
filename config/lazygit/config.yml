@@ -5,7 +5,7 @@ gui:
     inactiveBorderColor:
       - "#7b8496"
     searchingActiveBorderColor:
-      - "##4fe88f"
+      - "#4fe88f"
     optionsTextColor:
       - "#3c4048"
     selectedLineBgColor:

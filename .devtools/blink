@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+################################################################################
+# 功能描述: 批量软链接
+################################################################################
+
+# ======================== 帮助信息 ========================
+show_help() {
+  echo "📚 递归创建软链接脚本（支持路径内嵌通配符+相对路径）"
+  echo "用法1（路径内嵌通配符）：$0 <带通配符的源路径> <目标目录>"
+  echo "用法2（单独通配符参数）：$0 <源目录> <目标目录> [通配符模式]"
+  echo "示例："
+  echo "  1. 路径内嵌通配符（匹配jpg）：$0 ./data/*.jpg ./target"
+  echo "  2. 路径内嵌通配符（匹配img开头）：$0 /path/data/img* ./target"
+  echo "  3. 单独通配符（匹配多类型）：$0 ./data ./target *.{jpg,png,txt}"
+  echo "  4. 匹配所有文件：$0 ./data ./target"
+}
+
+set -eEuo pipefail
+
+# ======================== 参数解析与兼容处理 ========================
+# 检查参数数量（至少2个）
+if [ $# -lt 2 ] || [ $# -gt 3 ]; then
+  echo "❌ 参数数量错误！"
+  show_help
+  exit 1
+fi
+
+# 初始化变量
+SOURCE_PATH="$1"
+TARGET_DIR=$(realpath -s "$2") # 目标目录转绝对路径
+BASE_DIR=""                    # 源基础目录（无通配符）
+WILDCARD_PATTERN=""            # 通配符模式
+
+# 判断是否是“路径内嵌通配符”写法（源路径包含*、?、{}等通配符）
+if [[ "$SOURCE_PATH" == *'*'* || "$SOURCE_PATH" == *'?'* || "$SOURCE_PATH" == *'{'* ]]; then
+  # 用法1：路径内嵌通配符（如 ./data/*.jpg）
+  if [ $# -ne 2 ]; then
+    echo "❌ 路径内嵌通配符时，只能传入2个参数！"
+    show_help
+    exit 1
+  fi
+
+  # 分离基础目录和通配符（核心逻辑）
+  # 示例：./data/*.jpg → 基础目录=./data/，通配符=*.jpg
+  # 用最后一个/分割路径，前面是目录，后面是通配符
+  BASE_DIR=$(dirname "$SOURCE_PATH")
+  WILDCARD_PATTERN=$(basename "$SOURCE_PATH")
+
+  # 基础目录转绝对路径（支持相对路径）
+  BASE_DIR=$(realpath -s "$BASE_DIR")
+else
+  # 用法2：单独通配符参数（如 ./data ./target *.jpg）
+  BASE_DIR=$(realpath -s "$SOURCE_PATH") # 源目录转绝对路径
+  WILDCARD_PATTERN=${3:-*}               # 无第三个参数则匹配所有
+fi
+
+# ======================== 有效性检查 ========================
+# 检查基础目录是否存在
+if [ ! -d "$BASE_DIR" ]; then
+  echo "❌ 错误：源基础目录 $BASE_DIR 不存在！"
+  exit 1
+fi
+
+# ======================== 循环创建软链接 ========================
+echo "✅ 开始递归创建软链接："
+echo "   源基础目录：$BASE_DIR（已转绝对路径）"
+echo "   匹配模式：$WILDCARD_PATTERN"
+echo "   目标目录：$TARGET_DIR（已转绝对路径）"
+
+# 创建目标顶层目录
+mkdir -p "$TARGET_DIR"
+echo "📁 已创建目标顶层目录：$TARGET_DIR"
+
+# 循环遍历匹配的文件（适配大量文件+特殊字符）
+find "$BASE_DIR" -mindepth 1 -print0 | while IFS= read -r -d '' ITEM; do
+  ITEM_NAME=$(basename "$ITEM")
+  # 匹配通配符
+  case "$ITEM_NAME" in
+  $WILDCARD_PATTERN)
+    REL_PATH="${ITEM#$BASE_DIR/}"
+    TARGET_ITEM="$TARGET_DIR/$REL_PATH"
+
+    if [ -d "$ITEM" ]; then
+      mkdir -p "$TARGET_ITEM"
+      echo "📂 创建目录：$TARGET_ITEM"
+    elif [ -f "$ITEM" ] || [ -L "$ITEM" ]; then
+      # 用绝对路径创建软链接，避免相对路径失效
+      ln -s "$(realpath "$ITEM")" "$TARGET_ITEM"
+      echo "🔗 创建软链接：$TARGET_ITEM -> $(realpath "$ITEM")"
+    fi
+    ;;
+  *) ;;
+  esac
+done
+
+# ======================== 完成提示 ========================
+echo -e "\n🎉 软链接创建完成！"
+echo "📌 匹配模式：$WILDCARD_PATTERN"
+echo "📌 目标目录：$TARGET_DIR"
+exit 0

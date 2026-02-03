@@ -75,8 +75,6 @@ if [ "$os_kernel" = "Linux" ]; then
 fi
 
 # Rime配置
-RIME_PATH=("$HOME/Library/Rime", "$HOME/.local/share/fcitx5/rime")
-
 if [ "$os_kernel" = "Darwin" ]; then
   RIME_PATH="$HOME/Library/Rime"
 else
@@ -90,6 +88,7 @@ create_symlink "$BASE_ROOT/Rime" "$RIME_PATH"
 HOME_ITEMS=(
   ".vimrc"             # vim config
   ".cargo/config.toml" # cargo
+  ".devtools"          # dev scripts
 )
 
 for item in "${HOME_ITEMS[@]}"; do
