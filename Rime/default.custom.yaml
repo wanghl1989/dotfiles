@@ -7,8 +7,15 @@ patch:
   menu/page_size: 9 # 候选词个数
   # 若 caps 切换大小写无效, 打开 Mac 系统偏好设置 > 键盘 > 输入法 > 取消勾选[使用大写锁定键切换“美国”输入模式]
   ascii_composer/good_old_caps_lock: false # 若为 true， Caps 只切换大小写
+  # 切换中英：
+  # 不同的选项表示：打字打到一半时按下了 CapsLock、Shift、Control 后：
+  # commit_code  上屏原始的编码，然后切换到英文
+  # commit_text  上屏拼出的词句，然后切换到英文
+  # clear        清除未上屏内容，然后切换到英文
+  # inline_ascii 切换到临时英文模式，按回车上屏后回到中文状态
+  # noop         屏蔽快捷键，不切换中英，但不要屏蔽 CapsLock
   ascii_composer/switch_key:
-    Caps_Lock: commit_code # Caps 键
+    Caps_Lock: clear # Caps 键
     # Shift_L: commit_code # 左 Shift，切换中英文
     # Shift_R: commit_code # 右 Shift，切换中英文
     Control_L: noop # 左 Control，屏蔽该切换键

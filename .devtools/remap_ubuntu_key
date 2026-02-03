@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+for i in {1..9}; do
+  gsettings set org.gnome.shell.extensions.dash-to-dock app-hotkey-$i "[]"
+done
+
+for i in {1..9}; do
+  gsettings set org.gnome.shell.keybindings app-hotkey-$i "[]"
+done
+
+# 设置Super+1至Super+9切换到对应工作区
+for i in {1..9}; do
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-$i "['<Super>$i']"
+done
+
+# 设置Super+Shift+1-9把窗口移动到对应的工作区
+for i in {1..9}; do
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-$i "['<Shift><Super>$i']"
+done

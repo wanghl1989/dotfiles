@@ -5,9 +5,9 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        ty = {
-          settings = {},
-        },
+        -- ty = {
+        --   settings = {},
+        -- },
         basedpyright = {
           settings = {
             basedpyright = {
