@@ -8,6 +8,5 @@ use = "AminurAlam/yazi-plugins:preview-git"
 rev = "688d133"
 hash = "52f20cafe2faf4901910ef77da8956e8"
 
-
 [flavor]
 deps = []
