@@ -14,8 +14,9 @@ map("n", "<A-k>", "", { desc = "" })
 map("i", "<A-j>", "", { desc = "" })
 map("i", "<A-k>", "", { desc = "" })
 
-map("v", "<A-j>", "", { desc = "Move Down" })
-map("v", "<A-k>", "", { desc = "Move Up" })
+map("v", "<A-j>", "", { desc = "" })
+map("v", "<A-k>", "", { desc = "" })
+
 -- safe file and quit
 map("n", "<Leader>ww", ":update<CR>", { noremap = true, desc = "Save windows" })
 map("n", "<Leader>wc", "<C-W>w", { noremap = true, silent = true, desc = "Switch windows" })

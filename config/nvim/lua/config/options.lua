@@ -3,7 +3,6 @@
 -- Add any additional options here
 local opt = vim.opt
 vim.g.lazyvim_python_lsp = "basedpyright"
-vim.g.root_spec = { "cwd" }
 vim.o.jumpoptions = "stack"
 -- opt.wrap = true
 opt.swapfile = false
@@ -27,3 +26,85 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 -- 使得左右键可以跨行
 -- vim.o.whichwrap = vim.o.whichwrap .. "<>,h,l"
+
+local root_patterns = {
+  -- directories
+  "client",
+  "server",
+
+  -- version control systems
+  "_darcs",
+  ".hg",
+  ".bzr",
+  ".svn",
+  ".git",
+
+  -- build tools
+  "Makefile",
+  "CMakeLists.txt",
+  "build.gradle",
+  "build.gradle.kts",
+  "pom.xml",
+  "build.xml",
+
+  -- node.js and javascript
+  "package.json",
+  "package-lock.json",
+  "yarn.lock",
+  ".nvmrc",
+  "gulpfile.js",
+  "Gruntfile.js",
+
+  -- python
+  "requirements.txt",
+  "Pipfile",
+  "pyproject.toml",
+  "setup.py",
+  "tox.ini",
+
+  -- rust
+  "Cargo.toml",
+
+  -- go
+  "go.mod",
+
+  -- elixir
+  "mix.exs",
+
+  -- configuration files
+  ".prettierrc",
+  ".prettierrc.json",
+  ".prettierrc.yaml",
+  ".prettierrc.yml",
+  ".eslintrc",
+  ".eslintrc.json",
+  ".eslintrc.js",
+  ".eslintrc.cjs",
+  ".eslintignore",
+  ".stylelintrc",
+  ".stylelintrc.json",
+  ".stylelintrc.yaml",
+  ".stylelintrc.yml",
+  ".editorconfig",
+  ".gitignore",
+
+  -- html projects
+  "index.html",
+
+  -- miscellaneous
+  "README.md",
+  "README.rst",
+  "LICENSE",
+  "Vagrantfile",
+  "Procfile",
+  ".env",
+  ".env.example",
+  "config.yaml",
+  "config.yml",
+  ".terraform",
+  "terraform.tfstate",
+  ".kitchen.yml",
+  "Berksfile",
+}
+
+vim.g.root_spec = { "cwd" }

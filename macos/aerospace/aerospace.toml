@@ -185,7 +185,7 @@ shift-down = ['volume set 0', 'mode main']
 
 [[on-window-detected]]
 if.app-id = 'net.kovidgoyal.kitty'
-run = 'move-node-to-workspace 1'
+run = ['move-node-to-workspace 1', 'layout tiling']
 
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
@@ -229,4 +229,4 @@ run = ['layout floating']
 # ghostty bug: https://ghostty.org/docs/help/macos-tiling-wms
 [[on-window-detected]]
 if.app-id = "com.mitchellh.ghostty"
-run = ["layout tiling"]
+run = ['layout tiling']

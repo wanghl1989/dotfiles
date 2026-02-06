@@ -1,5 +1,29 @@
 -- Snacks.nvim configuration
 -- Provides dashboard, indent guides, and file picker
+
+local excluded = {
+  "node_modules/",
+  "dist/",
+  ".next/",
+  ".vite/",
+  ".git/",
+  ".gitlab/",
+  "build/",
+  "target/",
+  "dadbod_ui/tmp/",
+  "dadbod_ui/dev/",
+
+  -- ISSUE: these FILES are being hidden from snacks.explorer too.
+  "package-lock.json",
+  "pnpm-lock.yaml",
+  "yarn.lock",
+  ".venv/",
+  "venv/",
+  "target/",
+  ".vscode/",
+  ".claude/",
+}
+
 return {
   "snacks.nvim",
   opts = {
@@ -73,6 +97,7 @@ return {
           max_depth = 3,
         },
       },
+      exclude = excluded,
       ignored = false,
       hidden = true,
     },
