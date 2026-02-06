@@ -100,3 +100,8 @@ setopt INC_APPEND_HISTORY    # 执行命令后立即写入历史，而非会话�
 setopt SHARE_HISTORY        # 多个终端会话共享历史记录
 setopt HIST_IGNORE_SPACE    # 忽略以空格开头的命令（可选，隐私保护）
 setopt HIST_IGNORE_DUPS     # 忽略重复的命令（可选）
+
+
+
+### xdgconfig
+export XDG_CONFIG_HOME="$HOME/.config"

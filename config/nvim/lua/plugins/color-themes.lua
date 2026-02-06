@@ -13,12 +13,12 @@ return {
         Comment = { fg = "#7c8088", bg = "NONE", italic = true },
       },
       colors = {
-        bg = "#181A26",
+        -- bg = "#181A26",
+        fg = "#d9c6aa",
         dark = {
-          bg_alt = "#1e2124",
+          -- bg_alt = "#1e2124",
           bg_highlight = "#3c5868",
-          fg = "#ddf7ff",
-          green = "#50f872",
+          green = "#4fe88f",
           blue = "#829dd4",
           magenta = "#ff92df",
           cyan = "#7cf8f7",
