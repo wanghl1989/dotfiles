@@ -14,7 +14,7 @@ return {
       },
       colors = {
         -- bg = "#181A26",
-        fg = "#d9c6aa",
+        fg = "#d2f8d2",
         dark = {
           -- bg_alt = "#1e2124",
           bg_highlight = "#3c5868",
