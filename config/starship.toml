@@ -1,7 +1,29 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+# format = """
+# [ ┌─](bold #4fe88f)\
+# $os\
+# $directory\
+# $git_branch\
+# $git_status\
+# $git_commit\
+# $fill\
+# $package\
+# $c\
+# $cpp\
+# $rust\
+# ${custom.cargo_version}\
+# $golang\
+# $nodejs\
+# $python\
+# $conda\
+# $docker_context\
+# $time\n\
+# [ └─](bold #4fe88f)\
+# $character\
+# """
+
 format = """
-[ ┌─](bold #4fe88f)\
 $os\
 $directory\
 $git_branch\
@@ -19,7 +41,6 @@ $python\
 $conda\
 $docker_context\
 $time\n\
-[ └─](bold #4fe88f)\
 $character\
 """
 
@@ -28,6 +49,7 @@ $cmd_duration\
 ${custom.emoji}\
 """
 
+add_newline = true
 continuation_prompt = '▶▶ '
 
 [username]
@@ -171,7 +193,7 @@ format = '[$symbol($version )]($style)'
 [os]
 disabled = false
 style = "fg:#50f872"
-format = '[ $symbol ]($style)'
+format = '[< $symbol >]($style)'
 
 [os.symbols]
 Alpaquita = ""
@@ -243,18 +265,18 @@ format = '[$symbol($version )]($style)'
 [character]
 disabled = false
 format = '$symbol '
-# success_symbol = '[](bold green) '
-# error_symbol = '[](bold red) '
-# vimcmd_symbol = '[](bold green)'
-# vimcmd_replace_one_symbol = '[](bold purple)'
-# vimcmd_replace_symbol = '[](bold purple)'
-# vimcmd_visual_symbol = '[](bold yellow)'
+success_symbol = '[](bold #4fe88f)'
+error_symbol = '[](bold #ff6e5e)'
+vimcmd_symbol = '[](bold #ff5ef1)'
+vimcmd_replace_one_symbol = '[](bold #829dd4)'
+vimcmd_replace_symbol = '[](bold #829dd4)'
+vimcmd_visual_symbol = '[](bold #f1ff5e)'
 
 
 [time]
 disabled = false
 style = "bold fg:#829dd4"
-format = '[ $time ]($style) '
+format = '[ $time]($style)'
 time_format = "%H:%M"
 
 [cmd_duration]
@@ -279,4 +301,4 @@ command = "EMOJIS=(⛵️ 🛰 🪐 🚀 🧡 🔭 🌍 💫 ☄️ ✨ 🌠 �
 # if you are on windows, replace "true" with "1"
 when = "true"
 shell = ["bash", "--noprofile", "--norc"]
-format = " $output "
+format = " $output"
