@@ -46,7 +46,6 @@ $character\
 
 right_format = """
 $cmd_duration\
-${custom.emoji}\
 """
 
 add_newline = true
@@ -192,8 +191,8 @@ format = '[$symbol($version )]($style)'
 
 [os]
 disabled = false
-style = "fg:#50f872"
-format = '[< $symbol >]($style)'
+style = "bold fg:#50f872"
+format = '[$symbol ]($style)'
 
 [os.symbols]
 Alpaquita = ""
@@ -265,12 +264,12 @@ format = '[$symbol($version )]($style)'
 [character]
 disabled = false
 format = '$symbol '
-success_symbol = '[](bold #4fe88f)'
+success_symbol = '[󰜴](bold #4fe88f)'
 error_symbol = '[](bold #ff6e5e)'
-vimcmd_symbol = '[](bold #ff5ef1)'
+vimcmd_symbol = '[󰜱](bold #ff5ef1)'
 vimcmd_replace_one_symbol = '[](bold #829dd4)'
 vimcmd_replace_symbol = '[](bold #829dd4)'
-vimcmd_visual_symbol = '[](bold #f1ff5e)'
+vimcmd_visual_symbol = '[󰜷](bold #f1ff5e)'
 
 
 [time]
