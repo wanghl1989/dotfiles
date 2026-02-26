@@ -25,7 +25,7 @@ opts = get_options()
 bar_fg = as_rgb(color_as_int(opts.foreground))
 bar_bg= as_rgb(color_as_int(opts.background))
 
-ICON = "  \uf489 " + os.uname().nodename + " "
+ICON = "\uf489 " + os.uname().nodename + " "
 icon_fg = as_rgb(color_as_int(opts.color6))
 icon_bg = as_rgb(color_as_int(opts.color0))
 
