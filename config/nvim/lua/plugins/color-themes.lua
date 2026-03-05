@@ -5,7 +5,7 @@ return {
     priority = 1000,
     opts = {
       variant = "dark",
-      transparent = false,
+      transparent = true,
       saturation = 1,
       terminal_color = false,
       borderless_pickers = false,

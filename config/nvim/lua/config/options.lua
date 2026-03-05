@@ -3,6 +3,10 @@
 -- Add any additional options here
 local opt = vim.opt
 vim.g.lazyvim_python_lsp = "basedpyright"
+vim.g.lazyvim_python_ruff = "ruff"
+-- 自动format
+vim.g.autoformat = false
+
 vim.o.jumpoptions = "stack"
 -- opt.wrap = true
 opt.swapfile = false

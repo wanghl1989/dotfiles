@@ -40,7 +40,8 @@ $nodejs\
 $python\
 $conda\
 $docker_context\
-$time\n\
+$time\
+$line_break\
 $character\
 """
 
@@ -48,8 +49,8 @@ right_format = """
 $cmd_duration\
 """
 
-add_newline = true
-continuation_prompt = '▶▶ '
+# add_newline = true
+# continuation_prompt = '▶▶ '
 
 [username]
 disabled = true
@@ -60,7 +61,7 @@ show_always = false
 symbol = " "
 
 [line_break]
-disabled = true
+disabled = false
 
 [c]
 symbol = " "
@@ -192,7 +193,8 @@ format = '[$symbol($version )]($style)'
 [os]
 disabled = false
 style = "bold fg:#50f872"
-format = '[$symbol ]($style)'
+format = '[$symbol]($style)'
+# format = '[$symbol ]($style)'
 
 [os.symbols]
 Alpaquita = ""

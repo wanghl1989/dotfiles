@@ -2,12 +2,10 @@ return {
   {
     "stevearc/conform.nvim",
     opts = {
-      format_on_save = {
-        lsp_format = "never",
-      },
       formatters_by_ft = {
-        cpp = { "clang-format" },
-        python = { "ruff" },
+        ["cpp"] = { "clang-format" },
+        ["python"] = { "ruff_format", "ruff_fix", "ruff_organize_imports" },
+        ["rust"] = { "rustfmt" }
       },
     },
     keys = {
