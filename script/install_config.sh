@@ -34,7 +34,7 @@ os_kernel=$(uname -s)
 
 # 在 ~/.config中的配置
 # macos linux通用
-ITEMS=("zed" "nvim" "kitty" "uv" "starship.toml" "tmux" "ghostty" "lazygit" "bat" "yazi" "btop" "lazydocker" "lsd" "zellij" "eza" "newsboat" "pip")
+ITEMS=("zed" "nvim" "kitty" "uv" "ruff" "starship.toml" "tmux" "ghostty" "lazygit" "bat" "yazi" "btop" "lazydocker" "lsd" "zellij" "eza" "newsboat" "pip" "fastfetch")
 BASE_ROOT=$(dirname $(dirname "$SCRIPT_PATH"))
 
 DEST_DIR="$HOME/.config"
