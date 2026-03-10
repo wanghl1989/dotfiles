@@ -40,7 +40,6 @@ $nodejs\
 $python\
 $conda\
 $docker_context\
-$time\
 $line_break\
 $character\
 """
@@ -192,7 +191,7 @@ format = '[$symbol($version )]($style)'
 
 [os]
 disabled = false
-style = "bold fg:#50f872"
+style = "bold fg:#ddf7ff"
 format = '[$symbol]($style)'
 # format = '[$symbol ]($style)'
 
@@ -268,7 +267,7 @@ disabled = false
 format = '$symbol '
 success_symbol = '[󰜴](bold #4fe88f)'
 error_symbol = '[](bold #ff6e5e)'
-vimcmd_symbol = '[󰜱](bold #ff5ef1)'
+vimcmd_symbol = '[󰜱](bold #4fe88f)'
 vimcmd_replace_one_symbol = '[](bold #829dd4)'
 vimcmd_replace_symbol = '[](bold #829dd4)'
 vimcmd_visual_symbol = '[󰜷](bold #f1ff5e)'

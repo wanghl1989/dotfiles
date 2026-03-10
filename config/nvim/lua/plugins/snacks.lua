@@ -28,7 +28,7 @@ return {
   "snacks.nvim",
   opts = {
     dashboard = {
-      -- enabled = true,
+      enabled = false,
       preset = {
         --      header = [[
         --                                              ───▐▀▄──────▄▀▌───▄▄▄▄▄▄▄

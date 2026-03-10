@@ -32,7 +32,6 @@ map("n", "gh", "^", opts)
 map("v", "gl", "$", opts)
 map("v", "gh", "^", opts)
 
-map("n", "<S-j>", "", opts)
 
 map("n", "<leader>nh", ":noh<CR>", { noremap = true, silent = true, desc = "Clear highlights" })
 
@@ -49,7 +48,7 @@ map("n", "<leader>md", ":delmarks ", { noremap = true, silent = true, desc = "De
 map("n", "<leader>ma", ":delmarks a-zA-Z0-9<CR>", { noremap = true, silent = true, desc = "Delete all marks" })
 
 map("n", "<S-j>", function()
-  vim.diagnostic.oepn_float()
+  vim.diagnostic.open_float()
 end, opts)
 
 map("n", "<leader>fh", function()
