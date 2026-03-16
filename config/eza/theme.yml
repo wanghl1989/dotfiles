@@ -2,7 +2,7 @@ colourful: true
 
 filekinds:
   normal: { foreground: "#ddf7ff" }
-  directory: { foreground: "#829dd4", is_bold: true }
+  directory: { foreground: "#5ea1ff", is_bold: true }
   symlink: { foreground: "#7cf8f7" }
   pipe: { foreground: "#f1ff5e" }
   block_device: { foreground: "#f1ff5e", is_bold: true }
@@ -10,7 +10,7 @@ filekinds:
   socket: { foreground: "#ff6e5e", is_bold: true }
   special: { foreground: "#f1ff5e" }
   executable: { foreground: "#4fe88f", is_bold: true }
-  mount_point: { foreground: "#829dd4", is_bold: true, is_underline: true }
+  mount_point: { foreground: "#5ea1ff", is_bold: true, is_underline: true }
 
 perms:
   user_read: { foreground: "#f1ff5e", is_bold: true }
@@ -56,7 +56,7 @@ links:
 
 git:
   new: { foreground: "#4fe88f" }
-  modified: { foreground: "#829dd4" }
+  modified: { foreground: "#5ea1ff" }
   deleted: { foreground: "#ff6e5e" }
   renamed: { foreground: "#f1ff5e" }
   typechange: { foreground: "#bd5eff" }
@@ -71,7 +71,7 @@ git_repo:
 
 security_context:
   colon: { foreground: "#ddf7ff", is_dimmed: true }
-  user: { foreground: "#829dd4" }
+  user: { foreground: "#5ea1ff" }
   role: { foreground: "#4fe88f" }
   typ: { foreground: "#f1ff5e" }
   range: { foreground: "#7cf8f7" }
@@ -90,7 +90,7 @@ file_type:
   source: { foreground: "#f1ff5e", is_bold: true }
 
 punctuation: { foreground: "#7b8496", is_bold: true }
-date: { foreground: "#829dd4" }
+date: { foreground: "#5ea1ff" }
 inode: { foreground: "#bd5eff" }
 blocks: { foreground: "#7cf8f7" }
 header: { foreground: "#ddf7ff", is_underline: true }

@@ -24,7 +24,9 @@
 # """
 
 format = """
+[░▒▓](#4fe88f)\
 $os\
+$username\
 $directory\
 $git_branch\
 $git_status\
@@ -51,10 +53,26 @@ $cmd_duration\
 # add_newline = true
 # continuation_prompt = '▶▶ '
 
+
+[os]
+disabled = false
+style = "bold bg:#4fe88f fg:#090c0c"
+format = '[ $symbol ]($style)'
+# format = '[$symbol ]($style)'
+
 [username]
-disabled = true
-format = '[$user]($style) '
-show_always = false
+disabled = false
+style_user = "bold bg:#4fe88f fg:#090c0c"
+format = '[$user ]($style)'
+show_always = true
+
+[directory]
+# read_only = "[󰌾]"
+# home_symbol = ""
+# truncation_length = 3
+# truncation_symbol = ""
+style = "bold fg:#7cf8f7"
+format = "[  $path]($style) "
 
 [bun]
 symbol = " "
@@ -110,13 +128,7 @@ format = '[$symbol$environment]($style) '
 [deno]
 symbol = " "
 
-[directory]
-# read_only = "[󰌾]"
-# home_symbol = ""
-# truncation_length = 3
-# truncation_symbol = ""
-style = "bold fg:#7cf8f7"
-format = " [ $path]($style) "
+
 
 [docker_context]
 symbol = " "
@@ -188,12 +200,6 @@ symbol = " "
 style = "bold fg:#4fe88f"
 format = '[$symbol($version )]($style)'
 
-
-[os]
-disabled = false
-style = "bold fg:#ddf7ff"
-format = '[$symbol]($style)'
-# format = '[$symbol ]($style)'
 
 [os.symbols]
 Alpaquita = ""

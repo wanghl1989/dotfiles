@@ -17,7 +17,7 @@ gui:
     defaultFgColor:
       - "#ddf7ff"
     optionsTextColor:
-      - "#829dd4"
+      - "#5ea1ff"
 
   authorColors:
     "*": "#ff79c6"
