@@ -25,7 +25,7 @@ opts = get_options()
 bar_fg = as_rgb(color_as_int(opts.foreground))
 bar_bg = as_rgb(color_as_int(opts.background))
 
-ICON = " \uf489 " + os.uname().nodename + " "
+ICON = "  \uf489 " + os.uname().nodename + " "
 icon_fg = as_rgb(color_as_int(opts.color4))
 icon_bg = as_rgb(color_as_int(opts.background))
 
@@ -56,7 +56,7 @@ def _draw_icon(screen: Screen, index: int) -> int:
 
     screen.cursor.fg = icon_fg
     screen.cursor.bg = icon_bg
-    screen.draw(SEPARATOR_DOT)
+    screen.draw(SEPARATOR_SYMBOL_LEFT)
     screen.cursor.fg = icon_fg
     screen.cursor.x = len(ICON) + len(SEPARATOR_SYMBOL_LEFT)
     return screen.cursor.x
@@ -125,46 +125,23 @@ def _draw_left_status(
     is_last: bool,
     extra_data: ExtraData,
 ) -> int:
-    # if screen.cursor.x >= screen.columns - right_status_length:
-    #     return screen.cursor.x
-    # tab_bg = screen.cursor.bg
-    # tab_fg = screen.cursor.fg
-    # default_bg = as_rgb(int(draw_data.default_bg))
-    # if extra_data.next_tab:
-    #     next_tab_bg = as_rgb(draw_data.tab_bg(extra_data.next_tab))
-    #     needs_soft_separator = next_tab_bg == tab_bg
-    # else:
-    #     next_tab_bg = default_bg
-    #     needs_soft_separator = False
-    #
-    # # screen.draw(" ")
-    # screen.cursor.bg = tab_bg
-
     draw_title(draw_data, screen, tab, index)
-
-    # screen.cursor.fg = tab_bg
-    # screen.cursor.bg = bar_bg
-    # screen.draw(SEPARATOR_SYMBOL_LEFT)
-
-    # if not is_last:
-    #     screen.draw("")
-    #     screen.cursor.fg = bar_bg
-    #     screen.cursor.bg = next_tab_bg
-    #     screen.draw(SEPARATOR_SYMBOL_LEFT)
-
-    # if not needs_soft_separator:
-    #     screen.draw(" ")
-    #     screen.cursor.fg = tab_bg
-    #     screen.cursor.bg = next_tab_bg
-    #     screen.draw(SEPARATOR_SYMBOL_LEFT)
-    # else:
-    #     prev_fg = screen.cursor.fg
-    #     if tab_bg == tab_fg:
-    #         screen.cursor.fg = default_bg
-    #
-    #     screen.draw(" " + SOFT_SEPARATOR_SYMBOL_LEFT)
-    #     screen.cursor.fg = prev_fg
+    trailing_spaces = min(max_title_length - 1, draw_data.trailing_spaces)
+    max_title_length -= trailing_spaces
+    extra = screen.cursor.x - before - max_title_length
+    if extra > 0:
+        screen.cursor.x -= extra + 1
+        screen.draw("…")
+    if trailing_spaces:
+        screen.draw(" " * trailing_spaces)
     end = screen.cursor.x
+    screen.cursor.bold = screen.cursor.italic = False
+    if not is_last:
+        screen.cursor.bg = bar_bg
+        screen.cursor.fg = as_rgb(color_as_int(opts.color8))
+        screen.draw(draw_data.sep)
+    screen.cursor.bg = 0
+    screen.cursor.fg = 0
     return end
 
 
@@ -173,10 +150,12 @@ def _draw_right_status(screen: Screen, is_last: bool, cells: list) -> int:
         return 0
     draw_attributed_string(Formatter.reset, screen)
     screen.cursor.x = screen.columns - right_status_length
+    screen.cursor.bg = 0
     for status, color_fg, _color_bg in cells:
         screen.cursor.fg = color_fg
         # screen.cursor.bg = color_bg
         screen.draw(status)
+    screen.cursor.fg = 0
     return screen.cursor.x
 
 

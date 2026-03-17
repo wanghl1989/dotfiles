@@ -113,8 +113,7 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
 zstyle ':completion:*' menu no
 # preview directory's content with eza when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 -a --color=always --icons=auto $realpath'
-zstyle ':fzf-tab:complete:ln:*' fzf-preview 'eza -1 -a --color=always --icons=auto $realpath'
+zstyle ':fzf-tab:complete:(cd|ln|mv|cp|rm|cat|head|tail):*' fzf-preview 'eza -1 -a --color=always --icons=auto $realpath'
 zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview 'git diff $realpath | bat --color=always'
 # custom fzf flags
 # NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
