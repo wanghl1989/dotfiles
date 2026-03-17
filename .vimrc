@@ -22,6 +22,9 @@ set t_Co=256
 if version >= 603
         set helplang=cn
 endif
+set shortmess+=I
+colorscheme sorbet
+set termguicolors
 
 set showmatch
 set hlsearch
@@ -45,7 +48,13 @@ nnoremap gl $
 nnoremap gh ^
 
 nnoremap <leader>nh :noh<CR>
-nnoremap <leader>e :e .<CR>
+nnoremap <leader>e :e .<CR> 
 nnoremap <S-h> :bprevious<CR>
-nnoremap <S-l>l :bnext<CR>
+nnoremap <S-l> :bnext<CR>
+
+let g:netrw_banner=0        " 关闭讨厌的顶部提示
+let g:netrw_liststyle=3     " 树状显示文件
+let g:netrw_winsize=25      " 文件树宽度 25%
+let g:netrw_altv=1          " 垂直分栏打开文件
+let g:netrw_browse_split=4  " 新建窗口打开文件
 

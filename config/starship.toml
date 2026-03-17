@@ -27,6 +27,7 @@ format = """
 [░▒▓](#4fe88f)\
 $os\
 $username\
+[▓▒░](#4fe88f)\
 $directory\
 $git_branch\
 $git_status\
@@ -73,6 +74,12 @@ show_always = true
 # truncation_symbol = ""
 style = "bold fg:#7cf8f7"
 format = "[  $path]($style) "
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
 
 [bun]
 symbol = " "

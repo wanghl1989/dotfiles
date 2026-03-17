@@ -22,8 +22,8 @@ border_style = { fg = "#7f849c" }
 syntect_theme = "~/.config/yazi/Catppuccin-mocha.tmTheme"
 
 [tabs]
-active = { fg = "#1e1e2e", bg = "#cdd6f4", bold = true }
-inactive = { fg = "#cdd6f4", bg = "#45475a" }
+active = { fg = "#1e1e2e", bg = "#7cf8f7", bold = true }
+inactive = { fg = "#7cf8f7", bg = "#45475a" }
 
 [mode]
 normal_main = { fg = "#1e1e2e", bg = "#4fe88f", bold = true }

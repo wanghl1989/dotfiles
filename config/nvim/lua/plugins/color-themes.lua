@@ -24,6 +24,7 @@ return {
           cyan = "#5ea1ff",
           pink = "#FF79C6",
           purple = "#cba6f7",
+          orange = "#ffbd5e"
         },
       },
       theme = {},
