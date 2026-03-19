@@ -24,7 +24,7 @@ return {
                 delete = "<leader>vd", -- Delete surrounding
                 find = "<leader>vfr", -- Find surrounding (to the right)
                 find_left = "<leader>vfl", -- Find surrounding (to the left)
-                highlight = "<leader>vh", -- Highlight surrounding
+                highlight = "<leader>vs", -- Highlight surrounding
                 replace = "<leader>vr", -- Replace surrounding
                 update_n_lines = "<leader>vn", -- Update `n_lines`
             },

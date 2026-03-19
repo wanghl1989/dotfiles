@@ -2,7 +2,7 @@ return {
   "linux-cultist/venv-selector.nvim",
   cmd = "VenvSelect",
   ft = "python", -- Load when opening Python files
-  keys = { { "<leader>vs", "<cmd>:VenvSelect<cr>", desc = "Select VirtualEnv", ft = "python" } },
+  keys = { { "<leader>cp", "<cmd>:VenvSelect<cr>", desc = "Select VirtualEnv", ft = "python" } },
 
   opts = {
     search_venv_managers = true,

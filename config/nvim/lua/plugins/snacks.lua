@@ -64,7 +64,8 @@ return {
       enabled = false,
     },
     explorer = {
-      -- enabled = false,
+      enabled = false,
+      replace_netrw = false,
     },
     picker = {
       formatters = {
