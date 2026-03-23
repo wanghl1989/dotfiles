@@ -138,10 +138,8 @@ def _draw_left_status(
     screen.cursor.bold = screen.cursor.italic = False
     if not is_last:
         screen.cursor.bg = bar_bg
-        screen.cursor.fg = as_rgb(color_as_int(opts.color8))
         screen.draw(draw_data.sep)
     screen.cursor.bg = 0
-    screen.cursor.fg = 0
     return end
 
 
