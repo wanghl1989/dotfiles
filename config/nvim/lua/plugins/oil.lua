@@ -15,6 +15,10 @@ return {
       view_options = {
         -- Show files and directories that start with "."
         show_hidden = false,
+        sort = {
+          { "type", "asc" },
+          { "mtime", "asc" },
+        },
       },
       show_file_highlights = true,
       show_directory_highlights = false,
