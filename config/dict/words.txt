@@ -28,6 +28,7 @@ capture
 charset
 chart
 cover
+clippy
 column
 commit
 comment
@@ -87,6 +88,8 @@ iterator
 immutable
 import
 implement
+impl
+init
 increase
 increment
 install
@@ -117,6 +120,7 @@ monitor
 mutation
 multiple
 minute
+numpy
 observer
 operator
 output
@@ -182,6 +186,7 @@ stack
 segment
 statement
 structure
+struct
 studio
 socket
 similar
@@ -190,6 +195,7 @@ sticky
 shim
 task
 traversal
+torch
 tool
 temporary
 terminal
@@ -197,6 +203,7 @@ track
 tutorial
 upgrade
 unique
+usage
 ultralytics
 vertical
 vendors
