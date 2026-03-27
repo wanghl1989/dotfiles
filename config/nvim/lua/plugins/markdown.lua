@@ -5,27 +5,35 @@ vim.api.nvim_set_hl(0, highlight_md_heading, { bg = "#3e4452", fg = "#81a1c1" })
 My_Render_Markdown_Opts = {
   render_modes = true, -- enable all modes
   heading = {
-    sign = false,
-    border = true,
+    sign = true,
+    border = false,
     width = "block",
     below = "▔",
     above = "▁",
     left_pad = 0,
     right_pad = 4,
     position = "left",
-    icons = {
-      "█ ",
-      "██ ",
-      "███ ",
-      "████ ",
-      "█████ ",
-      "██████ ",
+
+    backgrounds = {
+      "MiniStatusLineModeNormal",
+      "MiniStatusLineModeInsert",
+      "MiniStatusLineModeReplace",
+      "MiniStatusLineModeVisual",
+      "MiniStatusLineModeCommand",
+      "MiniStatusLineModeOther",
     },
-    backgrounds = { highlight_md_heading },
+    icons = {
+      " ",
+      " ",
+      " ",
+      " ",
+      " ",
+      " ",
+    },
   },
   code = {
     width = "block",
-    left_pad = 2,
+    left_pad = 0,
     right_pad = 2,
     sign = false,
     left_margin = 2,

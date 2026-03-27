@@ -7,9 +7,6 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "edit_predictions": {
-    "provider": "zed",
-  },
   "preview_tabs": {
     "enabled": false,
   },
@@ -27,11 +24,11 @@
   "base_keymap": "VSCode",
   "vim_mode": true,
   "ui_font_size": 16,
-  "ui_font_family": "IosevkaTermSlab Nerd Font Mono",
-  "buffer_font_size": 16,
-  "buffer_font_family": "IosevkaTermSlab Nerd Font Mono",
+  "ui_font_family": "Cascadia Code",
+  "buffer_font_size": 14,
+  "buffer_font_family": "Google Sans Code",
   "buffer_font_weight": 500,
-  "relative_line_numbers": "enabled",
+  "relative_line_numbers": true,
   "tab_bar": {
     "show_nav_history_buttons": false,
   },
@@ -204,10 +201,12 @@
           },
         },
         {
-          "code_action": "source.fixAll.ruff",
-        },
-        {
-          "code_action": "source.organizeImports.ruff",
+          "code_actions": {
+            // Fix all auto-fixable lint violations
+            "source.fixAll.ruff": true,
+            // Organize imports
+            "source.organizeImports.ruff": true,
+          },
         },
       ],
     },
@@ -301,5 +300,9 @@
   "telemetry": {
     "diagnostics": false,
     "metrics": false,
+  },
+
+  "features": {
+    "edit_prediction_provider": "zed",
   },
 }
