@@ -19,6 +19,7 @@ opt.swapfile = false
 opt.mouse = "a"
 opt.laststatus = 3
 opt.winborder = "rounded"
+-- opt.cursorcolumn = true
 
 -- 禁止自动注释续行
 opt.formatoptions:remove({ "c", "r", "o" })

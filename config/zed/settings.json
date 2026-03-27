@@ -7,46 +7,45 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "edit_predictions": {
+    "provider": "zed",
+  },
   "preview_tabs": {
-    "enabled": false
+    "enabled": false,
   },
   "auto_update": false,
   "gutter": {
-    "line_numbers": true
+    "line_numbers": true,
   },
   "minimap": {
-    "show": "auto"
+    "show": "auto",
   },
   "cursor_blink": true,
   "linked_edits": true,
   "icon_theme": "Colored Zed Icons Theme Dark",
-  "theme": {
-    "light": "Tokyo Night Light",
-    "dark": "Tokyo Night",
-    "mode": "dark"
-  },
+  "theme": "Tomorrow at Midnight",
   "base_keymap": "VSCode",
   "vim_mode": true,
-  "ui_font_size": 14,
-  "ui_font_family": "Cascadia Code",
-  "buffer_font_size": 14,
-  "buffer_font_family": "Google Sans Code",
+  "ui_font_size": 16,
+  "ui_font_family": "IosevkaTermSlab Nerd Font Mono",
+  "buffer_font_size": 16,
+  "buffer_font_family": "IosevkaTermSlab Nerd Font Mono",
   "buffer_font_weight": 500,
-  "relative_line_numbers": true,
+  "relative_line_numbers": "enabled",
   "tab_bar": {
-    "show_nav_history_buttons": false
+    "show_nav_history_buttons": false,
   },
   "tabs": {
     "file_icons": true,
-    "git_status": true
+    "git_status": true,
   },
   "inlay_hints": {
-    "enabled": true
+    "enabled": true,
   },
   "hide_mouse": "on_typing",
   "indent_guides": {
     "enabled": true,
-    "coloring": "indent_aware"
+    "coloring": "indent_aware",
   },
   "soft_wrap": "editor_width",
   "tab_size": 2,
@@ -55,9 +54,9 @@
     "syntax": {
       "comment": {
         "font_style": "italic",
-        "font_weight": 400
-      }
-    }
+        "font_weight": 400,
+      },
+    },
   },
   "vertical_scroll_margin": 6,
   "restore_on_startup": "none",
@@ -141,10 +140,10 @@
       "typeindex",
       "typeinfo",
       "variant",
-      "shared_mutex"
+      "shared_mutex",
     ],
     "C++": ["c", "h", "cpp", "hpp"],
-    "*.mdx": ["markdown"]
+    "*.mdx": ["markdown"],
   },
   "file_scan_exclusions": [
     "**/.git",
@@ -157,41 +156,41 @@
     "**/.settings",
     "**/vendor",
     "**/.tmp*",
-    "**/.vscode"
+    "**/.vscode",
   ],
   "terminal": {
     "blinking": "on",
     "font_family": "FiraCode Nerd Font",
     "font_size": 12,
     "toolbar": {
-      "breadcrumbs": true
+      "breadcrumbs": true,
     },
     "shell": "system",
     "copy_on_select": true,
-    "dock": "bottom"
+    "dock": "bottom",
   },
   "git": {
     "git_gutter": "tracked_files",
     "inline_blame": {
-      "enabled": false
-    }
+      "enabled": false,
+    },
   },
   "languages": {
     "C++": {
       "formatter": {
         "external": {
           "command": "clang-format",
-          "arguments": ["-style=file"]
-        }
-      }
+          "arguments": ["-style=file"],
+        },
+      },
     },
     "Go": {
       "code_actions_on_format": {
-        "source.organizeImports": true
-      }
+        "source.organizeImports": true,
+      },
     },
     "Rust": {
-      "tab_size": 4
+      "tab_size": 4,
     },
     "Python": {
       "language_servers": ["basedpyright", "!pyright", "ruff"],
@@ -201,54 +200,52 @@
         {
           "external": {
             "command": "ruff",
-            "arguments": ["format", "-"]
-          }
+            "arguments": ["format", "-"],
+          },
         },
         {
-          "code_actions": {
-            // Fix all auto-fixable lint violations
-            "source.fixAll.ruff": true,
-            // Organize imports
-            "source.organizeImports.ruff": true
-          }
-        }
-      ]
+          "code_action": "source.fixAll.ruff",
+        },
+        {
+          "code_action": "source.organizeImports.ruff",
+        },
+      ],
     },
     "TSX": {
       "formatter": {
         "external": {
           "command": "prettier",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
+          "arguments": ["--stdin-filepath", "{buffer_path}"],
+        },
       },
       "code_actions_on_format": {
         "source.organizeImports": true,
-        "source.fixAll.eslint": true
-      }
+        "source.fixAll.eslint": true,
+      },
     },
     "JavaScript": {
       "formatter": {
         "external": {
           "command": "prettier",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
+          "arguments": ["--stdin-filepath", "{buffer_path}"],
+        },
       },
       "code_actions_on_format": {
-        "source.fixAll.eslint": true
-      }
+        "source.fixAll.eslint": true,
+      },
     },
     "TypeScript": {
       "formatter": {
         "external": {
           "command": "prettier",
-          "arguments": ["--stdin-filepath", "{buffer_path}"]
-        }
+          "arguments": ["--stdin-filepath", "{buffer_path}"],
+        },
       },
       "code_actions_on_format": {
         "source.organizeImports": true,
-        "source.fixAll.eslint": true
-      }
-    }
+        "source.fixAll.eslint": true,
+      },
+    },
   },
 
   "lsp": {
@@ -257,19 +254,19 @@
         "checkOnSave": {
           // rust-analyzer.check.command (default: "check")
           // "command": "clippy"
-        }
-      }
+        },
+      },
     },
     "ty": {
       "settings": {
         "inlayHints": {
-          "callArgumentNames": false
+          "callArgumentNames": false,
         },
         "diagnosticMode": "workspace",
         "initialization_options": {
-          "logLevel": "debug"
-        }
-      }
+          "logLevel": "debug",
+        },
+      },
     },
     // "basedpyright": {
     //   "settings": {
@@ -295,18 +292,14 @@
     "eslint": {
       "settings": {
         "codeActionOnSave": {
-          "rules": ["import/order"]
-        }
-      }
-    }
+          "rules": ["import/order"],
+        },
+      },
+    },
   },
 
   "telemetry": {
     "diagnostics": false,
-    "metrics": false
+    "metrics": false,
   },
-
-  "features": {
-    "edit_prediction_provider": "zed"
-  }
 }

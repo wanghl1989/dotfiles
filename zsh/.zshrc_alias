@@ -140,6 +140,16 @@ search_engine() {
 
 }
 
+fzfg() {
+
+  if [ -z "$1" ]; then
+      echo "请提供关键词！"
+      echo "用法：fzfg 关键词"
+      return 1
+  fi
+  rg -l "$1" | fzf --preview "rg -n --color=always -C 3 '$1' {}"
+}
+
 alias baidu="search_engine baidu"
 alias bing="search_engine bing"
 alias google="search_engine google"

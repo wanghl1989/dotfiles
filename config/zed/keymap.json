@@ -1,5 +1,5 @@
 // Zed keymap
-//
+
 // For information on binding keys, see the Zed
 // documentation: https://zed.dev/docs/key-bindings
 //
@@ -15,22 +15,22 @@
       "ctrl-alt-n": "task::Spawn",
       "ctrl-alt-r": "task::Rerun",
       "ctrl-\\": "workspace::NewCenterTerminal",
-      "ctrl-t": "terminal_panel::ToggleFocus",
-      "ctrl-e": "workspace::ToggleLeftDock"
-    }
+      "ctrl-/": "terminal_panel::ToggleFocus",
+      "ctrl-e": "workspace::ToggleLeftDock",
+    },
   },
   {
     "context": "Workspace",
     "bindings": {
-      "shift shift": "workspace::NewSearch"
-    }
+      "shift shift": "workspace::NewSearch",
+    },
   },
   {
     "context": "Editor",
     "bindings": {
       "ctrl-a": "editor::SelectAll",
-      "alt-enter": "editor::ToggleCodeActions"
-    }
+      "alt-enter": "editor::ToggleCodeActions",
+    },
   },
   {
     "context": "Editor && VimControl && !VimWaiting && !menu",
@@ -63,21 +63,21 @@
       "space p d": "diagnostics::Deploy",
       "space b q": "pane::CloseAllItems",
       "space b o": "pane::CloseOtherItems",
-      "space w": "workspace::Save",
-      "space q": "pane::CloseActiveItem",
+      "space w w": "workspace::Save",
+      "space w q": "pane::CloseActiveItem",
       "space -": "pane::SplitDown",
       "space |": "pane::SplitRight",
       "z f": "editor::Fold",
-      "z o": "editor::UnfoldRecursive"
-    }
+      "z o": "editor::UnfoldRecursive",
+    },
   },
   {
     "context": "Editor && vim_mode == visual",
     "bindings": {
       "S": "buffer_search::Deploy",
       "g l": "editor::SelectToEndOfLine",
-      "g h": "editor::SelectToBeginningOfLine"
-    }
+      "g h": "editor::SelectToBeginningOfLine",
+    },
   },
   {
     "context": "ProjectPanel && not_editing",
@@ -93,8 +93,8 @@
       "x": "project_panel::Cut",
       "l": "project_panel::Open",
       "y p": "workspace::CopyPath",
-      "y r": "workspace::CopyRelativePath"
-    }
+      "y r": "workspace::CopyRelativePath",
+    },
   },
   {
     "context": "Dock || Terminal || Editor",
@@ -102,19 +102,19 @@
       "ctrl-h": "workspace::ActivatePaneLeft",
       "ctrl-l": "workspace::ActivatePaneRight",
       "ctrl-k": "workspace::ActivatePaneUp",
-      "ctrl-j": "workspace::ActivatePaneDown"
-    }
+      "ctrl-j": "workspace::ActivatePaneDown",
+    },
   },
   {
     "context": "Terminal",
     "bindings": {
-      "ctrl-t": "workspace::ToggleBottomDock"
-    }
+      "ctrl-/": "workspace::ToggleBottomDock",
+    },
   },
   {
     "context": "Editor && vim_mode == insert",
     "bindings": {
-      "j k": "vim::NormalBefore"
-    }
-  }
+      "j k": "vim::NormalBefore",
+    },
+  },
 ]
