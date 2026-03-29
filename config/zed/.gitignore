@@ -3,3 +3,5 @@ conversations
 themes
 .DS_Store
 .cache
+settings_backup.json
+keymaps_backup.json

@@ -17,6 +17,7 @@
   "gutter": {
     "line_numbers": true,
   },
+
   "minimap": {
     "show": "auto",
   },
@@ -25,6 +26,7 @@
   "icon_theme": "Colored Zed Icons Theme Dark",
   "theme": "Tomorrow at Midnight",
   "base_keymap": "VSCode",
+  "cursor_shape": "block",
   "vim_mode": true,
   "ui_font_size": 16,
   "ui_font_family": "IosevkaTermSlab Nerd Font Mono",
@@ -59,7 +61,7 @@
     },
   },
   "vertical_scroll_margin": 6,
-  "restore_on_startup": "none",
+  "restore_on_startup": "launchpad",
   "extend_comment_on_newline": false,
   "file_types": {
     "jsonc": ["*.cjson"],
@@ -257,38 +259,38 @@
         },
       },
     },
-    "ty": {
+    // "ty": {
+    //   "settings": {
+    //     "inlayHints": {
+    //       "callArgumentNames": false,
+    //     },
+    //     "diagnosticMode": "workspace",
+    //     "initialization_options": {
+    //       "logLevel": "debug",
+    //     },
+    //   },
+    // },
+    "basedpyright": {
       "settings": {
-        "inlayHints": {
-          "callArgumentNames": false,
+        "python": {
+          "pythonPath": ".venv/bin/python",
+          "extraPaths": [".venv/lib"],
         },
-        "diagnosticMode": "workspace",
-        "initialization_options": {
-          "logLevel": "debug",
+
+        "basedpyright.analysis": {
+          "diagnosticMode": "openFilesOnly",
+          "inlayHints": {
+            "callArgumentNames": true,
+          },
+          "typeCheckingMode": "basic",
+          "diagnosticSeverityOverrides": {
+            "reportUnusedCallResult": "none",
+            "reportMissingTypeStubs": false,
+          },
         },
+        "disableOrganizeImports": true,
       },
     },
-    // "basedpyright": {
-    //   "settings": {
-    //     "python": {
-    //       "pythonPath": ".venv/bin/python",
-    //       "extraPaths": [".venv/lib"]
-    //     },
-
-    //     "basedpyright.analysis": {
-    //       "diagnosticMode": "openFilesOnly",
-    //       "inlayHints": {
-    //         "callArgumentNames": true
-    //       },
-    //       "typeCheckingMode": "basic",
-    //       "diagnosticSeverityOverrides": {
-    //         "reportUnusedCallResult": "none",
-    //         "reportMissingTypeStubs": false
-    //       }
-    //     },
-    //     "disableOrganizeImports": true
-    //   }
-    // },
     "eslint": {
       "settings": {
         "codeActionOnSave": {
