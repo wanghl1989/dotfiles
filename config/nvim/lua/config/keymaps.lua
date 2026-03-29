@@ -52,8 +52,7 @@ map("n", "yH", "y^", { noremap = true, silent = true, desc = "Change to start of
 map("n", "vL", "v$", { noremap = true, silent = true, desc = "Change to end of line" })
 map("n", "vH", "v^", { noremap = true, silent = true, desc = "Change to start of line" })
 
-map("n", "<leader><up>", "k:join<CR>", { noremap = true, silent = true, desc = "Join the next line" })
-map("n", "<leader><down>", ":join<CR>", { noremap = true, silent = true, desc = "Join the next line" })
+map("v", "<leader>j", ":'<,'>join<CR>", { noremap = true, silent = true, desc = "Join the lines"})
 
 map("v", "<leader><up>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 map("v", "<leader><down>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
