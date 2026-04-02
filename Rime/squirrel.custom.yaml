@@ -3,7 +3,7 @@ patch:
 
   # 皮肤主题名称输入在下方，分为浅色和深色
   # 浅色主题
-  style/color_scheme: wechat_dark
+  style/color_scheme: mac_light
   # 深色主题
   style/color_scheme_dark: mac_dark
 

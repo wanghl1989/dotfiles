@@ -96,3 +96,9 @@ gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "{'Gtk/IMMod
 
 - x11: install `xclip`
 - wayland: install `wl-clipboard`
+
+### Macos setup mouse
+
+~~~bash
+defaults write -g ApplePressAndHoldEnabled -bool false
+~~~
