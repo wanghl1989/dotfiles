@@ -18,6 +18,7 @@ map("v", "<A-j>", "<NOP>", opts)
 map("v", "<A-k>", "<NOP>", opts)
 
 map("v", "<C-w>", "<NOP>", opts)
+map("i", "<C-c>", "<ESC>", opts)
 
 -- common set
 map("n", "<leader>nh", ":noh<CR>", { noremap = true, silent = true, desc = "Clear highlights" })
@@ -62,10 +63,6 @@ map("v", "K", "<NOP>", opts)
 
 map({ "i", "n", "x" }, "<A-u>", "<NOP>", opts)
 
--- mark
-map("n", "<leader>ml", ":marks<cr>", { noremap = true, silent = true, desc = "Show all marks" })
-map("n", "<leader>md", ":delmarks ", { noremap = true, silent = true, desc = "Delete mark" })
-map("n", "<leader>ma", ":delmarks a-zA-Z0-9<CR>", { noremap = true, silent = true, desc = "Delete all marks" })
 
 map("n", "<S-j>", function()
   vim.diagnostic.open_float()
@@ -99,35 +96,6 @@ map("n", "<leader>fs", function()
     Snacks.picker.treesitter()
   end
 end, { desc = "Find symbol in current buffer" })
-
--- multicursor
--- local mc = require("multicursor-nvim")
--- map({ "n", "x" }, "<leader>vk", function()
---   mc.lineAddCursor(-1)
--- end, { noremap = true, desc = "Line add cursor previous" })
--- map({ "n", "x" }, "<leader>vj", function()
---   mc.lineAddCursor(1)
--- end, { noremap = true, desc = "Line add cursor next" })
--- map({ "n", "x" }, "<leader>vK", function()
---   mc.lineSkipCursor(-1)
--- end, { noremap = true, desc = "Line skip cursor previous" })
--- map({ "n", "x" }, "<leader>vJ", function()
---   mc.lineSkipCursor(1)
--- end, { noremap = true, desc = "Line skip cursor next" })
---
--- -- Add or skip adding a new cursor by matching word/selection
--- map({ "n", "x" }, "<leader>vl", function()
---   mc.matchAddCursor(1)
--- end, { noremap = true, desc = "Match add cursor next" })
--- map({ "n", "x" }, "<leader>vh", function()
---   mc.matchAddCursor(-1)
--- end, { noremap = true, desc = "Match add cursor previous" })
--- map({ "n", "x" }, "<leader>vL", function()
---   mc.matchSkipCursor(1)
--- end, { noremap = true, desc = "Match skip cursor next" })
--- map({ "n", "x" }, "<leader>vH", function()
---   mc.matchSkipCursor(-1)
--- end, { noremap = true, desc = "Match skip cursor previous" })
 
 -- Oil
 

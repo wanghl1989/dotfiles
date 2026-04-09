@@ -16,10 +16,10 @@ map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
 
 -- 调整窗口大小
-vim.keymap.set("n", "<C-Up>", ":resize +2<CR>", { desc = "Increase window height" })
-vim.keymap.set("n", "<C-Down>", ":resize -2<CR>", { desc = "Decrease window height" })
-vim.keymap.set("n", "<C-Left>", ":vertical resize -2<CR>", { desc = "Decrease window width" })
-vim.keymap.set("n", "<C-Right>", ":vertical resize +2<CR>", { desc = "Increase window width" })
+map("n", "<C-Up>", ":resize +2<CR>", { desc = "Increase window height" })
+map("n", "<C-Down>", ":resize -2<CR>", { desc = "Decrease window height" })
+map("n", "<C-Left>", ":vertical resize -2<CR>", { desc = "Decrease window width" })
+map("n", "<C-Right>", ":vertical resize +2<CR>", { desc = "Increase window width" })
 
 map("n", "<A-j>", "<NOP>", opts)
 map("n", "<A-k>", "<NOP>", opts)
@@ -81,3 +81,6 @@ end, opts)
 map("n", "<leader>fh", function()
 	Snacks.picker.help()
 end, { noremap = true, silent = true, desc = "Show help." })
+
+map("v", "<", "<gv", { desc = "Indent code in visual mode" })
+map("v", ">", ">gv", { desc = "Indent code in visual mode" })

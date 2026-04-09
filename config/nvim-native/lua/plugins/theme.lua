@@ -12,12 +12,19 @@ require("cyberdream").setup({
 	},
 
 	colors = {
-		bg = "#0B0C16",
-		fg = "#ddf7ff",
-		green = "#4fe88f",
-		blue = "#829dd4",
-		magenta = "#86a7df",
-		cyan = "#7cf8f7",
+		-- bg = "#181A26",
+		fg = "#d2f8d2",
+		dark = {
+			-- bg_alt = "#1e2124",
+			bg_highlight = "#3c5868",
+			green = "#4fe88f",
+			blue = "#7cf8f7",
+			magenta = "#ff92df",
+			cyan = "#5ea1ff",
+			pink = "#FF79C6",
+			purple = "#cba6f7",
+			orange = "#ffbd5e",
+		},
 	},
 })
 
