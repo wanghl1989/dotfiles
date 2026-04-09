@@ -3,56 +3,163 @@ vim.pack.add({
 	{ src = "https://github.com/mason-org/mason.nvim" },
 })
 
--- LSP Config
-vim.lsp.config("lua_ls", {
-	settings = {
-		lua = {
-			runtime = { version = "LuaJIT", path = vim.split(package.path, ";") }, -- Lua 运行时
-			diagnostics = { globals = { "vim" } }, -- 忽略全局变量 vim 的警告
-			workspace = {
-				library = vim.api.nvim_get_runtime_file("", true),
-				checkThirdParty = false,
-			},
-		},
-	},
-})
-vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
-	callback = function()
-		-- Mason
-		require("mason").setup()
-	end,
-})
+require("mason").setup()
+vim.lsp.enable({ "lua_ls", "basedpyright", "clangd", "ruff" })
 
--- 启用 LSP
-vim.lsp.enable({ "lua_ls", "ty", "clangd", "ruff" })
+
 -- LSP 诊断显示
 vim.diagnostic.config({ virtual_text = true }) -- 行内文本提示
 -- vim.diagnostic.config({ virtual_lines = true }) -- 虚拟行提示（可选）
 
-----------------------
--- 快捷键配置 --
-----------------------
 
--- 系统剪贴板
-vim.keymap.set({ "n", "v" }, "<leader>c", '"+y', { desc = "copy to system clipboard" })
-vim.keymap.set({ "n", "v" }, "<leader>x", '"+d', { desc = "cut to system clipboard" })
-vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', { desc = "paste to system clipboard" })
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = vim.api.nvim_create_augroup("SetupLSP", {}),
+	callback = function(event)
+		local client = assert(vim.lsp.get_client_by_id(event.data.client_id))
 
--- LSP 快捷键
-vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
-vim.keymap.set("n", "gI", vim.lsp.buf.implementation, { desc = "Go to implementation" })
-vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Find references", nowait = true })
-vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { desc = "Go to type definition" })
-vim.keymap.set("n", "gK", function()
-	return vim.lsp.buf.signature_help()
-end, { desc = "Signature help" })
-vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename symbol" })
-vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP code action" })
--- 快速跳转诊断
-vim.keymap.set("n", "[d", function()
-	vim.diagnostic.jump({ wrap = true, count = -1 })
-end, { desc = "prev diagnostic" })
-vim.keymap.set("n", "]d", function()
-	vim.diagnostic.jump({ wrap = true, count = 1 })
-end, { desc = "next diagnostic" })
+		-- [inlay hint]
+		if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+			vim.keymap.set("n", "<leader>th", function()
+				vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
+			end, { buffer = event.buf, desc = "LSP: Toggle Inlay Hints" })
+		end
+
+		-- [folding]
+		if client and client:supports_method("textDocument/foldingRange") then
+			local win = vim.api.nvim_get_current_win()
+			vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+		end
+
+		-- [keymaps]
+		vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format)
+		vim.keymap.set("n", "gd", function()
+			local params = vim.lsp.util.make_position_params(0, "utf-8")
+			vim.lsp.buf_request(0, "textDocument/definition", params, function(_, result, _, _)
+				if not result or vim.tbl_isempty(result) then
+					vim.notify("No definition found", vim.log.levels.INFO)
+				else
+					require("snacks").picker.lsp_definitions()
+				end
+			end)
+		end, { buffer = event.buf, desc = "LSP: Goto Definition" })
+		vim.keymap.set("n", "gD", function()
+			local win = vim.api.nvim_get_current_win()
+			local width = vim.api.nvim_win_get_width(win)
+			local height = vim.api.nvim_win_get_height(win)
+
+			-- Mimic tmux formula: 8 * width - 20 * height
+			local value = 8 * width - 20 * height
+			if value < 0 then
+				vim.cmd("split") -- vertical space is more: horizontal split
+			else
+				vim.cmd("vsplit") -- horizontal space is more: vertical split
+			end
+
+			vim.lsp.buf.definition()
+		end, { buffer = event.buf, desc = "LSP: Goto Definition (split)" })
+
+		local function jump_to_current_function_start()
+			local params = { textDocument = vim.lsp.util.make_text_document_params() }
+			local responses = vim.lsp.buf_request_sync(0, "textDocument/documentSymbol", params, 1000)
+			if not responses then
+				return
+			end
+
+			local pos = vim.api.nvim_win_get_cursor(0)
+			local line = pos[1] - 1
+
+			local function find_symbol(symbols)
+				for _, s in ipairs(symbols) do
+					local range = s.range or (s.location and s.location.range)
+					if range and line >= range.start.line and line <= range["end"].line then
+						if s.children then
+							local child = find_symbol(s.children)
+							if child then
+								return child
+							end
+						end
+						return s
+					end
+				end
+			end
+
+			for _, resp in pairs(responses) do
+				local sym = find_symbol(resp.result or {})
+				if sym and sym.range then
+					vim.api.nvim_win_set_cursor(0, { sym.range.start.line + 1, 0 })
+					return
+				end
+			end
+		end
+		vim.keymap.set("n", "[f", jump_to_current_function_start, { desc = "Jump to start of current function" })
+		local function jump_to_current_function_end()
+			local params = { textDocument = vim.lsp.util.make_text_document_params() }
+			local responses = vim.lsp.buf_request_sync(0, "textDocument/documentSymbol", params, 1000)
+			if not responses then
+				return
+			end
+
+			local pos = vim.api.nvim_win_get_cursor(0)
+			local line = pos[1] - 1
+
+			local function find_symbol(symbols)
+				for _, s in ipairs(symbols) do
+					local range = s.range or (s.location and s.location.range)
+					if range and line >= range.start.line and line <= range["end"].line then
+						if s.children then
+							local child = find_symbol(s.children)
+							if child then
+								return child
+							end
+						end
+						return s
+					end
+				end
+			end
+
+			for _, resp in pairs(responses) do
+				local sym = find_symbol(resp.result or {})
+				if sym and sym.range then
+					-- jump to end of the symbol
+					vim.api.nvim_win_set_cursor(0, { sym.range["end"].line + 1, 0 })
+					return
+				end
+			end
+		end
+
+		-- Highlight words under cursor
+		if
+			client
+			and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight)
+			and vim.bo.filetype ~= "bigfile"
+		then
+			local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
+			vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+				buffer = event.buf,
+				group = highlight_augroup,
+				callback = vim.lsp.buf.document_highlight,
+			})
+
+			vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+				buffer = event.buf,
+				group = highlight_augroup,
+				callback = vim.lsp.buf.clear_references,
+			})
+
+			vim.api.nvim_create_autocmd("LspDetach", {
+				group = vim.api.nvim_create_augroup("kickstart-lsp-detach", { clear = true }),
+				callback = function(event2)
+					vim.lsp.buf.clear_references()
+					vim.api.nvim_clear_autocmds({ group = "kickstart-lsp-highlight", buffer = event2.buf })
+					-- vim.cmd 'setl foldexpr <'
+				end,
+			})
+		end
+		vim.keymap.set("n", "]f", jump_to_current_function_end, { desc = "Jump to end of current function" })
+		vim.diagnostic.config({
+			virtual_text = true,
+			virtual_lines = false,
+			float = { source = true },
+		})
+	end,
+})

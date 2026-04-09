@@ -4,6 +4,11 @@ vim.g.maplocalleader = "\\"
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
+map("v", "<C-w>", "<NOP>", opts)
+map("i", "<C-c>", "<ESC>", opts)
+map("n", "<leader>nh", ":noh<CR>", { noremap = true, silent = true, desc = "Clear highlights" })
+map("i", "jk", "<esc>", opts)
+
 -- move
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
