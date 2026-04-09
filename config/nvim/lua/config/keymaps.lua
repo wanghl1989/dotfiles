@@ -8,7 +8,7 @@ local opts = { noremap = true, silent = true }
 -- #map("n", "<esc>k", "", { noremap = true, silent = true })
 -- #map("n", "<esc>j", "", { noremap = true, silent = true })
 
-map("n", "<leader>n", "", { desc = "notification and highlights" })
+map("n", "<leader>n", "<NOP>", { desc = "notification and highlights" })
 map("n", "<A-j>", "<NOP>", opts)
 map("n", "<A-k>", "<NOP>", opts)
 map("i", "<A-j>", "<NOP>", opts)
@@ -17,11 +17,12 @@ map("i", "<A-k>", "<NOP>", opts)
 map("v", "<A-j>", "<NOP>", opts)
 map("v", "<A-k>", "<NOP>", opts)
 
-map("v", "<C-w>", "<NOP>", opts)
-map("i", "<C-c>", "<ESC>", opts)
+
 
 -- common set
 map("n", "<leader>nh", ":noh<CR>", { noremap = true, silent = true, desc = "Clear highlights" })
+map("v", "<C-w>", "<NOP>", opts)
+map("i", "<C-c>", "<ESC>", opts)
 map("i", "jk", "<esc>", opts)
 
 -- safe file and quit

@@ -5,7 +5,7 @@ vim.pack.add({
 })
 
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
-	group = vim.api.nvim_create_augroup("User_TreesitterInit", { clear = true }),
+	group = vim.api.nvim_create_augroup("SetupTreesitterInit", { clear = true }),
 	once = true,
 	callback = function()
 		-- @diagnostic disable-next-line: missing-fields

@@ -3,6 +3,19 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-lualine/lualine.nvim" },
 })
 
+vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
+
+local function diff_source()
+	local gitsigns = vim.b.gitsigns_status_dict
+	if gitsigns then
+		return {
+			added = gitsigns.added,
+			modified = gitsigns.changed,
+			removed = gitsigns.removed,
+		}
+	end
+end
+
 require("lualine").setup({
 	options = {
 		icons_enabled = true,
@@ -38,11 +51,27 @@ require("lualine").setup({
 	},
 	sections = {
 		lualine_a = { "mode" },
-		lualine_b = { "branch", "diff", "diagnostics" },
+		lualine_b = {
+			{ "branch", icon = "" },
+			{ "diff", symbols = { added = "+", modified = "~", removed = "-" }, source = diff_source },
+			{ "diagnostics" },
+		},
 		lualine_c = { "filename" },
 		lualine_x = { "encoding", "fileformat", "filetype" },
-		lualine_y = { "progress" },
-		lualine_z = { "location" },
+		lualine_y = { "progress", "position" },
+		lualine_z = {
+			{
+				"lsp_status",
+				icon = false,
+				symbols = {
+					spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
+					done = "✓",
+					separator = " ",
+				},
+				ignore_lsp = {},
+				show_name = true,
+			},
+		},
 	},
 	inactive_sections = {
 		lualine_a = {},

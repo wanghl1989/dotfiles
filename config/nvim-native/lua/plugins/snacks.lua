@@ -2,8 +2,9 @@ vim.pack.add({
 	{ src = "https://github.com/folke/snacks.nvim" },
 })
 -- Picker
-require("snacks").setup({
-	explorer = { enabled = true },
+local Snacks = require("snacks")
+Snacks.setup({
+	explorer = { enabled = false },
 	notifier = {
 		enabled = true,
 		timeout = 3000,
@@ -15,11 +16,16 @@ require("snacks").setup({
 	scroll = { enabled = true },
 	picker = {
 		matcher = { frecency = true, cwd_bonus = true, history_bonus = true },
-		formatters = { icon_width = 3 },
+        formatters = {
+            file = {
+            filename_first = true,
+            truncate = 100,
+            },
+        },
 		win = {
 			input = {
 				keys = {
-					["<C-t>"] = { "edit_tab", mode = { "n", "i" } },
+					["<C-T>"] = { "edit_tab", mode = { "n", "i" } },
 				},
 			},
 		},
@@ -30,17 +36,20 @@ require("snacks").setup({
 			keys = {
 				{ icon = "󰈞 ", key = "f", desc = "Find files", action = ":lua Snacks.picker.smart()" },
 				{ icon = " ", key = "o", desc = "Find history", action = "lua Snacks.picker.recent()" },
-				{ icon = " ", key = "e", desc = "New file", action = ":enew" },
+				{ icon = " ", key = "e", desc = "Exlplore", action = ":Oil ." },
 				{ icon = " ", key = "o", desc = "Recent files", action = ":lua Snacks.picker.recent()" },
-				{ icon = " ", key = "M", desc = "Mason", action = ":Mason" },
+				{ icon = " ", key = "m", desc = "Mason", action = ":Mason" },
 				{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
 			},
 			header = [[
-░  ░░░░░░░░  ░░░░  ░░░      ░░░  ░░░░░░░
-▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒▒▒▒
-▓  ▓▓▓▓▓▓▓▓        ▓▓  ▓▓▓▓▓▓▓▓       ▓▓
-█  ████████  ████  ██  ████  ██  ████  █
-█        ██  ████  ███      ███       ██
+                                                                   
+      ████ ██████           █████      ██                w.hl
+     ███████████             █████                            
+     █████████ ███████████████████ ███   ███████████  
+    █████████  ███    █████████████ █████ ██████████████  
+   █████████ ██████████ █████████ █████ █████ ████ █████  
+ ███████████ ███    ███ █████████ █████ █████ ████ █████ 
+██████  █████████████████████ ████ █████ █████ ████ ██████
 ]],
 		},
 		sections = {
@@ -104,12 +113,9 @@ end, "Grep")
 map("<leader>:", function()
 	Snacks.picker.command_history()
 end, "Command History")
-map("<leader>n", function()
+map("<leader>nl", function()
 	Snacks.picker.notifications()
 end, "Notification History")
-map("<leader>e", function()
-	Snacks.explorer()
-end, "File Explorer")
 -- find
 map("<leader>fb", function()
 	Snacks.picker.buffers()
@@ -282,13 +288,10 @@ end, "Toggle Scratch Buffer")
 map("<leader>S", function()
 	Snacks.scratch.select()
 end, "Select Scratch Buffer")
-map("<leader>n", function()
+map("<leader>ns", function()
 	Snacks.notifier.show_history()
 end, "Notification History")
 map("<leader>bd", function()
-	Snacks.bufdelete()
-end, "Delete Buffer")
-map("<leader>wq", function()
 	Snacks.bufdelete()
 end, "Delete Buffer")
 map("<leader>cR", function()
@@ -300,15 +303,19 @@ end, { desc = "Git Browse" })
 map("<leader>gg", function()
 	Snacks.lazygit()
 end, "Lazygit")
-map("<leader>un", function()
+map("<leader>nc", function()
 	Snacks.notifier.hide()
 end, "Dismiss All Notifications")
-map("<c-/>", function()
+
+
+vim.keymap.set({ "n", "t" }, "<c-/>", function()
 	Snacks.terminal()
-end, "Toggle Terminal")
-map("<c-_>", function()
+end, { desc = "Toggle Terminal" })
+
+vim.keymap.set({ "n", "t" }, "<c-t>", function()
 	Snacks.terminal()
-end, "which_key_ignore")
+end, { desc = "Toggle Terminal" })
+
 vim.keymap.set({ "n", "t" }, "]]", function()
 	Snacks.words.jump(vim.v.count1)
 end, { desc = "Next Reference" })
