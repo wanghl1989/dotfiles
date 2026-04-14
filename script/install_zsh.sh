@@ -29,6 +29,19 @@ echo "✅ 已创建软链接：$LINK_PATH → $SOURCE_DIR"
 
 ZSHRC_FILE="$HOME/.zshrc"
 
+
+SENTENCES=('eval "$(starship init zsh)"' 'eval "$(zoxide init zsh)"' 'eval "$(fnm completions --shell zsh)"')
+
+
+for sentence in "${SENTENCES[@]}"; do
+  if ! grep -Fxq "$sentence" "$ZSHRC_FILE"; then
+    echo "$sentence" >>"$ZSHRC_FILE"
+    echo "已添加: $sentence"
+  else
+    echo "已存在 \" $sentence \"  语句, 跳过"
+  fi
+done
+
 if [ ! -f "$ZSHRC_FILE" ]; then
   touch "$ZSHRC_FILE"
   echo "创建了新的.zshrc文件"
