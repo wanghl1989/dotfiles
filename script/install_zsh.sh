@@ -62,4 +62,4 @@ for item in "${ITEMS[@]}"; do
 done
 
 # 使配置生效
-echo "🎉 操作完成！使用 source ~/.zshrc 重新加载zsh配置..."
+scripts操作完成！使用 source ~/.zshrc 重新加载zsh配置..."
