@@ -88,7 +88,6 @@ create_symlink "$BASE_ROOT/Rime" "$RIME_PATH"
 HOME_ITEMS=(
   ".vimrc"             # vim config
   ".cargo/config.toml" # cargo
-  ".devtools"          # dev scripts
 )
 
 for item in "${HOME_ITEMS[@]}"; do

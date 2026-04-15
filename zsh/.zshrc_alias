@@ -522,4 +522,4 @@ proxy() {
     esac
 }
 
-export PATH=$PATH:"$HOME/.devtools"
+export PATH=$PATH:"$HOME/.zsh/scripts"
