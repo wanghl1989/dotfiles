@@ -3,6 +3,7 @@ overall = { bg = "#1e1e2e" }
 
 [mgr]
 cwd = { fg = "#7cf8f7" }
+linemode = "size"
 
 find_keyword = { fg = "#f1ff5e", italic = true }
 find_position = { fg = "#f5c2e7", bg = "reset", italic = true }

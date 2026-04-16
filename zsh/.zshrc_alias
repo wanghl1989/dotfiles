@@ -476,11 +476,20 @@ fs() {
 
 
 ff(){
-    _fzf_wrapper \
+  fd --type f --hidden --follow --exclude .git  . 2>/dev/null | _fzf_wrapper \
     --ansi \
     --prompt="File Search > " \
     --preview="bat --style=numbers --color=always {} 2>/dev/null || cat {}" \
     --bind="enter:execute(nvim {})+abort"
+}
+
+
+fimg(){
+  fd -t f -e jpg -e jpeg -e png -e gif -e webp -e bmp . 2>/dev/null | _fzf_wrapper \
+    --ansi \
+    --prompt="Image Search > " \
+    --preview="kitty +kitten icat --clear --transfer-mode=memory --stdin=no  {}" \
+    --bind="enter:execute(open {})+abort"
 }
 
 proxy() {
@@ -520,6 +529,29 @@ proxy() {
             echo "  show  查看当前代理状态"
             ;;
     esac
+}
+
+con(){
+  # 检查 CONDA_HOME 环境变量是否存在且为有效目录
+  if [ -z "${CONDA_HOME}" ] || [ ! -d "${CONDA_HOME}" ]; then
+      echo "请设置conda的安装路径： export CONDA_HOME=/path/to/miniconda3"
+      return 1
+  fi
+
+  # >>> conda initialize >>>
+  # !! Contents within this block are managed by 'conda init' !!
+  __conda_setup="$("${CONDA_HOME}/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
+  if [ $? -eq 0 ]; then
+      eval "$__conda_setup"
+  else
+      if [ -f "${CONDA_HOME}/etc/profile.d/conda.sh" ]; then
+          . "${CONDA_HOME}/etc/profile.d/conda.sh"
+      else
+          export PATH="${CONDA_HOME}/bin:$PATH"
+      fi
+  fi
+  unset __conda_setup
+  # <<< conda initialize <<<
 }
 
 export PATH=$PATH:"$HOME/.zsh/scripts"
