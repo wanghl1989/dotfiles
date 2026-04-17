@@ -1,7 +1,6 @@
 # zsh plugin
 # zinit
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
     command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
         print -P "%F{33} %F{34}Installation successful.%f%b" || \
@@ -34,14 +33,8 @@ zinit light zdharma/fast-syntax-highlighting
 
 # disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false
-# set descriptions format to enable group support
-# NOTE: don't use escape sequences (like '%F{red}%d%f') here, fzf-tab will ignore them
-zstyle ':completion:*:descriptions' format '[%d]'
 # set list-colors to enable filename colorizing
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
-zstyle ':completion:*' menu no
-
 
 
 if command -v fzf &> /dev/null; then
@@ -49,8 +42,12 @@ if command -v fzf &> /dev/null; then
     zinit light joshskidmore/zsh-fzf-history-search
 
     zinit light Aloxaf/fzf-tab
-    # preview directory's content with eza when completing cd
+
+    # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+    zstyle ':completion:*' menu no
+        # preview directory's content with eza when completing cd
     zstyle ':fzf-tab:complete:(cd|ln|mv|cp|rm|cat|head|tail):*' fzf-preview 'eza -1 -a --color=always --icons=auto $realpath'
+    zstyle ':fzf-tab:complete:(python|uv run|bash|sh):*' fzf-preview 'if [ -d "$realpath" ]; then eza -1 -a --color=always --icons=auto "$realpath"; else  bat "$realpath"; fi'
     zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview 'git diff $realpath | bat --color=always'
     # custom fzf flags
     # NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
@@ -58,8 +55,7 @@ if command -v fzf &> /dev/null; then
     zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2
 
     # To make fzf-tab follow FZF_DEFAULT_OPTS.
-    # NOTE: This may lead to unexpected behavior since some flags break this plugin. See Aloxaf/fzf-tab#455.
-    zstyle ':fzf-tab:*' use-fzf-default-opts yes
+    zstyle ':fzf-tab:*' use-fzf-default-opts no
     # switch group using `<` and `>`
     zstyle ':fzf-tab:*' switch-group '<' '>'
 
@@ -77,10 +73,11 @@ bindkey '^N' down-line-or-search #Ctrl+N select previous
 
 
 
-zinit ice depth=1
 
 if [[ -z "$NVIM" ]]; then
-  zinit light jeffreytse/zsh-vi-mode
+
+    zinit ice depth=1
+    zinit light jeffreytse/zsh-vi-mode
 fi
 
 # some config
@@ -133,5 +130,4 @@ setopt HIST_IGNORE_DUPS     # 忽略重复的命令（可选）
 
 ### xdgconfig
 export XDG_CONFIG_HOME="$HOME/.config"
-
 

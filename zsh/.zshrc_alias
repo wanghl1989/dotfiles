@@ -493,9 +493,15 @@ fimg(){
 }
 
 proxy() {
+    
     case "$1" in
         # 开启全局终端代理（所有命令生效：curl/git/npm/brew等）
         on)
+            if [ -z "${PROXY_URL}" ]; then
+                echo "请设置proxy url： export PROXY_URL=socks5://127.0.0.1:7890"
+                proxy off
+                return 1
+            fi
             export http_proxy="socks5://127.0.0.1:7890"
             export https_proxy="socks5://127.0.0.1:7890"
             export all_proxy="socks5://127.0.0.1:7890"
