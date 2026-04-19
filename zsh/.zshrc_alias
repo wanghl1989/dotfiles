@@ -155,7 +155,7 @@ alias github="search_engine github"
 _fzf_wrapper() {
     # 仅当两个变量都不存在时，设置默认 FZF 选项
     if [[ ! -v FZF_DEFAULT_OPTS && ! -v FZF_DEFAULT_OPTS_FILE ]]; then
-        export FZF_DEFAULT_OPTS='--cycle --layout=reverse --border --height=90% --preview-window=wrap --marker="*"'
+        export FZF_DEFAULT_OPTS='--cycle --layout=reverse --border --height=90% --popup 85%,90% --preview-window=right:55% --marker="*"'
     fi
 
     # 执行 fzf，绑定快捷键 + 传递所有参数
