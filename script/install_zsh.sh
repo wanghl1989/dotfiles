@@ -22,7 +22,7 @@ elif [ -d "$LINK_PATH" ]; then
   rm -rf "$LINK_PATH"
 fi
 
-ITEMS=(".zshrc_plugin" ".zshrc_alias" ".zshrc_images")
+ITEMS=(".zshrc_plugin" ".zshrc_alias" ".zshrc_images" ".zshrc_utils")
 
 ln -sf "$SOURCE_DIR" "$LINK_PATH"
 echo "✅ 已创建软链接：$LINK_PATH → $SOURCE_DIR"
