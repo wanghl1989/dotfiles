@@ -1,0 +1,451 @@
+# ------------------------------
+# 辅助包装函数：执行 fzf 前设置环境变量
+# ------------------------------
+_fzf_wrapper() {
+    # 仅当两个变量都不存在时，设置默认 FZF 选项
+    if [[ ! -v FZF_DEFAULT_OPTS && ! -v FZF_DEFAULT_OPTS_FILE ]]; then
+        export FZF_DEFAULT_OPTS='--cycle --layout=reverse --border --height=90% --popup 85%,90% --preview-window=right:55% --marker="*"'
+    fi
+
+    # 执行 fzf，绑定快捷键 + 传递所有参数
+    fzf --bind="ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down" "$@"
+}
+
+
+
+# ------------------------------
+# 文件预览核心函数
+# ------------------------------
+_fzf_preview_file='/bin/bash -c '\''
+file="$1"
+# 符号链接
+if [[ -L "$file" ]]; then
+    target=$(realpath "$file")
+    printf "\033[33m%s\033[0m\n" "'$file' 是软链接，指向: $target"
+    file="$target"
+fi
+# 普通文件
+if [[ -f "$file" ]]; then
+    bat --style=numbers --color=always "$file" 2>/dev/null || cat "$file"
+# 目录
+elif [[ -d "$file" ]]; then
+    ls -A -F "$file"
+# 特殊文件
+elif [[ -c "$file" ]]; then printf "\033[36m%s\033[0m\n" "'$file' 字符设备";
+elif [[ -b "$file" ]]; then printf "\033[36m%s\033[0m\n" "'$file' 块设备";
+elif [[ -S "$file" ]]; then printf "\033[36m%s\033[0m\n" "'$file' Socket";
+elif [[ -p "$file" ]]; then printf "\033[36m%s\033[0m\n" "'$file' 管道";
+else echo "$file 不存在" >&2;
+fi
+'\'' {}'
+
+# ------------------------------
+# 打印 Git Diff 彩色标题边框
+# ------------------------------
+_fzf_report_diff_type() {
+    local diff_type="$1"
+    local desc="打印带边框的彩色标题（用于 git diff 输出前）"
+    local len=${#diff_type}
+    local repeat_count=$((len + 2))
+    # 生成分隔线
+    local line=$(printf "─%.0s" $(seq 1 $repeat_count))
+    # 黄色输出
+    printf '\033[33m'
+    echo "╭$line╮"
+    echo "│ $diff_type │"
+    echo "╰$line╯"
+    printf '\033[0m'
+}
+
+# ------------------------------
+# Git 变更文件预览
+# ------------------------------
+_fzf_preview_changed_file() {
+    local path_status="$1"
+    local desc="显示 git status 中指定文件的 diff"
+    # 截取路径（跳过前3个字符）
+    local path=${path_status:3}
+    # 转义特殊字符
+    path=$(printf "%b" "$path")
+    local index_status=${path_status:0:1}
+    local working_tree_status=${path_status:1:1}
+    local diff_opts="--color=always"
+
+    # 未跟踪文件
+    if [[ $index_status == '?' ]]; then
+        _fzf_report_diff_type "Untracked"
+        _fzf_preview_file "$path"
+    # 合并冲突文件
+    elif [[ "DD AU UD UA DU AA UU" == *"$index_status$working_tree_status"* ]]; then
+        _fzf_report_diff_type "Unmerged"
+        git diff $diff_opts -- "$path"
+    # 已暂存/未暂存变更
+    else
+        if [[ $index_status != ' ' ]]; then
+            _fzf_report_diff_type "Staged"
+            # 重命名文件处理
+            if [[ $index_status == 'R' ]]; then
+                local orig_and_new_path=(${path// -> / })
+                git diff --staged $diff_opts -- "${orig_and_new_path[0]}" "${orig_and_new_path[1]}"
+                path="${orig_and_new_path[1]}"
+            else
+                git diff --staged $diff_opts -- "$path"
+            fi
+        fi
+        if [[ $working_tree_status != ' ' ]]; then
+            _fzf_report_diff_type "Unstaged"
+            git diff $diff_opts -- "$path"
+        fi
+    fi
+}
+
+# ------------------------------
+# Bash 兼容 Fish commandline 功能（核心：替换当前命令行单词）
+# ------------------------------
+_bash_replace_current_token() {
+    local replacement="$*"
+    local line=$READLINE_LINE
+    local pos=$READLINE_POINT
+
+    # 匹配光标位置的单词
+    local before=${line:0:pos}
+    local after=${line:pos}
+    local start=$(echo "$before" | grep -bo '[^[:space:]]*$' | tail -n1 | cut -d: -f1)
+    [[ -z $start ]] && start=0
+    local end=$(echo "$after" | grep -o '^[^[:space:]]*' | wc -c)
+    end=$((pos + end))
+
+    # 替换单词并刷新命令行
+    READLINE_LINE="${line:0:start}${replacement}${line:end}"
+    READLINE_POINT=$((start + ${#replacement}))
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 主功能函数
+# ─────────────────────────────────────────────────────────────────────────────
+# ------------------------------
+# 模糊搜索 Git Log (git_log)
+# ------------------------------
+git_log() {
+    local desc="模糊搜索 git log，选中后将完整 commit hash 插入命令行"
+    # 检查是否在 Git 仓库
+    if ! git rev-parse --git-dir >/dev/null 2>&1; then
+        echo 'gl: Not in a git repository.' >&2
+        return 1
+    fi
+
+    # 默认 Log 格式
+    [[ ! -v fzf_git_log_format ]] && local fzf_git_log_format='%C(bold blue)%h%C(reset) - %C(cyan)%ad%C(reset) %C(yellow)%d%C(reset) %C(normal)%s%C(reset)  %C(dim normal)[%an]%C(reset)'
+
+    # 预览命令
+    local preview_cmd='git show --color=always --stat --patch {1}'
+    [[ -v fzf_diff_highlighter ]] && preview_cmd="$preview_cmd | $fzf_diff_highlighter"
+
+    # 获取当前命令行单词
+    local current_token=$(echo "$READLINE_LINE" | cut -d' ' -f$((READLINE_POINT+1)))
+
+    # FZF 选择
+    local selected_log_lines=$(
+        git log --no-show-signature --color=always --format=format:"$fzf_git_log_format" --date=short |
+        _fzf_wrapper --ansi \
+            --multi \
+            --scheme=history \
+            --prompt="Git Log> " \
+            --preview="$preview_cmd" \
+            --query="$current_token" \
+            $fzf_git_log_opts
+    )
+
+    # 插入 Commit Hash
+    if [[ $? -eq 0 && -n $selected_log_lines ]]; then
+        local commit_hashes=()
+        while IFS= read -r line; do
+            local abbreviated_commit_hash=$(echo "$line" | cut -d' ' -f1)
+            local full_commit_hash=$(git rev-parse "$abbreviated_commit_hash")
+            commit_hashes+=("$full_commit_hash")
+        done <<< "$selected_log_lines"
+        _bash_replace_current_token "${commit_hashes[*]}"
+    fi
+}
+
+# ------------------------------
+# 模糊搜索 Git Status (git_search)
+# ------------------------------
+git_status() {
+    local desc="模糊搜索 git status，选中后将文件路径插入命令行"
+    # 检查 Git 仓库
+    if ! git rev-parse --git-dir >/dev/null 2>&1; then
+        echo 'gs: Not in a git repository.' >&2
+        return 1
+    fi
+    FZF_PREVIEW_GIT='/bin/bash -c '\''
+    line="$1"
+    status="${line:0:2}"
+    path="${line:3}"
+    path=$(printf "%b" "$path")
+    diff_opts="--color=always"
+
+    report() {
+    t="$1"
+    len=${#t}
+    cnt=$((len+2))
+    line=$(printf "─%.0s" $(seq 1 $cnt))
+    printf "\033[33m"
+    echo "╭$line╮"
+    echo "│ $t │"
+    echo "╰$line╯"
+    printf "\033[0m"
+    }
+
+    if [[ "$status" == "??" ]]; then
+    report "Untracked"
+    if [[ -L "$path" ]]; then
+        target=$(realpath "$path")
+        printf "\033[33m${path} → ${target}\033[0m\n"
+        path="$target"
+    fi
+    if [[ -f "$path" ]]; then
+        bat --style=numbers --color=always "$path" 2>/dev/null || cat "$path"
+    elif [[ -d "$path" ]]; then
+        ls -A -F "$path"
+    fi
+    elif [[ "DD AU UD UA DU AA UU" == *"$status"* ]]; then
+    report "Unmerged"
+    [[ -n "$path" ]] && git diff $diff_opts -- "$path"
+    else
+    index_status="${status:0:1}"
+    working_status="${status:1:1}"
+
+    if [[ "$index_status" != " " ]]; then
+        report "Staged"
+        if [[ "$index_status" == "R" ]]; then
+        orig="${path%% -> *}"
+        new="${path#* -> }"
+        [[ -n "$orig" && -n "$new" ]] && git diff --staged $diff_opts -- "$orig" "$new"
+        else
+        [[ -n "$path" ]] && git diff --staged $diff_opts -- "$path"
+        fi
+    fi
+
+    if [[ "$working_status" != " " ]]; then
+        report "Unstaged"
+        [[ -n "$path" ]] && git diff $diff_opts -- "$path"
+    fi
+    fi
+    '\'' {}'
+    
+    # 当前命令行单词
+    local current_token=$(echo "$READLINE_LINE" | cut -d' ' -f$((READLINE_POINT+1)))
+
+    # FZF 选择
+    local selected_paths=$(
+        git -c color.status=always status --short |
+        _fzf_wrapper --ansi \
+            --multi \
+            --prompt="Git Status> " \
+            --query="$current_token" \
+            --preview="$FZF_PREVIEW_GIT {}" \
+            --nth="2.." \
+            $fzf_git_status_opts
+    )
+
+    # 插入文件路径
+    if [[ $? -eq 0 && -n $selected_paths ]]; then
+        local cleaned_paths=()
+        while IFS= read -r path; do
+            if [[ ${path:0:1} == 'R' ]]; then
+                local p=$(echo "$path" | awk -F'-> ' '{print $2}')
+                cleaned_paths+=("$p")
+            else
+                cleaned_paths+=("${path:3}")
+            fi
+        done <<< "$selected_paths"
+        _bash_replace_current_token "${cleaned_paths[*]}"
+    fi
+}
+
+# ------------------------------
+# 模糊搜索 Git 分支 (gb)
+# ------------------------------
+git_branch() {
+    local desc="模糊搜索本地 git 分支，按 Enter 切换到选中分支"
+    # 检查 Git 仓库
+    if ! git rev-parse --git-dir >/dev/null 2>&1; then
+        echo 'gb: Not in a git repository.' >&2
+        return 1
+    fi
+
+    # 当前分支
+    local current_branch=$(git branch --show-current)
+
+    # FZF 选择分支
+    local selected_branch=$(
+        git branch --color=always |
+        _fzf_wrapper --ansi \
+            --prompt="Git Branch> " \
+            --preview="git log --oneline --color=always --max-count=20 $(echo {} | sed 's/^\* //g' | xargs)" \
+            --preview-window="right:60%:wrap" \
+            --header="current: $current_branch  |  Enter: checkout" \
+            $fzf_git_branch_opts
+    )
+
+    # 切换分支
+    if [[ $? -eq 0 && -n $selected_branch ]]; then
+        local branch_name=$(echo "$selected_branch" | sed 's/^\* //g' | xargs)
+        git checkout "$branch_name"
+    fi
+}
+
+# ------------------------------
+# 模糊搜索进程 (fp)
+# ------------------------------
+fp() {
+    local desc="模糊搜索运行中的进程，选中后将 PID 插入命令行"
+    local ps_cmd=$(command -v ps)
+    local ps_preview_fmt="pid,ppid=PARENT,user,%cpu,rss=RSS_IN_KB,start=START_TIME,command"
+
+    # 当前命令行单词
+    local current_token=$(echo "$READLINE_LINE" | cut -d' ' -f$((READLINE_POINT+1)))
+
+    # FZF 选择进程
+    local processes_selected=$(
+        $ps_cmd -A -opid,command |
+        _fzf_wrapper --multi \
+            --prompt="Processes> " \
+            --query "$current_token" \
+            --ansi \
+            --header-lines=1 \
+            --preview="$ps_cmd -o '$ps_preview_fmt' -p {1} || echo 'Cannot preview {1} because it exited.'" \
+            --preview-window="bottom:4:wrap:border-rounded" \
+            $fzf_processes_opts
+    )
+
+    # 插入 PID
+    if [[ $? -eq 0 && -n $processes_selected ]]; then
+        local pids_selected=()
+        while IFS= read -r proc; do
+            local pid=$(echo "$proc" | xargs | cut -d' ' -f1)
+            pids_selected+=("$pid")
+        done <<< "$processes_selected"
+        _bash_replace_current_token "${pids_selected[*]}"
+    fi
+}
+
+
+# ------------------------------
+# 模糊搜索文件内容(fs)
+# ------------------------------
+fs() {
+  fd --type f --hidden --follow --exclude .git  . 2>/dev/null | _fzf_wrapper \
+    --ansi \
+    --disabled \
+    --prompt="Content Search > " \
+    --preview-window="right:60%" \
+    --preview="rg -n --color=always -C 3 '{q}' {} 2>/dev/null" \
+    --bind="change:reload:rg -l '{q}' 2>/dev/null || true" \
+    --bind="enter:execute(nvim +\$(rg -n '{q}' {} | head -n1 | cut -d: -f1) {})+abort"
+}
+
+
+# ------------------------------
+# 模糊搜索文件名(ff)
+# ------------------------------
+
+
+
+ff(){
+    fd --type f --hidden --follow --exclude .git  . 2>/dev/null | _fzf_wrapper \
+        --ansi \
+        --prompt="File Search > " \
+        --preview="$_fzf_preview_file {}" \
+        --bind="enter:execute(nvim {})+abort"
+}
+
+
+# ------------------------------
+# 模糊搜索图片(fimg)
+# ------------------------------
+fimg(){
+
+  fd -t f -e jpg -e jpeg -e png -e gif -e webp -e bmp . 2>/dev/null | _fzf_wrapper \
+    --ansi \
+    --prompt="Image Search > " \
+    --preview="kitty +kitten icat --clear --transfer-mode=memory --stdin=no  {}" \
+    --bind="enter:execute(open {})+abort"
+}
+
+# ------------------------------
+# 设置proxy
+# ------------------------------
+proxy() {
+    
+    case "$1" in
+        # 开启全局终端代理（所有命令生效：curl/git/npm/brew等）
+        on)
+            if [ -z "${PROXY_URL}" ]; then
+                echo "请设置proxy url： export PROXY_URL=socks5://127.0.0.1:7890"
+                proxy off
+                return 1
+            fi
+            export http_proxy="socks5://127.0.0.1:7890"
+            export https_proxy="socks5://127.0.0.1:7890"
+            export all_proxy="socks5://127.0.0.1:7890"
+            # 兼容大写环境变量（部分软件只识别大写）
+            export HTTP_PROXY=$http_proxy
+            export HTTPS_PROXY=$https_proxy
+            export ALL_PROXY=$all_proxy
+            echo "✅ 终端全局代理已开启：socks5://127.0.0.1:7890"
+            ;;
+
+        # 关闭全局终端代理
+        off)
+            unset http_proxy https_proxy all_proxy
+            unset HTTP_PROXY HTTPS_PROXY ALL_PROXY
+            echo "❌ 终端全局代理已关闭"
+            ;;
+
+        # 查看当前代理状态
+        show)
+            echo "📌 当前终端代理配置："
+            echo "http_proxy:  $http_proxy"
+            echo "https_proxy: $https_proxy"
+            echo "all_proxy:   $all_proxy"
+            ;;
+
+        # 帮助提示
+        *)
+            echo "用法：proxy [命令]"
+            echo "  on    开启终端全局 SOCKS5 代理 (127.0.0.1:7890)"
+            echo "  off   关闭终端全局代理"
+            echo "  show  查看当前代理状态"
+            ;;
+    esac
+}
+
+
+# ------------------------------
+# conda 手动启用
+# ------------------------------
+con(){
+  # 检查 CONDA_HOME 环境变量是否存在且为有效目录
+  if [ -z "${CONDA_HOME}" ] || [ ! -d "${CONDA_HOME}" ]; then
+      echo "请设置conda的安装路径： export CONDA_HOME=/path/to/miniconda3"
+      return 1
+  fi
+
+  # >>> conda initialize >>>
+  # !! Contents within this block are managed by 'conda init' !!
+  __conda_setup="$("${CONDA_HOME}/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
+  if [ $? -eq 0 ]; then
+      eval "$__conda_setup"
+  else
+      if [ -f "${CONDA_HOME}/etc/profile.d/conda.sh" ]; then
+          . "${CONDA_HOME}/etc/profile.d/conda.sh"
+      else
+          export PATH="${CONDA_HOME}/bin:$PATH"
+      fi
+  fi
+  unset __conda_setup
+  # <<< conda initialize <<<
+}
+
