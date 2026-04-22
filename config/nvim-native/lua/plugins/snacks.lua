@@ -16,12 +16,12 @@ Snacks.setup({
 	scroll = { enabled = true },
 	picker = {
 		matcher = { frecency = true, cwd_bonus = true, history_bonus = true },
-        formatters = {
-            file = {
-            filename_first = true,
-            truncate = 100,
-            },
-        },
+		formatters = {
+			file = {
+				filename_first = true,
+				truncate = 100,
+			},
+		},
 		win = {
 			input = {
 				keys = {
@@ -38,23 +38,25 @@ Snacks.setup({
 				{ icon = " ", key = "o", desc = "Find history", action = "lua Snacks.picker.recent()" },
 				{ icon = " ", key = "e", desc = "Exlplore", action = ":Oil ." },
 				{ icon = " ", key = "o", desc = "Recent files", action = ":lua Snacks.picker.recent()" },
+				{ icon = "󰒲 ", key = "u", desc = "Update", action = ":lua vim.pack.update()" },
 				{ icon = " ", key = "m", desc = "Mason", action = ":Mason" },
 				{ icon = " ", key = "q", desc = "Quit", action = ":qa" },
 			},
 			header = [[
-                                                                   
+                                             
       ████ ██████           █████      ██                w.hl
-     ███████████             █████                            
-     █████████ ███████████████████ ███   ███████████  
-    █████████  ███    █████████████ █████ ██████████████  
-   █████████ ██████████ █████████ █████ █████ ████ █████  
- ███████████ ███    ███ █████████ █████ █████ ████ █████ 
+     ███████████             █████ 
+     █████████ ███████████████████ ███   ███████████
+    █████████  ███    █████████████ █████ ██████████████
+   █████████ ██████████ █████████ █████ █████ ████ █████
+ ███████████ ███    ███ █████████ █████ █████ ████ █████
 ██████  █████████████████████ ████ █████ █████ ████ ██████
 ]],
 		},
+
 		sections = {
 			{ section = "header" },
-			{ icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
+			{ icon = " ", section = "keys", gap = 1, padding = 1 },
 		},
 	},
 	image = {
@@ -306,7 +308,6 @@ end, "Lazygit")
 map("<leader>nc", function()
 	Snacks.notifier.hide()
 end, "Dismiss All Notifications")
-
 
 vim.keymap.set({ "n", "t" }, "<c-/>", function()
 	Snacks.terminal()

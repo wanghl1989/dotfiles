@@ -6,11 +6,9 @@ vim.pack.add({
 require("mason").setup()
 vim.lsp.enable({ "lua_ls", "basedpyright", "clangd", "ruff" })
 
-
 -- LSP 诊断显示
 vim.diagnostic.config({ virtual_text = true }) -- 行内文本提示
 -- vim.diagnostic.config({ virtual_lines = true }) -- 虚拟行提示（可选）
-
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("SetupLSP", {}),
@@ -31,7 +29,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 
 		-- [keymaps]
-		vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format)
+		vim.keymap.set("n", "<leader>cf", vim.lsp.buf.format)
 		vim.keymap.set("n", "gd", function()
 			local params = vim.lsp.util.make_position_params(0, "utf-8")
 			vim.lsp.buf_request(0, "textDocument/definition", params, function(_, result, _, _)
@@ -162,4 +160,82 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			float = { source = true },
 		})
 	end,
+})
+
+-- LspRestart: Restart LSP clients for current buffer
+vim.api.nvim_create_user_command("LspInfo", ":checkhealth lsp", { desc = "Check LSP Info" })
+
+-- LspRestart: Restart LSP clients for current buffer
+vim.api.nvim_create_user_command("LspRestart", function()
+	local bufnr = vim.api.nvim_get_current_buf()
+	local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+	if #clients == 0 then
+		vim.notify("No LSP clients attached to restart", vim.log.levels.WARN)
+		return
+	end
+
+	for _, client in ipairs(clients) do
+		vim.notify("Restarting " .. client.name, vim.log.levels.INFO)
+		vim.lsp.stop_client(client.id)
+	end
+
+	vim.defer_fn(function()
+		vim.cmd("edit")
+	end, 100)
+end, { desc = "Restart LSP clients for current buffer" })
+
+-- LspStatus: Show brief LSP status
+vim.api.nvim_create_user_command("LspStatus", function()
+	local bufnr = vim.api.nvim_get_current_buf()
+	local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+	if #clients == 0 then
+		print("󰅚 No LSP clients attached")
+		return
+	end
+
+	print("󰒋 LSP Status for buffer " .. bufnr .. ":")
+	print("─────────────────────────────────")
+
+	for i, client in ipairs(clients) do
+		print(string.format("󰌘 Client %d: %s (ID: %d)", i, client.name, client.id))
+		print("  Root: " .. (client.config.root_dir or "N/A"))
+		print("  Filetypes: " .. table.concat(client.config.filetypes or {}, ", "))
+
+		local caps = client.server_capabilities
+		local features = {}
+		if caps.completionProvider then
+			table.insert(features, "completion")
+		end
+		if caps.hoverProvider then
+			table.insert(features, "hover")
+		end
+		if caps.definitionProvider then
+			table.insert(features, "definition")
+		end
+		if caps.referencesProvider then
+			table.insert(features, "references")
+		end
+		if caps.renameProvider then
+			table.insert(features, "rename")
+		end
+		if caps.codeActionProvider then
+			table.insert(features, "code_action")
+		end
+		if caps.documentFormattingProvider then
+			table.insert(features, "formatting")
+		end
+
+		print("  Features: " .. table.concat(features, ", "))
+		print("")
+	end
+end, { desc = "Show brief LSP status" })
+
+-- lsp
+local api, lsp = vim.api, vim.lsp
+api.nvim_create_user_command("LspLog", function()
+	vim.cmd(string.format("tabnew %s", lsp.get_log_path()))
+end, {
+	desc = "Opens the Nvim LSP client log.",
 })

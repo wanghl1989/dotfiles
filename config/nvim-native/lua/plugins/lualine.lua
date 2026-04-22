@@ -19,7 +19,7 @@ end
 require("lualine").setup({
 	options = {
 		icons_enabled = true,
-		theme = "auto",
+		theme = "cyberdream",
 		component_separators = { left = "", right = "" },
 		section_separators = { left = "", right = "" },
 		disabled_filetypes = {
@@ -57,7 +57,7 @@ require("lualine").setup({
 			{ "diagnostics" },
 		},
 		lualine_c = { "filename" },
-		lualine_x = { "encoding", "fileformat", "filetype" },
+		lualine_x = { "encoding", "fileformat", "filetype" , "venv-selector"},
 		lualine_y = { "progress", "position" },
 		lualine_z = {
 			{

@@ -5,7 +5,12 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 	group = vim.api.nvim_create_augroup("SetupBufferline", { clear = true }),
 	once = true,
 	callback = function()
-		require("bufferline").setup()
+        local bufferline = require("bufferline")
+		bufferline.setup({
+			options = {
+				style_preset = bufferline.style_preset.no_italic,
+			},
+		})
 	end,
 })
 

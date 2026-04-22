@@ -4,6 +4,7 @@ return {
   "akinsho/bufferline.nvim",
   opts = {
     options = {
+      style_preset = require("bufferline").style_preset.no_italic,
       always_show_bufferline = false,
       show_buffer_close_icons = false,
       show_close_icon = false,
