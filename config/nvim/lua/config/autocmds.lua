@@ -68,3 +68,4 @@ if fcitx5_remote then
     callback = M.Enter_insert,
   })
 end
+

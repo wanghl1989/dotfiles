@@ -1,4 +1,3 @@
--- For `plugins/markview.lua` users.
 local highlight_md_heading = "MyHighlightHeading"
 vim.api.nvim_set_hl(0, highlight_md_heading, { bg = "#3e4452", fg = "#81a1c1" })
 

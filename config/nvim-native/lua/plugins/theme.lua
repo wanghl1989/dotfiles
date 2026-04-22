@@ -3,7 +3,7 @@ vim.pack.add({
 })
 
 require("cyberdream").setup({
-	transparent = false,
+	transparent = true,
 	saturation = 1,
 	terminal_color = false,
 	borderless_pickers = false,
@@ -27,5 +27,6 @@ require("cyberdream").setup({
 		},
 	},
 })
+
 
 vim.cmd("colorscheme cyberdream")

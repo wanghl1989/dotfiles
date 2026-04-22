@@ -30,7 +30,7 @@ echo "✅ 已创建软链接：$LINK_PATH → $SOURCE_DIR"
 ZSHRC_FILE="$HOME/.zshrc"
 
 
-SENTENCES=('eval "$(starship init zsh)"' 'eval "$(zoxide init zsh)"'  'eval "$(fnm env)"'  'eval "$(fnm completions --shell zsh)"')
+SENTENCES=('eval "$(starship init zsh)"' 'eval "$(zoxide init zsh)"'  'eval "$(fnm env)"')
 
 
 for sentence in "${SENTENCES[@]}"; do
