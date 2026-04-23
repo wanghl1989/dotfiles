@@ -36,12 +36,14 @@ map("v", "<A-k>", "<NOP>", opts)
 
 map("v", "<C-w>", "<NOP>", opts)
 
+-- split
+map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
+map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
+
 -- safe file and quit
 map("n", "<Leader>wc", "<C-W>w", { noremap = true, silent = true, desc = "Switch windows" })
 map("n", "<Leader>ww", ":update<CR>", { noremap = true, desc = "Save windows" })
-map("n", "<leader>wq", function()
-	Snacks.bufdelete()
-end, { desc = "Delete Buffer", noremap = true })
+
 map("n", "<Leader>qa", ":qa<CR>", { noremap = true, desc = "Quit all" })
 map("n", "<Leader>qq", ":q<CR>", { noremap = true, desc = "Quit current" })
 

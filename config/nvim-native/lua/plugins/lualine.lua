@@ -5,27 +5,15 @@ vim.pack.add({
 
 vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
 
-local function diff_source()
-	local gitsigns = vim.b.gitsigns_status_dict
-	if gitsigns then
-		return {
-			added = gitsigns.added,
-			modified = gitsigns.changed,
-			removed = gitsigns.removed,
-		}
-	end
-end
+local Snacks = require("snacks")
 
 require("lualine").setup({
 	options = {
 		icons_enabled = true,
-		theme = "cyberdream",
+		theme = "auto",
+		disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter", "snacks_dashboard", "oil" } },
 		component_separators = { left = "", right = "" },
-		section_separators = { left = "", right = "" },
-		disabled_filetypes = {
-			statusline = {},
-			winbar = {},
-		},
+		section_separators = { left = "|", right = "|" },
 		ignore_focus = {},
 		always_divide_middle = true,
 		always_show_tabline = true,
@@ -53,12 +41,43 @@ require("lualine").setup({
 		lualine_a = { "mode" },
 		lualine_b = {
 			{ "branch", icon = "" },
-			{ "diff", symbols = { added = "+", modified = "~", removed = "-" }, source = diff_source },
+			{
+				"diff",
+				symbols = { added = "+", modified = "~", removed = "-" },
+
+				source = function()
+					local gitsigns = vim.b.gitsigns_status_dict
+					if gitsigns then
+						return {
+							added = gitsigns.added,
+							modified = gitsigns.changed,
+							removed = gitsigns.removed,
+						}
+					end
+				end,
+			},
 			{ "diagnostics" },
 		},
-		lualine_c = { "filename" },
-		lualine_x = { "encoding", "fileformat", "filetype" , "venv-selector"},
-		lualine_y = { "progress", "position" },
+		lualine_c = { require("utils.path").pretty_path() },
+		lualine_x = {
+			Snacks.profiler.status(),
+			-- {
+			-- 	function()
+			-- 		return "  " .. require("dap").status()
+			-- 	end,
+			-- 	cond = function()
+			-- 		return package.loaded["dap"] and require("dap").status() ~= ""
+			-- 	end,
+			-- 	color = function()
+			-- 		return { fg = Snacks.util.color("Debug") }
+			-- 	end,
+			-- },
+			{ "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
+			{ "venv-selector", icon = "\u{e606}", color = { fg = "#50f872" } },
+		},
+		lualine_y = {
+			{ "progress", separator = " ", padding = { left = 1, right = 0 } },
+		},
 		lualine_z = {
 			{
 				"lsp_status",

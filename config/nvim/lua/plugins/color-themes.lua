@@ -10,7 +10,7 @@ return {
       terminal_color = false,
       borderless_pickers = false,
       highlights = {
-        Comment = { fg = "#7c8088", bg = "NONE", italic = true },
+        Comment = { fg = "#7c8088", bg = "NONE", italic = false },
       },
       colors = {
         -- bg = "#181A26",

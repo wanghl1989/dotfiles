@@ -8,7 +8,7 @@ require("cyberdream").setup({
 	terminal_color = false,
 	borderless_pickers = false,
 	highlights = {
-		Comment = { fg = "#898989", bg = "NONE", italic = true },
+		Comment = { fg = "#898989", bg = "NONE", italic = false },
 	},
 
 	colors = {

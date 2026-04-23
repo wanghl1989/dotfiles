@@ -65,6 +65,13 @@ Snacks.setup({
 	},
 	indent = {
 		enabled = true,
+		only_current = true,
+	},
+	animate = {
+		enabled = false,
+	},
+	scope = {
+		enabled = true,
 	},
 	styles = {
 		snacks_image = {
@@ -234,9 +241,7 @@ end, "Marks")
 map("<leader>sM", function()
 	Snacks.picker.man()
 end, "Man Pages")
-map("<leader>sp", function()
-	Snacks.picker.lazy()
-end, "Search for Plugin Spec")
+
 map("<leader>sq", function()
 	Snacks.picker.qflist()
 end, "Quickfix List")
@@ -250,6 +255,9 @@ map("<leader>uC", function()
 	Snacks.picker.colorschemes()
 end, "Colorschemes")
 -- LSP
+map("<leader>cl", function()
+	Snacks.picker.lsp_config()
+end, "Lsp Info")
 map("gd", function()
 	Snacks.picker.lsp_definitions()
 end, "Goto Definition")
@@ -293,9 +301,15 @@ end, "Select Scratch Buffer")
 map("<leader>ns", function()
 	Snacks.notifier.show_history()
 end, "Notification History")
+
 map("<leader>bd", function()
 	Snacks.bufdelete()
 end, "Delete Buffer")
+
+map("<leader>wq", function()
+	Snacks.bufdelete()
+end, "Delete Buffer")
+
 map("<leader>cR", function()
 	Snacks.rename.rename_file()
 end, "Rename File")

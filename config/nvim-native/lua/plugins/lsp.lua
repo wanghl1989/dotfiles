@@ -4,7 +4,60 @@ vim.pack.add({
 })
 
 require("mason").setup()
-vim.lsp.enable({ "lua_ls", "basedpyright", "clangd", "ruff" })
+
+vim.lsp.config("*", {
+	capabilities = {
+		workspace = {
+			fileOperations = {
+				didRename = true,
+				willRename = true,
+			},
+		},
+	},
+})
+
+vim.lsp.config("lua_ls", {
+	settings = {
+		Lua = {
+			runtime = { version = "LuaJIT" }, -- Neovim使用LuaJIT
+			diagnostics = {
+				globals = { "vim" }, -- 识别 Neovim 全局变量 vim
+			},
+			workspace = {
+				checkThirdParty = false, -- 关闭第三方库提示
+				library = vim.api.nvim_get_runtime_file("", true), -- 加载Neovim源码
+			},
+			telemetry = { enable = false }, -- 关闭遥测
+		},
+	},
+})
+
+vim.lsp.config("basedpyright", {
+	settings = {
+		basedpyright = {
+			analysis = {
+				typeCheckingMode = "off",
+				autoImportCompletions = false,
+				diagnosticMode = "workspace",
+				inlayHints = {
+					variableTypes = true,
+					functionReturnTypes = true,
+				},
+			},
+		},
+	},
+})
+
+vim.lsp.enable({
+	"tree-sitter-cli",
+	"lua_ls",
+	"basedpyright",
+	"clangd",
+	"ruff",
+	"vue-language-server",
+	"prettier",
+	"json-lsp",
+})
 
 -- LSP 诊断显示
 vim.diagnostic.config({ virtual_text = true }) -- 行内文本提示
@@ -17,7 +70,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		-- [inlay hint]
 		if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-			vim.keymap.set("n", "<leader>th", function()
+			vim.keymap.set("n", "<leader>ch", function()
 				vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
 			end, { buffer = event.buf, desc = "LSP: Toggle Inlay Hints" })
 		end
@@ -30,31 +83,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		-- [keymaps]
 		vim.keymap.set("n", "<leader>cf", vim.lsp.buf.format)
-		vim.keymap.set("n", "gd", function()
-			local params = vim.lsp.util.make_position_params(0, "utf-8")
-			vim.lsp.buf_request(0, "textDocument/definition", params, function(_, result, _, _)
-				if not result or vim.tbl_isempty(result) then
-					vim.notify("No definition found", vim.log.levels.INFO)
-				else
-					require("snacks").picker.lsp_definitions()
-				end
-			end)
-		end, { buffer = event.buf, desc = "LSP: Goto Definition" })
-		vim.keymap.set("n", "gD", function()
-			local win = vim.api.nvim_get_current_win()
-			local width = vim.api.nvim_win_get_width(win)
-			local height = vim.api.nvim_win_get_height(win)
-
-			-- Mimic tmux formula: 8 * width - 20 * height
-			local value = 8 * width - 20 * height
-			if value < 0 then
-				vim.cmd("split") -- vertical space is more: horizontal split
-			else
-				vim.cmd("vsplit") -- horizontal space is more: vertical split
-			end
-
-			vim.lsp.buf.definition()
-		end, { buffer = event.buf, desc = "LSP: Goto Definition (split)" })
+		-- vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Goto Definition" })
+		-- vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "References", nowait = true })
+		-- vim.keymap.set("n", "gI", vim.lsp.buf.implementation, { desc = "Goto Implementation" })
+		-- vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { desc = "Goto T[y]pe Definition" })
+		-- vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
+		vim.keymap.set("n", "K", function()
+			return vim.lsp.buf.hover()
+		end, { desc = "Hover" })
+		vim.keymap.set({ "n", "x" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
 
 		local function jump_to_current_function_start()
 			local params = { textDocument = vim.lsp.util.make_text_document_params() }
@@ -90,6 +127,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			end
 		end
 		vim.keymap.set("n", "[f", jump_to_current_function_start, { desc = "Jump to start of current function" })
+
 		local function jump_to_current_function_end()
 			local params = { textDocument = vim.lsp.util.make_text_document_params() }
 			local responses = vim.lsp.buf_request_sync(0, "textDocument/documentSymbol", params, 1000)
