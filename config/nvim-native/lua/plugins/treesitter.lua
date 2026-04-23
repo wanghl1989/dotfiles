@@ -24,6 +24,7 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 				"json",
 				"yaml",
 				"toml",
+				"lua",
 			},
 			ignore_install = {},
 			auto_install = true,

@@ -18,6 +18,7 @@ require("plugins.lualine")
 require("plugins.marks")
 require("plugins.multicursor")
 require("plugins.flash")
+require("plugins.search")
 require("plugins.yanky")
 require("plugins.tools")
 
