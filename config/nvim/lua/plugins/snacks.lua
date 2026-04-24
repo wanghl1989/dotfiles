@@ -43,13 +43,21 @@ return {
 ]],
       },
     },
-    image = {},
+    image = {
+      enabled = true,
+      doc = { enabled = true, inline = false, float = false, max_width = 80, max_height = 20 },
+    },
     indent = {
-      scope = {
-        enabled = false,
-        only_current = false, -- only show scope in the current window
+      indent = {
+        only_scope = false, -- only show indent guides of the scope
+        only_current = true, -- only show indent guides in the current window
       },
-      animate = { enabled = false },
+      animate = {
+        enabled = false,
+      },
+    },
+    animate = {
+      enabled = false,
     },
     scroll = {
       enabled = false,
@@ -93,7 +101,7 @@ return {
       ignored = false,
       hidden = true,
     },
-    statuscolumn = {},
+    statuscolumn = { enabled = true },
     lazygit = {
       configure = true,
       theme = {

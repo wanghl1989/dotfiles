@@ -64,8 +64,13 @@ Snacks.setup({
 		doc = { enabled = true, inline = false, float = false, max_width = 80, max_height = 20 },
 	},
 	indent = {
-		enabled = true,
-		only_current = true,
+		indent = {
+			only_scope = false, -- only show indent guides of the scope
+			only_current = true, -- only show indent guides in the current window
+		},
+		animate = {
+			enabled = false,
+		},
 	},
 	animate = {
 		enabled = false,
