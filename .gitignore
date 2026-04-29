@@ -27,3 +27,6 @@ config/zed/prompts/prompts-library-db.0.mdb/lock.mdb
 Rime/trash
 config/nvim/lazy-lock.json
 
+/config/fish/completions/docker.fish
+/config/fish/completions/kubectl.fish
+/config/fish/completions/orbctl.fish
