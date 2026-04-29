@@ -26,5 +26,4 @@ config/zed/prompts/prompts-library-db.0.mdb/lock.mdb
 
 Rime/trash
 config/nvim/lazy-lock.json
-/config/nvim-native/Session.vim
-/config/nvim-native
+
