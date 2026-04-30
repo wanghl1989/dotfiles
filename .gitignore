@@ -1,6 +1,7 @@
 .vscode
 .marscode
 .claude
+.DS_Store
 Rime/user.yaml
 Rime/*.userdb
 Rime/*.userdb/*
