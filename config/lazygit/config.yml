@@ -15,9 +15,9 @@ gui:
     unstagedChangesColor:
       - "#ffbd5e"
     defaultFgColor:
-      - "#ddf7ff"
+      - "#d4be98"
     optionsTextColor:
-      - "#5ea1ff"
+      - "#7daea3"
 
   authorColors:
     "*": "#ff79c6"

@@ -1,3 +1,18 @@
+vim.g.gruvbox_baby_function_style = "NONE"
+vim.g.gruvbox_baby_keyword_style = "NONE"
+
+-- Each highlight group must follow the structure:
+-- ColorGroup = {fg = "foreground color", bg = "background_color", style = "some_style(:h attr-list)"}
+-- See also :h highlight-guifg
+-- Example:
+vim.g.gruvbox_baby_highlights = { Normal = { fg = "#123123", bg = "NONE", style = "underline" } }
+
+-- Enable telescope theme
+vim.g.gruvbox_baby_telescope_theme = 1
+
+-- Enable transparent mode
+vim.g.gruvbox_baby_transparent_mode = 1
+
 return {
   {
     "scottmckendry/cyberdream.nvim",
@@ -24,16 +39,33 @@ return {
           cyan = "#5ea1ff",
           pink = "#FF79C6",
           purple = "#cba6f7",
-          orange = "#ffbd5e"
+          orange = "#ffbd5e",
         },
       },
       theme = {},
     },
   },
   {
+    "ellisonleao/gruvbox.nvim",
+    priority = 1000,
+    config = true,
+    opts = {
+      italic = {
+        strings = false,
+        emphasis = false,
+        comments = false,
+        operators = false,
+        folds = false,
+      },
+      contrast = "hard",
+      transparent_mode = true
+    },
+  },
+
+  {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "cyberdream",
+      colorscheme = "gruvbox",
     },
   },
 }
