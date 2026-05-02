@@ -1,49 +1,61 @@
-return {
-  {
-    "stevearc/oil.nvim",
-    ---@module 'oil'
-    ---@type oil.SetupOpts
-    opts = {
-      default_file_explorer = true,
-      delete_to_trash = true,
-      columns = {
-        "icon", -- 文件图标（可选，删掉就是纯文本ls）
-        "permissions", -- 文件权限（rwxr-xr-x）
-        "size", -- 文件大小（人性化，ls -h）
-        "mtime", -- 修改时间
-      },
-      view_options = {
-        -- Show files and directories that start with "."
-        show_hidden = false,
-        sort = {
-          { "type", "asc" },
-          { "mtime", "asc" },
-        },
-      },
-      show_file_highlights = true,
-      show_directory_highlights = false,
-      show_ignored_files = true,
-      keymaps = {
-        ["g?"] = { "actions.show_help", mode = "n" },
-        ["<CR>"] = "actions.select",
-        ["<S-l>"] = "actions.select",
-        ["<C-s>"] = { "actions.select", opts = { vertical = true } },
-        ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
-        ["<C-t>"] = { "actions.select", opts = { tab = true } },
-        ["<S-j>"] = "actions.preview",
-        ["<C-c>"] = { "actions.close", mode = "n" },
-        ["<C-l>"] = "actions.refresh",
-        ["<S-h>"] = { "actions.parent", mode = "n" },
-        ["<S-k>"] = { "actions.open_cwd", mode = "n" },
-        ["`"] = { "actions.cd", mode = "n" },
-        ["g~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
-        ["gs"] = { "actions.change_sort", mode = "n" },
-        ["gx"] = "actions.open_external",
-        ["g."] = { "actions.toggle_hidden", mode = "n" },
-        ["g\\"] = { "actions.toggle_trash", mode = "n" },
-      },
-    },
-    lazy = false,
-  },
-  { "malewicz1337/oil-git.nvim", opts = {} },
-}
+vim.pack.add({
+	{ src = "https://github.com/stevearc/oil.nvim" },
+	{ src = "https://github.com/malewicz1337/oil-git.nvim" },
+})
+local oil = require("oil")
+oil.setup({
+	default_file_explorer = true,
+	delete_to_trash = true,
+	columns = {
+		"icon", -- 文件图标（可选，删掉就是纯文本ls）
+		"permissions", -- 文件权限（rwxr-xr-x）
+		"size", -- 文件大小（人性化，ls -h）
+		"mtime", -- 修改时间
+	},
+	view_options = {
+		-- Show files and directories that start with "."
+		show_hidden = false,
+		sort = {
+			{ "type", "asc" },
+			{ "mtime", "asc" },
+		},
+	},
+	show_file_highlights = true,
+	show_directory_highlights = false,
+	show_ignored_files = true,
+	keymaps = {
+		["g?"] = { "actions.show_help", mode = "n" },
+		["<CR>"] = "actions.select",
+		["<S-l>"] = "actions.select",
+		["<C-s>"] = { "actions.select", opts = { vertical = true } },
+		["<C-h>"] = { "actions.select", opts = { horizontal = true } },
+		["<C-t>"] = { "actions.select", opts = { tab = true } },
+		["<S-j>"] = "actions.preview",
+		["<C-c>"] = { "actions.close", mode = "n" },
+		["<C-l>"] = "actions.refresh",
+		["<S-h>"] = { "actions.parent", mode = "n" },
+		["<S-k>"] = { "actions.open_cwd", mode = "n" },
+		["`"] = { "actions.cd", mode = "n" },
+		["g~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+		["gs"] = { "actions.change_sort", mode = "n" },
+		["gx"] = "actions.open_external",
+		["g."] = { "actions.toggle_hidden", mode = "n" },
+		["g\\"] = { "actions.toggle_trash", mode = "n" },
+	},
+})
+
+vim.keymap.set("n", "<leader>e", function()
+	if vim.bo.filetype == "oil" then
+        oil.close()
+	else
+		oil.open()
+	end
+end, { noremap = true, desc = "Toggle Oil File Explorer" })
+
+vim.keymap.set("n", "<leader>E", function()
+	if vim.bo.filetype == "oil" then
+		oil.close()
+	else
+		oil.open(vim.fn.getcwd())
+	end
+end, { noremap = true, desc = "Toggle Oil File Explorer(Root)" })

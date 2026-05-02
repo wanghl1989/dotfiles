@@ -1,2 +1,29 @@
--- bootstrap lazy.nvim, LazyVim and your plugins
-require("config.lazy")
+require("config.options")
+require("config.keymaps")
+require("config.autocmds")
+
+--plugins
+require("plugins.theme")
+require("plugins.whichkey")
+require("plugins.mini")
+require("plugins.alpha")
+require("plugins.treesitter")
+require("plugins.ui")
+require("plugins.oil")
+require("plugins.git")
+require("plugins.conform")
+require("plugins.blink")
+require("plugins.bufferline")
+require("plugins.lualine")
+require("plugins.marks")
+require("plugins.multicursor")
+require("plugins.terminal")
+require("plugins.flash")
+require("plugins.search")
+require("plugins.yanky")
+require("plugins.tools")
+
+require("plugins.python")
+require("plugins.markdown")
+-- lsp
+require("plugins.lsp")

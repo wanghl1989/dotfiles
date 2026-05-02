@@ -64,7 +64,7 @@ fi
 
 # linux中的设置
 if [ "$os_kernel" = "Linux" ]; then
-  LINUX_ITEMS=("mpv")
+  LINUX_ITEMS=("mpv" ".Xresources")
 
   for item in "${LINUX_ITEMS[@]}"; do
     source_path="$BASE_ROOT/linux/$item"

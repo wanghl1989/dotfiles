@@ -1,4 +1,4 @@
-theme = hackerman.conf
+theme = gruvbox_material_dark.conf
 background-blur = 20
 
 window-padding-x = 10
