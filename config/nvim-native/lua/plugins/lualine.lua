@@ -5,13 +5,12 @@ vim.pack.add({
 
 vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
 
-local Snacks = require("snacks")
-
+local theme = require("gruvbox-material.lualine").theme("hard")
 require("lualine").setup({
 	options = {
 		icons_enabled = true,
-		theme = "auto",
-		disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter", "snacks_dashboard", "oil" } },
+		theme = theme,
+		disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter",  "oil" } },
 		component_separators = { left = "", right = "" },
 		section_separators = { left = "|", right = "|" },
 		ignore_focus = {},
@@ -44,23 +43,21 @@ require("lualine").setup({
 			{
 				"diff",
 				symbols = { added = "+", modified = "~", removed = "-" },
-
-				source = function()
-					local gitsigns = vim.b.gitsigns_status_dict
-					if gitsigns then
-						return {
-							added = gitsigns.added,
-							modified = gitsigns.changed,
-							removed = gitsigns.removed,
-						}
-					end
-				end,
+				-- source = function()
+				-- 	local gitsigns = vim.b.gitsigns_status_dict
+				-- 	if gitsigns then
+				-- 		return {
+				-- 			added = gitsigns.added,
+				-- 			modified = gitsigns.changed,
+				-- 			removed = gitsigns.removed,
+				-- 		}
+				-- 	end
+				-- end,
 			},
 			{ "diagnostics" },
 		},
 		lualine_c = { require("utils.path").pretty_path() },
 		lualine_x = {
-			Snacks.profiler.status(),
 			-- {
 			-- 	function()
 			-- 		return "  " .. require("dap").status()

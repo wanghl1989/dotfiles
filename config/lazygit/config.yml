@@ -1,26 +1,26 @@
 gui:
   theme: # catppuccin palette of course
     activeBorderColor:
-      - "#ff5ea0"
+      - "#ea6962"
     inactiveBorderColor:
-      - "#3c5868"
+      - "#665c54"
     searchingActiveBorderColor:
-      - "#4fe88f"
+      - "#a9b665"
     selectedLineBgColor:
-      - "#3c5868"
+      - "#928374"
     cherryPickedCommitBgColor:
-      - "#1e2124"
+      - "#d3869b"
     cherryPickedCommitFgColor:
-      - "#aca1cf"
+      - "#7daea3"
     unstagedChangesColor:
-      - "#ffbd5e"
+      - "#e78a4e"
     defaultFgColor:
       - "#d4be98"
     optionsTextColor:
       - "#7daea3"
 
   authorColors:
-    "*": "#ff79c6"
+    "*": "#d8a657"
   showBottomLine: true
   border: rounded
   nerdFontsVersion: "3"

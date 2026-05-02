@@ -7,8 +7,7 @@ vim.api.nvim_create_autocmd({ "UIEnter" }, {
 	group = vim.api.nvim_create_augroup("SetupExtraUI", { clear = true }),
 	callback = function()
 		vim.schedule(function()
-			require("nui").setup()
-			require("notice").setup({
+			require("noice").setup({
 				lsp = {
 					override = {
 						["vim.lsp.util.convert_input_to_markdown_lines"] = true,

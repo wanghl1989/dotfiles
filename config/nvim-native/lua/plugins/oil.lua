@@ -45,17 +45,17 @@ oil.setup({
 })
 
 vim.keymap.set("n", "<leader>e", function()
-  if vim.bo.filetype == "oil" then
-    Snacks.bufdelete()
-  else
-    oil.open()
-  end
+	if vim.bo.filetype == "oil" then
+        oil.close()
+	else
+		oil.open()
+	end
 end, { noremap = true, desc = "Toggle Oil File Explorer" })
 
 vim.keymap.set("n", "<leader>E", function()
-  if vim.bo.filetype == "oil" then
-    require("Snacks").bufdelete()
-  else
-    oil.open(vim.fn.getcwd())
-  end
+	if vim.bo.filetype == "oil" then
+		oil.close()
+	else
+		oil.open(vim.fn.getcwd())
+	end
 end, { noremap = true, desc = "Toggle Oil File Explorer(Root)" })
