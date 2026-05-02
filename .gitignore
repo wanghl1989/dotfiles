@@ -10,6 +10,7 @@ Rime/luna_pinyin.userdb
 Rime/easy_en.userdb/*
 Rime/luna_pinyin.userdb/*
 Rime/installation.yaml
+Rime/trash
 
 
 
@@ -25,9 +26,9 @@ btop/btop.conf
 config/zed/prompts/prompts-library-db.0.mdb/data.mdb
 config/zed/prompts/prompts-library-db.0.mdb/lock.mdb
 
-Rime/trash
-config/nvim/lazy-lock.json
 
 /config/fish/completions/docker.fish
 /config/fish/completions/kubectl.fish
 /config/fish/completions/orbctl.fish
+/config/nvim-lazy/lazy-lock.json
+/config/nvim-lazy/.neoconf.json

@@ -1,23 +1,37 @@
--- Buffer line configuration
--- Shows open buffers at the top of the screen
-return {
-  "akinsho/bufferline.nvim",
-  opts = {
-    options = {
-      style_preset = require("bufferline").style_preset.no_italic,
-      always_show_bufferline = false,
-      show_buffer_close_icons = false,
-      show_close_icon = false,
-    },
-  },
-  -- keys = {
-  --   { "<A-Left>", "<cmd>BufferLineCyclePrev<cr>", desc = "Move to previous buffer" },
-  --   { "<A-Right>", "<cmd>BufferLineCycleNext<cr>", desc = "Move to next buffer" },
-  --   { "<A-,>", "<cmd>BufferLineMovePrev<cr>", desc = "Re-order to previous buffer" },
-  --   { "<A-.>", "<cmd>BufferLineMoveNext<cr>", desc = "Re-order to next buffer" },
-  --   { "<A-p>", "<cmd>BufferLineTogglePin<cr>", desc = "Toggle Pin" },
-  --   { "<leader>bP", false },
-  --   { "<leader>bw", "<Cmd>BufferLineGroupClose ungrouped<cr>", desc = "Delete Non-Pinned Buffers" },
-  --   { "<leader>bW", "<cmd>BufferLineCloseOthers<cr>", desc = "Delete All Buffers" },
-  -- },
-}
+vim.pack.add({
+	{ src = "https://github.com/akinsho/bufferline.nvim" },
+})
+vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
+	group = vim.api.nvim_create_augroup("SetupBufferline", { clear = true }),
+	once = true,
+	callback = function()
+		local bufferline = require("bufferline")
+		bufferline.setup({
+			options = {
+				style_preset = bufferline.style_preset.no_italic,
+			},
+		})
+	end,
+})
+
+vim.api.nvim_create_autocmd({ "BufAdd", "BufDelete" }, {
+	callback = function()
+		vim.schedule(function()
+			pcall(nvim_bufferline)
+		end)
+	end,
+})
+
+local map = function(key, act, desc)
+	vim.keymap.set("n", key, act, { desc = desc })
+end
+map("<leader>bp", "<Cmd>BufferLineTogglePin<CR>", "Toggle Pin")
+map("<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", "Delete Non-Pinned Buffers")
+map("<leader>br", "<Cmd>BufferLineCloseRight<CR>", "Delete Buffers to the Right")
+map("<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", "Delete Buffers to the Left")
+map("<S-h>", "<cmd>BufferLineCyclePrev<cr>", "Prev Buffer")
+map("<S-l>", "<cmd>BufferLineCycleNext<cr>", "Next Buffer")
+map("[b", "<cmd>BufferLineCyclePrev<cr>", "Prev Buffer")
+map("]b", "<cmd>BufferLineCycleNext<cr>", "Next Buffer")
+map("[B", "<cmd>BufferLineMovePrev<cr>", "Move buffer prev")
+map("]B", "<cmd>BufferLineMoveNext<cr>", "Move buffer next")
