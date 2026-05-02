@@ -1,32 +1,25 @@
 vim.pack.add({
-	{ src = "https://github.com/scottmckendry/cyberdream.nvim" },
+	{ src = "https://github.com/f4z3r/gruvbox-material.nvim" },
 })
 
-require("cyberdream").setup({
-	transparent = true,
-	saturation = 1,
-	terminal_color = false,
-	borderless_pickers = false,
-	highlights = {
-		Comment = { fg = "#898989", bg = "NONE", italic = false },
+require("gruvbox-material").setup({
+	italics = false, -- enable italics in general
+	contrast = "hard", -- set contrast, can be any of "hard", "medium", "soft"
+	comments = {
+		italics = false, -- enable italic comments
 	},
-
-	colors = {
-		-- bg = "#181A26",
-		fg = "#d2f8d2",
-		dark = {
-			-- bg_alt = "#1e2124",
-			bg_highlight = "#3c5868",
-			green = "#4fe88f",
-			blue = "#7cf8f7",
-			magenta = "#ff92df",
-			cyan = "#5ea1ff",
-			pink = "#FF79C6",
-			purple = "#cba6f7",
-			orange = "#ffbd5e",
-		},
+	background = {
+		transparent = true, -- set the background to be opaque
 	},
+	float = {
+		force_background = false, -- set to true to force backgrounds on floats even when
+		background_color = nil, -- set color for float backgrounds. If nil, uses the default color set
+	},
+	signs = {
+		force_background = false, -- set to true to force backgrounds on signs even when
+		background_color = nil, -- set color for sign backgrounds. If nil, uses the default color set
+	},
+	customize = nil, -- customize the theme in any way you desire, see below what this
 })
 
-
-vim.cmd("colorscheme cyberdream")
+vim.cmd("colorscheme gruvbox-material")

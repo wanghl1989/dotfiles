@@ -43,6 +43,7 @@ map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 -- safe file and quit
 map("n", "<Leader>wc", "<C-W>w", { noremap = true, silent = true, desc = "Switch windows" })
 map("n", "<Leader>ww", ":update<CR>", { noremap = true, desc = "Save windows" })
+map("n", "<Leader>wq", ":bdelete<CR>", { noremap = true, desc = "Quit windows" })
 
 map("n", "<Leader>qa", ":qa<CR>", { noremap = true, desc = "Quit all" })
 map("n", "<Leader>qq", ":q<CR>", { noremap = true, desc = "Quit current" })
@@ -84,10 +85,6 @@ map("n", "<leader>ma", ":delmarks a-zA-Z0-9<CR>", { noremap = true, silent = tru
 map("n", "<S-j>", function()
 	vim.diagnostic.open_float()
 end, opts)
-
-map("n", "<leader>fh", function()
-	Snacks.picker.help()
-end, { noremap = true, silent = true, desc = "Show help." })
 
 map("v", "<", "<gv", { desc = "Indent code in visual mode" })
 map("v", ">", ">gv", { desc = "Indent code in visual mode" })

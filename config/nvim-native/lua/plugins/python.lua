@@ -29,6 +29,6 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 				},
 			}, -- if you add plugin options, they go here.
 		})
-		vim.keymap.set("n", "<leader>cp", "<cmd>:VenvSelect<cr>", { desc = "Select VirtualEnv"})
+		vim.keymap.set("n", "<leader>cp", "<cmd>:VenvSelect<cr>", { desc = "Select VirtualEnv" })
 	end,
 })
