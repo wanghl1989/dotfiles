@@ -23,7 +23,7 @@ if version >= 603
         set helplang=cn
 endif
 set shortmess+=I
-colorscheme sorbet
+colorscheme habamax
 set termguicolors
 
 set showmatch
