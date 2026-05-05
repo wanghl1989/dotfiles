@@ -1,5 +1,4 @@
 # ZSH ALIAS 
-
 if command -v eza &> /dev/null; then
   alias ls="eza --icons=auto"
   alias ll="eza --icons=auto --git -h -H -l"
@@ -41,6 +40,7 @@ if command -v trash &> /dev/null; then
   alias rm_real="rm"
   alias rm='trash'
 fi
+
 # zellij
 if command -v zellij &> /dev/null; then
   alias zij="zellij"
@@ -143,4 +143,4 @@ alias bing="search_engine bing"
 alias google="search_engine google"
 alias github="search_engine github"
 
-export PATH=$PATH:"$HOME/.zsh/scripts"
+export PATH=$PATH:"$HOME/.shell/scripts"
