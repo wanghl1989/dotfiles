@@ -1,6 +1,9 @@
 vim.pack.add({
 	{ src = "https://github.com/akinsho/toggleterm.nvim" },
 })
+
+local height = math.floor(0.618 * vim.o.lines)
+local width = math.floor(0.7 * vim.o.columns)
 require("toggleterm").setup({
 	open_mapping = [[<c-t>]],
 	-- open_mapping = [[<leader>tl]],
@@ -9,8 +12,8 @@ require("toggleterm").setup({
 	direction = "float",
 	size = 20,
 	float_opts = {
-		width = 100,
-		height = 30,
+		width = width,
+		height = height,
 		border = "single",
 	},
 })

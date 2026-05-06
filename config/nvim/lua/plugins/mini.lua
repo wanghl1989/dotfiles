@@ -111,7 +111,29 @@ require("mini.icons").setup({
 	},
 })
 
-require("mini.pick").setup(
+local MiniPick = require("mini.pick")
+MiniPick.registry.files = function(local_opts, opts)
+	local tool = local_opts.tool or "rg"
+	if tool == "rg" then
+		return MiniPick.builtin.cli({
+			command = { "rg", "--files", "--hidden", "--glob", "!.git" }, -- 排除 .git
+			postprocess = MiniPick.default_postprocess_files,
+		}, opts)
+	elseif tool == "fd" then
+		return MiniPick.builtin.cli({
+			command = { "fd", "--type", "f", "--hidden", "--exclude", ".git" },
+			postprocess = MiniPick.default_postprocess_files,
+		}, opts)
+	else
+		-- 其他工具沿用默认逻辑
+		return MiniPick.builtin.files(local_opts, opts)
+	end
+end
+
+require("mini.extra").setup()
+require("mini.notify").setup()
+
+MiniPick.setup(
 	-- No need to copy this inside `setup()`. Will be used automatically.
 	{
 		-- Delays (in ms; should be at least 1)
@@ -198,9 +220,6 @@ require("mini.pick").setup(
 	}
 )
 
-require("mini.extra").setup()
-require("mini.notify").setup()
-
 vim.keymap.set("n", "<leader>sb", ":Pick buffers<CR>", { desc = "Search Buffers" })
 vim.keymap.set("n", "<leader>sf", ":Pick files<CR>", { desc = "Search files" })
 vim.keymap.set("n", "<leader><leader>", ":Pick files<CR>", { desc = "Search files" })
@@ -220,4 +239,8 @@ end, { desc = "Search symbol" })
 
 vim.keymap.set("n", "<leader>sd", function()
 	require("mini.extra").pickers.lsp({ scope = "definition" })
+end, { desc = "Search definition" })
+
+vim.keymap.set("n", "<leader>nl", function()
+	require("mini.notify").show_history()
 end, { desc = "Search definition" })
