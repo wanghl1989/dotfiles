@@ -4,9 +4,9 @@ vim.pack.add({
 
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
-local theme = require("gruvbox-material.lualine").theme("hard")
 
 local header_art = vim.split([[
+
                                      d88b
                      _______________|8888|_______________
                     |_____________ ,~~~~~~. _____________|
@@ -21,6 +21,7 @@ local header_art = vim.split([[
 ||        |_________________,P'_::----------.._`?,_________________|        ||
 `|        |-------------------~~~~~~~~~~~~~~~~~~-------------------|        |'
   \_______/                                              _ wh.l _  \_______/
+
 ]],
     "\n",
     {}
