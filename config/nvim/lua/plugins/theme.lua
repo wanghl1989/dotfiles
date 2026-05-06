@@ -19,7 +19,15 @@ require("gruvbox-material").setup({
 		force_background = false, -- set to true to force backgrounds on signs even when
 		background_color = nil, -- set color for sign backgrounds. If nil, uses the default color set
 	},
-	customize = nil, -- customize the theme in any way you desire, see below what this
+	customize = nil
+})
+
+local colors = require("gruvbox-material.colors").get(vim.o.background, "hard")
+
+vim.api.nvim_set_hl(0, "MyCustomGroup", {
+	fg = colors.fg0,
+	bg = colors.bg1,
+	bold = true,
 })
 
 vim.cmd("colorscheme gruvbox-material")
