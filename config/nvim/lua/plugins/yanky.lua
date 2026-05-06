@@ -12,10 +12,12 @@ require("yanky").setup({
 	},
 })
 
+
 local map = function(key, cmd, mode, desc)
 	vim.keymap.set(mode, key, cmd, { desc = desc })
 end
 
+map("<leader>sy", "<cmd>YankyRingHistory<CR>", "n",  "Search yanky history")
 map("y", "<Plug>(YankyYank)", { "n", "x" }, "Yank Text")
 map("p", "<Plug>(YankyPutAfter)", { "n", "x" }, "Put Text After Cursor")
 map("P", "<Plug>(YankyPutBefore)", { "n", "x" }, "Put Text Before Cursor")

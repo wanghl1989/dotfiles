@@ -131,7 +131,10 @@ MiniPick.registry.files = function(local_opts, opts)
 end
 
 require("mini.extra").setup()
-require("mini.notify").setup()
+
+local MiniNotify =  require("mini.notify")
+MiniNotify.setup({})
+vim.notify = MiniNotify.make_notify({ ERROR = { duration = 10000 } })
 
 MiniPick.setup(
 	-- No need to copy this inside `setup()`. Will be used automatically.
@@ -241,6 +244,28 @@ vim.keymap.set("n", "<leader>sd", function()
 	require("mini.extra").pickers.lsp({ scope = "definition" })
 end, { desc = "Search definition" })
 
-vim.keymap.set("n", "<leader>nl", function()
-	require("mini.notify").show_history()
-end, { desc = "Search definition" })
+local function show_notify_history()
+	local history = MiniNotify.get_all()
+	if not history or #history == 0 then
+		return vim.notify("No notify history available", vim.log.levels.WARN)
+	end
+	local items = {}
+	for i = #history, 1, -1 do
+		local entry = history[i]
+		table.insert(items, string.format("[%s] %s", entry.level, entry.msg))
+	end
+	-- 启动 mini.pick
+	require("mini.pick").start({
+		source = {
+			items = items,
+			name = "Notify History",
+			choose = function(item)
+				local msg = item:gsub("^%[[A-Z]+%]%s*", "")
+				vim.fn.setreg("+", msg)
+				vim.notify("Copied to clipboard: " .. msg, vim.log.levels.INFO)
+			end,
+		},
+	})
+end
+vim.keymap.set("n", "<leader>nl", show_notify_history, { desc = "Show mini.notify history" })
+
