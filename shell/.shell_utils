@@ -99,26 +99,6 @@ _fzf_preview_changed_file() {
     fi
 }
 
-# ------------------------------
-# Bash 兼容 Fish commandline 功能（核心：替换当前命令行单词）
-# ------------------------------
-_bash_replace_current_token() {
-    local replacement="$*"
-    local line=$READLINE_LINE
-    local pos=$READLINE_POINT
-
-    # 匹配光标位置的单词
-    local before=${line:0:pos}
-    local after=${line:pos}
-    local start=$(echo "$before" | grep -bo '[^[:space:]]*$' | tail -n1 | cut -d: -f1)
-    [[ -z $start ]] && start=0
-    local end=$(echo "$after" | grep -o '^[^[:space:]]*' | wc -c)
-    end=$((pos + end))
-
-    # 替换单词并刷新命令行
-    READLINE_LINE="${line:0:start}${replacement}${line:end}"
-    READLINE_POINT=$((start + ${#replacement}))
-}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 主功能函数
@@ -156,15 +136,16 @@ git_log() {
             $fzf_git_log_opts
     )
 
-    # 插入 Commit Hash
+  # 核心修改：选中后 直接执行 git show，不再插入命令行
     if [[ $? -eq 0 && -n $selected_log_lines ]]; then
-        local commit_hashes=()
         while IFS= read -r line; do
-            local abbreviated_commit_hash=$(echo "$line" | cut -d' ' -f1)
-            local full_commit_hash=$(git rev-parse "$abbreviated_commit_hash")
-            commit_hashes+=("$full_commit_hash")
+            # 获取短哈希 → 转换为完整哈希
+            local short_hash=$(echo "$line" | cut -d' ' -f1)
+            local full_hash=$(git rev-parse "$short_hash")
+            # 直接执行 git show 查看提交详情
+            echo -e "\n📌 查看提交：$full_hash"
+            git show "$full_hash"
         done <<< "$selected_log_lines"
-        _bash_replace_current_token "${commit_hashes[*]}"
     fi
 }
 
@@ -248,19 +229,30 @@ git_status() {
             --nth="2.." \
             $fzf_git_status_opts
     )
-
-    # 插入文件路径
     if [[ $? -eq 0 && -n $selected_paths ]]; then
-        local cleaned_paths=()
-        while IFS= read -r path; do
-            if [[ ${path:0:1} == 'R' ]]; then
-                local p=$(echo "$path" | awk -F'-> ' '{print $2}')
-                cleaned_paths+=("$p")
+        local files=()
+        while IFS= read -r line; do
+            # ====================== 核心修复：精准提取纯文件路径 ======================
+            if [[ $line == R* ]]; then
+                # 处理重命名文件：提取 -> 后面的路径
+                file=$(echo "$line" | sed -E 's/^R.*-> //g' | xargs)
             else
-                cleaned_paths+=("${path:3}")
+                # 处理普通文件：删除前面的状态码（M/A/D/?? 等），只留路径
+                file=$(echo "$line" | sed -E 's/^.{2}//g' | xargs)
+            fi
+            # ========================================================================
+
+            # 只保留真实文件
+            if [[ -f "$file" ]]; then
+                files+=("$file")
             fi
         done <<< "$selected_paths"
-        _bash_replace_current_token "${cleaned_paths[*]}"
+
+        # 打开文件
+        if [[ ${#files[@]} -gt 0 ]]; then
+            echo -e "\n🔍 对比文件：${file[*]} (working tree vs HEAD)"
+            nvim -d "$file[@]" <(git show HEAD:"$file[@]")         
+        fi
     fi
 }
 
@@ -327,7 +319,7 @@ fp() {
             local pid=$(echo "$proc" | xargs | cut -d' ' -f1)
             pids_selected+=("$pid")
         done <<< "$processes_selected"
-        _bash_replace_current_token "${pids_selected[*]}"
+        echo "Selected Process:  $processes_selected"
     fi
 }
 
@@ -350,9 +342,6 @@ fs() {
 # ------------------------------
 # 模糊搜索文件名(ff)
 # ------------------------------
-
-
-
 ff(){
     fd --type f --hidden --follow --exclude .git  . 2>/dev/null | _fzf_wrapper \
         --ansi \
