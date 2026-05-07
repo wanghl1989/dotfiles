@@ -24,10 +24,10 @@
 # """
 
 format = """
-[░▒▓](#a9b665)\
+[░▒▓](#7daea3)\
 $os\
 $username\
-[▓▒░](#a9b665)\
+[▓▒░](#7daea3)\
 $directory\
 $git_branch\
 $git_status\
@@ -57,13 +57,13 @@ $cmd_duration\
 
 [os]
 disabled = false
-style = "bold bg:#a9b665 fg:#090c0c"
+style = "bold bg:#7daea3 fg:#1d2021"
 format = '[ $symbol ]($style)'
 # format = '[$symbol ]($style)'
 
 [username]
 disabled = false
-style_user = "bold bg:#a9b665 fg:#090c0c"
+style_user = "bold bg:#7daea3 fg:#1d2021"
 format = '[$user ]($style)'
 show_always = true
 
@@ -72,7 +72,7 @@ show_always = true
 # home_symbol = ""
 # truncation_length = 3
 # truncation_symbol = ""
-style = "bold fg:#89b482"
+style = "bold fg:#e78a4e"
 format = "[  $path]($style) "
 
 [directory.substitutions]
@@ -151,16 +151,16 @@ format = '[$symbol ($output)]($style) '
 
 [git_branch]
 symbol = " "
-style = "bold fg:#d3869b"
+style = "bold fg:#a9b665"
 format = '[$symbol$branch(:$remote_branch)]($style) '
 # format = '[ $symbol $branch]($style)'
 
 [git_status]
-style = "bold fg:#d3869b"
+style = "bold fg:#a9b665"
 format = '[\[($all_status$ahead_behind)\]]($style)'
 
 [git_commit]
-style = "bold fg:#d3869b"
+style = "bold fg:#a9b665"
 tag_symbol = '  '
 
 [golang]
@@ -271,7 +271,7 @@ symbol = " "
 
 [rust]
 symbol = "󱘗 "
-style = "bold fg:#ffbd5e"
+style = "bold fg:#d8a657"
 format = '[$symbol($version )]($style)'
 
 
@@ -304,7 +304,7 @@ min_time_to_notify = 45000
 command = 'cat Cargo.toml|grep version|head -1|cut -f2 -d\"'
 detect_extensions = ['rs']
 detect_files = ['Cargo.toml']
-style = "bold fg:#ffbd5e"
+style = "bold fg:#e78a4e"
 
 [custom.emoji]
 description = "Displays a (pseudo) random emoji for each prompt"
