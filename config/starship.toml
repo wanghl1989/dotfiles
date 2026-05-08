@@ -72,7 +72,7 @@ show_always = true
 # home_symbol = ""
 # truncation_length = 3
 # truncation_symbol = ""
-style = "bold fg:#e78a4e"
+style = "bold fg:#a9b665"
 format = "[  $path]($style) "
 
 [directory.substitutions]
@@ -151,16 +151,16 @@ format = '[$symbol ($output)]($style) '
 
 [git_branch]
 symbol = " "
-style = "bold fg:#a9b665"
+style = "bold fg:#d3869b"
 format = '[$symbol$branch(:$remote_branch)]($style) '
 # format = '[ $symbol $branch]($style)'
 
 [git_status]
-style = "bold fg:#a9b665"
+style = "bold fg:#d3869b"
 format = '[\[($all_status$ahead_behind)\]]($style)'
 
 [git_commit]
-style = "bold fg:#a9b665"
+style = "bold fg:#d3869b"
 tag_symbol = '  '
 
 [golang]
