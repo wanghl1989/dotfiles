@@ -376,13 +376,13 @@ proxy() {
                 proxy off
                 return 1
             fi
-            export http_proxy="socks5://127.0.0.1:7890"
-            export https_proxy="socks5://127.0.0.1:7890"
-            export all_proxy="socks5://127.0.0.1:7890"
+            export http_proxy=$PROXY_URL
+            export https_proxy=$PROXY_URL
+            export all_proxy=$PROXY_URL
             # 兼容大写环境变量（部分软件只识别大写）
-            export HTTP_PROXY=$http_proxy
-            export HTTPS_PROXY=$https_proxy
-            export ALL_PROXY=$all_proxy
+            export HTTP_PROXY=$PROXY_URL
+            export HTTPS_PROXY=$PROXY_URL
+            export ALL_PROXY=$PROXY_URL
             echo "✅ 终端全局代理已开启：socks5://127.0.0.1:7890"
             ;;
 
@@ -404,7 +404,7 @@ proxy() {
         # 帮助提示
         *)
             echo "用法：proxy [命令]"
-            echo "  on    开启终端全局 SOCKS5 代理 (127.0.0.1:7890)"
+            echo "  on    开启终端全局代理，需设置PROXY_URL"
             echo "  off   关闭终端全局代理"
             echo "  show  查看当前代理状态"
             ;;

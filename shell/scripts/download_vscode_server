@@ -1,0 +1,92 @@
+#!/bin/bash
+set -euo pipefail
+
+# ====================== 脚本配置区 ======================
+# 作用：接收第一个参数作为 VSCode Commit ID
+# ========================================================
+if [ $# -ne 1 ]; then
+    echo -e "\033[31m错误：请传入 VSCode Commit ID 作为参数！\033[0m"
+    echo -e "用法：bash $0 <你的VSCode提交ID>"
+    echo -e "示例：bash $0 1e790d770c7737fa1026287c440cd338d59d98e0\n"
+    exit 1
+fi
+
+# 定义核心变量
+COMMIT_ID="$1"
+VSCODE_SERVER_DIR="$HOME/.vscode-server"
+TEMP_DIR="/tmp/vscode-server-temp"
+
+if [[ $# -lt 2 ]];then 
+  ARCH="x86_64"
+else
+  ARCH="$2"
+fi
+
+case "${ARCH}" in
+    x86_64)
+        SERVER_ARCH="server-linux-x64"
+        ALPINE_CLI_ARCH="alpine_x64"
+        ;;
+    aarch64|arm64)
+        SERVER_ARCH="server-linux-arm64"
+        ALPINE_CLI_ARCH="alpine_arm64"
+        ;;
+    *)
+        echo -e "\033[31m不支持的系统架构：${ARCH}\033[0m"
+        exit 1
+        ;;
+esac
+
+echo -e "\033[32m=====================================\033[0m"
+echo -e "\033[32mVSCode Server 自动部署脚本\033[0m"
+echo -e "Commit ID：${COMMIT_ID}"
+echo -e "系统架构：${ARCH}"
+echo -e "安装目录：${VSCODE_SERVER_DIR}"
+echo -e "\033[32m=====================================\033[0m\n"
+
+mkdir -p "${TEMP_DIR}"
+cd "${TEMP_DIR}"
+
+# ====================== 下载 VSCode Server 核心包 ======================
+echo -e "\n🔹 下载 VSCode Server 主程序..."
+wget -q --show-progress \
+    "https://update.code.visualstudio.com/commit:${COMMIT_ID}/${SERVER_ARCH}/stable" \
+    -O "vscode-server-${COMMIT_ID}.tar.gz"
+
+# ====================== 下载 VSCode CLI 工具包 ======================
+echo -e "\n🔹 下载 VSCode CLI 工具..."
+wget -q --show-progress \
+    "https://vscode.download.prss.microsoft.com/dbazure/download/stable/${COMMIT_ID}/vscode_cli_${ALPINE_CLI_ARCH}_cli.tar.gz" \
+    -O "vscode-cli.tar.gz"
+
+# ====================== 解压并部署 Server ======================
+echo -e "\n🔹 部署 VSCode Server..."
+TARGET_SERVER_DIR="${VSCODE_SERVER_DIR}/cli/servers/Stable-${COMMIT_ID}/server"
+mkdir -p "${TARGET_SERVER_DIR}"
+tar -zxf "vscode-server-${COMMIT_ID}.tar.gz" -C "${TARGET_SERVER_DIR}" --strip-components=1
+
+# ====================== 修复：配置 VSCode CLI ======================
+echo -e "\n🔹 配置 VSCode CLI..."
+tar -zxf "vscode-cli.tar.gz"
+
+
+# 校验文件是否存在
+if [ ! -f "code" ]; then
+    echo -e "\033[31m错误：CLI 解压失败，未找到 code 文件！\033[0m"
+    exit 1
+fi
+
+# 移动并重命名 CLI
+mv -f code "${VSCODE_SERVER_DIR}/code-${COMMIT_ID}"
+
+# ====================== 清理临时文件 ======================
+echo -e "\n🔹 清理临时文件..."
+cd ~
+rm -rf "${TEMP_DIR}"
+
+# ====================== 完成提示 ======================
+echo -e "\n\033[32m=====================================\033[0m"
+echo -e "\033[32m✅ VSCode Server 部署成功！\033[0m"
+echo -e "安装路径：${VSCODE_SERVER_DIR}"
+echo -e "Commit ID：${COMMIT_ID}"
+echo -e "\033[32m=====================================\033[0m\n"
