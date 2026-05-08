@@ -54,7 +54,7 @@ fi
 if command -v tmux &> /dev/null; then
   alias tl="tmux list-session"
   alias ts="tmux source-file ~/.config/tmux/tmux.conf"
-  alias ta="tmux attach"
+  alias ta="tmux attach -t"
   alias tk="tmux kill-session -t"
   alias tn="tmux new -s"
 fi

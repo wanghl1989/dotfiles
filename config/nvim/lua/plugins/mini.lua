@@ -69,7 +69,6 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 				end,
 				priority = 2,
 			},
-
 			mappings = {
 				-- Textobjects
 				object_scope = "ii",
@@ -132,8 +131,24 @@ end
 
 require("mini.extra").setup()
 
-local MiniNotify =  require("mini.notify")
-MiniNotify.setup({})
+local MiniNotify = require("mini.notify")
+MiniNotify.setup({
+	content = {
+		format = nil,
+		sort = nil,
+	},
+	lsp_progress = {
+		enable = false,
+		level = "WARN",
+		duration_last = 1000,
+	},
+	window = {
+		config = {},
+		max_width_share = 0.382,
+		-- Value of 'winblend' option
+		winblend = 25,
+	},
+})
 vim.notify = MiniNotify.make_notify({ ERROR = { duration = 10000 } })
 
 MiniPick.setup(
@@ -268,4 +283,3 @@ local function show_notify_history()
 	})
 end
 vim.keymap.set("n", "<leader>nl", show_notify_history, { desc = "Show mini.notify history" })
-
