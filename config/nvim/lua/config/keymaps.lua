@@ -88,3 +88,8 @@ end, opts)
 
 map("v", "<", "<gv", { desc = "Indent code in visual mode" })
 map("v", ">", ">gv", { desc = "Indent code in visual mode" })
+
+-- pack manager
+vim.api.nvim_create_user_command("Pack", function()
+	require("utils.pack_ui").show()
+end, { desc = "Open Plugin Manager" })
