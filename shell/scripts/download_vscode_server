@@ -4,7 +4,7 @@ set -euo pipefail
 # ====================== 脚本配置区 ======================
 # 作用：接收第一个参数作为 VSCode Commit ID
 # ========================================================
-if [ $# -ne 1 ]; then
+if [ $# -lt 1 ]; then
     echo -e "\033[31m错误：请传入 VSCode Commit ID 作为参数！\033[0m"
     echo -e "用法：bash $0 <你的VSCode提交ID>"
     echo -e "示例：bash $0 1e790d770c7737fa1026287c440cd338d59d98e0\n"
@@ -13,7 +13,7 @@ fi
 
 # 定义核心变量
 COMMIT_ID="$1"
-VSCODE_SERVER_DIR="$HOME/.vscode-server"
+VSCODE_SERVER_DIR="$PWD/.vscode-server"
 TEMP_DIR="/tmp/vscode-server-temp"
 
 if [[ $# -lt 2 ]];then 
@@ -32,7 +32,7 @@ case "${ARCH}" in
         ALPINE_CLI_ARCH="alpine_arm64"
         ;;
     *)
-        echo -e "\033[31m不支持的系统架构：${ARCH}\033[0m"
+      echo -e "\033[31m不支持的系统架构：${ARCH}\033[0m, 可选值(x86_64,  arm64, aarch64)"
         exit 1
         ;;
 esac
