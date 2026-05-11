@@ -5,6 +5,7 @@ vim.pack.add({
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 	group = vim.api.nvim_create_augroup("SetupPython", { clear = true }),
 	pattern = { "*.py", "*.pyi" },
+    once = true,
 	callback = function()
 		require("venv-selector").setup({
 			search_venv_managers = true,

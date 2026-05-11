@@ -82,12 +82,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 
 		-- [keymaps]
-		vim.keymap.set("n", "<leader>cf", vim.lsp.buf.format)
-		-- vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Goto Definition" })
-		-- vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "References", nowait = true })
-		-- vim.keymap.set("n", "gI", vim.lsp.buf.implementation, { desc = "Goto Implementation" })
-		-- vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { desc = "Goto T[y]pe Definition" })
-		-- vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
+		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Goto Definition" })
+		vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "References", nowait = true })
+		vim.keymap.set("n", "gI", vim.lsp.buf.implementation, { desc = "Goto Implementation" })
+		vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { desc = "Goto T[y]pe Definition" })
+		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
 		vim.keymap.set("n", "K", function()
 			return vim.lsp.buf.hover()
 		end, { desc = "Hover" })

@@ -31,9 +31,10 @@ dashboard.section.header.val = header_art
 
 dashboard.section.buttons.val = {
 	dashboard.button("e", "  Explore", ":Oil .<CR>"),
-	dashboard.button("f", "󰈞  Find file", ":Pick files<CR>"),
-	dashboard.button("u", "󰚰  Update", ":lua vim.pack.update()<CR>"),
-	dashboard.button("h", "  Dotfiles", ":e ~/.config/nvim<CR>"),
+	dashboard.button("f", "󰮗  Find file", ":Pick files<CR>"),
+	dashboard.button("u", "󰏗  Plugins", ":Pack<CR>"),
+	dashboard.button("h", "  Dotfiles", ":e ~/.config/nvim<CR>"),
+	dashboard.button("m", "󰏗  Mason", ":Mason<CR>"),
 	dashboard.button("q", "󰈆  Quit Nvim", ":qa<CR>"),
 }
 

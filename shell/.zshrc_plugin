@@ -41,28 +41,33 @@ if command -v fzf &> /dev/null; then
     zinit ice lucid wait'0'
     zinit light joshskidmore/zsh-fzf-history-search
 
-    zinit light Aloxaf/fzf-tab
+    if [[ -n "$VSCODE_INJECTION" || -n "$TERM_PROGRAM" && "$TERM_PROGRAM" == "vscode" ]]; then
+        zstyle ':completion:*' menu select
+    else
+        zinit light Aloxaf/fzf-tab
+        # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+        zstyle ':completion:*' menu no
+            # preview directory's content with eza when completing cd
+        zstyle ':fzf-tab:complete:(cd|ln|mv|cp|rm|cat|head|tail):*' fzf-preview 'eza -1 -a --color=always --icons=auto $realpath'
+        zstyle ':fzf-tab:complete:(python|uv run|bash|sh):*' fzf-preview 'if [ -d "$realpath" ]; then eza -1 -a --color=always --icons=auto "$realpath"; else  bat "$realpath"; fi'
+        zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview 'git diff $realpath | bat --color=always'
+        # custom fzf flags
+        # NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
+        # zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
+        zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2
 
-    # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
-    zstyle ':completion:*' menu no
-        # preview directory's content with eza when completing cd
-    zstyle ':fzf-tab:complete:(cd|ln|mv|cp|rm|cat|head|tail):*' fzf-preview 'eza -1 -a --color=always --icons=auto $realpath'
-    zstyle ':fzf-tab:complete:(python|uv run|bash|sh):*' fzf-preview 'if [ -d "$realpath" ]; then eza -1 -a --color=always --icons=auto "$realpath"; else  bat "$realpath"; fi'
-    zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview 'git diff $realpath | bat --color=always'
-    # custom fzf flags
-    # NOTE: fzf-tab does not follow FZF_DEFAULT_OPTS by default
-    # zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
-    zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2
+        # To make fzf-tab follow FZF_DEFAULT_OPTS.
+        zstyle ':fzf-tab:*' use-fzf-default-opts no
+        # switch group using `<` and `>`
+        zstyle ':fzf-tab:*' switch-group '<' '>'
 
-    # To make fzf-tab follow FZF_DEFAULT_OPTS.
-    zstyle ':fzf-tab:*' use-fzf-default-opts no
-    # switch group using `<` and `>`
-    zstyle ':fzf-tab:*' switch-group '<' '>'
-
-    zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup 
-    zstyle ':fzf-tab:*' fzf-pad 4  
-    zstyle ':fzf-tab:*' popup-min-size 80 30
-    zstyle ':fzf-tab:*' fzf-flags --height=60% --border=rounded --color=bg+:#928374
+        zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup 
+        zstyle ':fzf-tab:*' fzf-pad 4  
+        zstyle ':fzf-tab:*' popup-min-size 80 30
+        zstyle ':fzf-tab:*' fzf-flags --height=60% --border=rounded --color=bg+:#928374
+    fi
+else
+    zstyle ':completion:*' menu select
 fi
 
 # 补全快捷键重设
@@ -76,7 +81,6 @@ bindkey '^N' down-line-or-search #Ctrl+N select previous
 
 
 if [[ -z "$NVIM" ]]; then
-
     zinit ice depth=1
     zinit light jeffreytse/zsh-vi-mode
 fi

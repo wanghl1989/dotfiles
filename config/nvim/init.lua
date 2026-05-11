@@ -25,5 +25,6 @@ require("plugins.tools")
 
 require("plugins.python")
 require("plugins.markdown")
+require("plugins.rust")
 -- lsp
 require("plugins.lsp")
