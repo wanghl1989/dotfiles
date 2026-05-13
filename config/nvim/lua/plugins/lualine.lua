@@ -10,7 +10,7 @@ require("lualine").setup({
 	options = {
 		icons_enabled = true,
 		theme = theme,
-		disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter",  "oil" } },
+		disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter" } },
 		component_separators = { left = "", right = "" },
 		section_separators = { left = "|", right = "|" },
 		ignore_focus = {},
@@ -70,7 +70,7 @@ require("lualine").setup({
 			-- 	end,
 			-- },
 			{ "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
-			{ "venv-selector", icon = "\u{e606}", color = { fg = "#50f872" } },
+			{ "venv-selector", icon = "\u{e606}", color = { fg = "#4fe88f" } },
 		},
 		lualine_y = {
 			{ "progress", separator = " ", padding = { left = 1, right = 0 } },
@@ -100,5 +100,5 @@ require("lualine").setup({
 	tabline = {},
 	winbar = {},
 	inactive_winbar = {},
-	extensions = {},
+	extensions = { "oil", "toggleterm", "mason"},
 })

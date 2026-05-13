@@ -5,7 +5,7 @@ vim.pack.add({
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 	group = vim.api.nvim_create_augroup("SetupPython", { clear = true }),
 	pattern = { "*.py", "*.pyi" },
-    once = true,
+	once = true,
 	callback = function()
 		require("venv-selector").setup({
 			search_venv_managers = true,
@@ -31,5 +31,8 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 			}, -- if you add plugin options, they go here.
 		})
 		vim.keymap.set("n", "<leader>cp", "<cmd>:VenvSelect<cr>", { desc = "Select VirtualEnv" })
+		vim.keymap.set("n", "<leader>co", function()
+			require("conform").format({ formatters = { "ruff_organize_imports" } })
+		end, { desc = "Oranize imports" })
 	end,
 })
