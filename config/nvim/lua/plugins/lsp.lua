@@ -59,10 +59,6 @@ vim.lsp.enable({
 	"json-lsp",
 })
 
--- LSP 诊断显示
-vim.diagnostic.config({ virtual_text = true }) -- 行内文本提示
--- vim.diagnostic.config({ virtual_lines = true }) -- 虚拟行提示（可选）
-
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("SetupLSP", {}),
 	callback = function(event)
@@ -163,9 +159,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 
 		vim.keymap.set("n", "]f", jump_to_current_function_end, { desc = "Jump to end of current function" })
+
+		-- LSP 诊断显示
 		vim.diagnostic.config({
-			virtual_text = true,
-			virtual_lines = false,
+			virtual_text = true, -- 行内文本提示
+			virtual_lines = false, -- 虚拟行提示（可选）
 			float = { source = true },
 		})
 	end,
