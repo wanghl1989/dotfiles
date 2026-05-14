@@ -86,7 +86,7 @@ rm -rf "${TEMP_DIR}"
 
 # ====================== 完成提示 ======================
 echo -e "\n\033[32m=====================================\033[0m"
-echo -e "\033[32m✅ VSCode Server 部署成功！\033[0m"
+echo -e "\033[32m✅ VSCode Server 下载完成\033[0m"
 echo -e "安装路径：${VSCODE_SERVER_DIR}"
 echo -e "Commit ID：${COMMIT_ID}"
 echo -e "\033[32m=====================================\033[0m\n"

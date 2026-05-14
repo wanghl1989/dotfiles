@@ -390,17 +390,17 @@ proxy() {
         on)
             if [ -z "${PROXY_URL}" ]; then
                 echo "请设置PROXY_URL"
-                echo "      Example： export PROXY_URL=socks5://127.0.0.1:7890"
+                echo "      Example： export PROXY_URL=127.0.0.1:7890"
                 proxy off
                 return 1
             fi
-            export http_proxy=$PROXY_URL
-            export https_proxy=$PROXY_URL
-            export all_proxy=$PROXY_URL
+            export http_proxy="http://$PROXY_URL"
+            export https_proxy="https://$PROXY_URL"
+            export all_proxy="socks5://$PROXY_URL"
             # 兼容大写环境变量（部分软件只识别大写）
-            export HTTP_PROXY=$PROXY_URL
-            export HTTPS_PROXY=$PROXY_URL
-            export ALL_PROXY=$PROXY_URL
+            export HTTP_PROXY="http://$PROXY_URL"
+            export HTTPS_PROXY="https://$PROXY_URL"
+            export ALL_PROXY="socks5://$PROXY_URL"
             echo "✅ 终端全局代理已开启：${PROXY_URL}"
             ;;
 

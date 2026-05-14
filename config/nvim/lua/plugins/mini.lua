@@ -115,7 +115,7 @@ MiniPick.registry.files = function(local_opts, opts)
 	local tool = local_opts.tool or "rg"
 	if tool == "rg" then
 		return MiniPick.builtin.cli({
-			command = { "rg", "--files", "--hidden", "--glob", "!.git" }, -- 排除 .git
+            command = { "rg", "--files", "--hidden", "--glob", "!**/.git" },
 			postprocess = MiniPick.default_postprocess_files,
 		}, opts)
 	elseif tool == "fd" then
@@ -128,6 +128,22 @@ MiniPick.registry.files = function(local_opts, opts)
 		return MiniPick.builtin.files(local_opts, opts)
 	end
 end
+
+local load_temp_rg = function(f)
+    local rg_env = 'RIPGREP_CONFIG_PATH'
+    local cached_rg_config = vim.uv.os_getenv(rg_env) or ''
+    vim.uv.os_setenv(rg_env, vim.fn.stdpath('config') .. '/.rg')
+    f()
+    vim.uv.os_setenv(rg_env, cached_rg_config)
+end
+
+
+MiniPick.registry.grep_live = function(local_opts, opts)
+    load_temp_rg(function()
+        MiniPick.builtin.grep_live({ tool = 'rg' })
+      end)
+end
+
 
 require("mini.extra").setup()
 
@@ -153,6 +169,7 @@ vim.notify = MiniNotify.make_notify({ ERROR = { duration = 10000 } })
 
 MiniPick.setup(
 	-- No need to copy this inside `setup()`. Will be used automatically.
+
 	{
 		-- Delays (in ms; should be at least 1)
 		delay = {
@@ -241,8 +258,8 @@ MiniPick.setup(
 vim.keymap.set("n", "<leader>sb", ":Pick buffers<CR>", { desc = "Search Buffers" })
 vim.keymap.set("n", "<leader>sf", ":Pick files<CR>", { desc = "Search files" })
 vim.keymap.set("n", "<leader><leader>", ":Pick files<CR>", { desc = "Search files" })
--- vim.keymap.set("n", "<leader>sg", ":Pick grep pattern='<cword>'<CR>", { desc = "Search grep" })
-vim.keymap.set("n", "<leader>sg", ":Pick grep_live<CR>", { desc = "Search grep" })
+vim.keymap.set("n", "<leader>sw", ":Pick grep pattern=\"<cword>\"<CR>", { desc = "Search grep" })
+vim.keymap.set("n", "<leader>sg", ":Pick grep_live<CR>", { desc = "Search grep live" })
 vim.keymap.set("n", "<leader>sh", ":Pick help<CR>", { desc = "Search help" })
 vim.keymap.set("n", "<leader>sH", ":Pick history<CR>", { desc = "Search history" })
 vim.keymap.set("n", "<leader>sp", ":Pick registers<CR>", { desc = "Search register" })
