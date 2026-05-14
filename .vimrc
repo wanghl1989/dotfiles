@@ -41,16 +41,38 @@ set undodir=~/.vim/undo
 set clipboard=unnamedplus
 
 let mapleader = " "
-nnoremap <leader>w :w<CR>
-nnoremap <leader>q :q<CR>
-nnoremap <leader>x :x<CR>
+nnoremap <leader>ww :update<CR>
+nnoremap <leader>wq :bdelete<CR>
+nnoremap <leader>qq :q<CR>
 nnoremap gl $
 nnoremap gh ^
+nnoremap yL y$
+nnoremap yH y^
+nnoremap cL c$
+nnoremap cH c^
+nnoremap vL v$
+nnoremap vH v^
+nnoremap dL d$
+nnoremap dH d^
 
 nnoremap <leader>nh :noh<CR>
-nnoremap <leader>e :e .<CR> 
+nnoremap <leader>e :e .<CR>
+nnoremap <leader>\| <C-w>v<CR>
+nnoremap <leader>- <C-w>s<CR>
+
 nnoremap <S-h> :bprevious<CR>
 nnoremap <S-l> :bnext<CR>
+
+nnoremap <C-h> <C-w>h<CR>
+nnoremap <C-j> <C-w>j<CR>
+nnoremap <C-k> <C-w>k<CR>
+nnoremap <C-l> <C-w>l<CR>
+
+vnoremap > >gv<CR>
+vnoremap < <gv<CR>
+
+vnoremap <S-j> <NOP>
+vnoremap <S-k> <NOP>
 
 let g:netrw_banner=0        " 关闭讨厌的顶部提示
 let g:netrw_liststyle=3     " 树状显示文件
