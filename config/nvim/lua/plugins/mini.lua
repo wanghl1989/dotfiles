@@ -73,7 +73,6 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 				-- Textobjects
 				object_scope = "ii",
 				object_scope_with_border = "ai",
-
 				-- Motions (jump to respective border line; if not present - body line)
 				goto_top = "[i",
 				goto_bottom = "]i",

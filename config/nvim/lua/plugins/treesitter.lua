@@ -38,6 +38,14 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 			end,
 			indent = { enable = true },
 		})
+
+		require("treesitter-context").setup({
+			max_lines = 3,
+			min_lines = 1,
+			multiline_threshold = 2,
+			separator = "_",
+		})
+
 		require("nvim-treesitter-textobjects").setup({
 			select = {
 				enable = true,
@@ -88,6 +96,12 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 			end, { desc = "Move to " .. qstr })
 		end
 		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
+        local colors = require("gruvbox-material.colors").get(vim.o.background, "hard")
+		vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", {
+			bg = "NONE",
+			fg = colors.red,
+		})
 	end,
 })
 vim.api.nvim_create_autocmd("FileType", {
