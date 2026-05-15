@@ -38,7 +38,7 @@ date_fg = as_rgb(color_as_int(opts.color3))
 date_bg = as_rgb(color_as_int(opts.background))
 
 # Requires nerdfont: https://www.nerdfonts.com
-SEPARATOR_SYMBOL_LEFT = " \ue0b0"
+SEPARATOR_SYMBOL_LEFT = ""
 SOFT_SEPARATOR_SYMBOL_LEFT = "\ue0b1"
 SEPARATOR_SYMBOL_RIGHT = "\ue0b2"
 SEPARATOR_DOT = "\ueb10"
@@ -138,7 +138,7 @@ def _draw_left_status(
     screen.cursor.bold = screen.cursor.italic = False
     if not is_last:
         screen.cursor.bg = bar_bg
-        screen.draw(draw_data.sep)
+        screen.draw(SEPARATOR_DOT)
     screen.cursor.bg = 0
     return end
 

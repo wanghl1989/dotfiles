@@ -12,7 +12,7 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 		bufferline.setup({
 			options = {
 				style_preset = bufferline.style_preset.no_italic,
-				separator_style = "slant",
+				separator_style = "thin",
 				show_buffer_close_icons = true,
 				show_close_icon = false,
 				offsets = {

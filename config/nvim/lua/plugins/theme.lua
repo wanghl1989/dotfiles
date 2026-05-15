@@ -24,6 +24,8 @@ require("gruvbox-material").setup({
 
 
 local function set_custom_highlights()
+
+    local theme_colors = require("gruvbox-material.colors").get(vim.o.background, "hard")
 	-- Inlay 提示
 	vim.api.nvim_set_hl(0, "LspInlayHint", { fg = "#727364", bg = "NONE", italic = false })
 
@@ -43,6 +45,10 @@ local function set_custom_highlights()
 		-- 代码下划线（波浪线）
 		vim.api.nvim_set_hl(0, "DiagnosticUnderline" .. type, { undercurl = true, sp = color })
 	end
+    vim.api.nvim_set_hl(0, "CursorLineNr", {
+        bg = theme_colors.bg,
+        fg = theme_colors.green
+    })
 end
 
 vim.api.nvim_create_autocmd("ColorScheme", { callback = set_custom_highlights })
