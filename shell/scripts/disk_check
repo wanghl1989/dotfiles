@@ -1,217 +1,231 @@
 #!/usr/bin/env bash
+set -euo pipefail  # 开启严格模式，提前捕获错误
 
 ################################################################################
-# 功能描述: 磁盘空间深度检查和分析
+# 功能描述: 磁盘空间深度检查和分析（修复版）
 ################################################################################
 
 REPORT_FILE="/var/log/disk_check_$(date +%Y%m%d_%H%M%S).log"
 DISK_WARNING=80
 INODE_WARNING=80
-LARGE_FILE_SIZE=1G  # 大文件阈值（修复：全角空格→半角空格）
+LARGE_FILE_SIZE="1G"
 
-# 颜色定义
+# 颜色定义（仅终端输出，不写入日志）
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
+# ==================== 日志函数（修复：颜色不写入文件） ====================
 log() {
-    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $1" | tee -a "$REPORT_FILE"    
+    echo "[$(date +"%Y-%m-%d %H:%M:%S")] $1" | tee -a "$REPORT_FILE"
 }
 
 log_warning() {
-    echo -e "${YELLOW}[WARNING] $1${NC}" | tee -a "$REPORT_FILE"    
+    # 终端彩色输出，日志纯文本输出
+    echo -e "${YELLOW}[WARNING] $1${NC}"
+    echo "[$(date +"%Y-%m-%d %H:%M:%S")] [WARNING] $1" >> "$REPORT_FILE"
 }
 
 log_error() {
-    echo -e "${RED}[ERROR] $1${NC}" | tee -a "$REPORT_FILE"    
+    echo -e "${RED}[ERROR] $1${NC}"
+    echo "[$(date +"%Y-%m-%d %H:%M:%S")] [ERROR] $1" >> "$REPORT_FILE"
 }
 
 log_ok() {
-    echo -e "${GREEN}[OK] $1${NC}" | tee -a "$REPORT_FILE"    
+    echo -e "${GREEN}[OK] $1${NC}"
+    echo "[$(date +"%Y-%m-%d %H:%M:%S")] [OK] $1" >> "$REPORT_FILE"
 }
 
-# 1. 磁盘使用率检查
+# ==================== 1. 磁盘使用率检查（修复：路径、空值、跨分区） ====================
 check_disk_usage() {
     log "============================================================"
     log "1. 磁盘使用率检查"
     log "============================================================"
     
-      
-    df -h | grep -vE '^Filesystem|tmpfs|cdrom|loop' | while read line; do
-        USAGE=$(echo $line | awk '{print $5}' | sed 's/%//')
-        MOUNT=$(echo $line | awk '{print $6}')
-        AVAIL=$(echo $line | awk '{print $4}')
+    # 过滤无效分区，-P 防止换行解析错误
+    df -Ph | grep -vE '^Filesystem|tmpfs|cdrom|loop|udev' | while read -r line; do
+        # 引号包裹，防止分割异常
+        USAGE=$(echo "$line" | awk '{print $5}' | sed 's/%//g')
+        MOUNT=$(echo "$line" | awk '{print $6}')
+        AVAIL=$(echo "$line" | awk '{print $4}')
         
-        log "分区: $MOUNT"    
-        log "  使用率: ${USAGE}%"    
-        log "  可用空间: $AVAIL"    
+        # 空值校验，避免整数比较报错
+        if [[ -z "$USAGE" || ! $USAGE =~ ^[0-9]+$ ]]; then
+            log_warning "分区 $MOUNT 使用率解析失败，跳过"
+            continue
+        fi
+
+        log "分区: $MOUNT"
+        log "  使用率: ${USAGE}%"
+        log "  可用空间: $AVAIL"
         
-        if [ "$USAGE" -gt "$DISK_WARNING" ]; then
-            log_error "  磁盘使用率超过${DISK_WARNING}%!"    
+        if (( USAGE > DISK_WARNING )); then
+            log_error "  磁盘使用率超过${DISK_WARNING}%!"
             
-            # 分析占用空间最大的目录
-            log "  占用空间TOP 10目录:"    
-            du -sh ${MOUNT}/* 2>/dev/null | sort -rh | head -10 | awk '{print "    " $0}' | tee -a "$REPORT_FILE"
+            log "  占用空间TOP 10目录:"
+            # -xdev 不跨分区，2>/dev/null 屏蔽权限报错
+            du -sh --one-file-system "$MOUNT"/* 2>/dev/null | sort -rh | head -10 | awk '{print "    " $0}' | tee -a "$REPORT_FILE"
             
-            # 查找大文件（修复：execls→-exec ls，漏空格）
-            log "  大文件(>$LARGE_FILE_SIZE):"    
-            find ${MOUNT} -type f -size +${LARGE_FILE_SIZE} -exec ls -lh {} \; 2>/dev/null | awk '{print "    " $9 " (" $5 ")"}' | head -10 | tee -a "$REPORT_FILE"
+            log "  大文件(>$LARGE_FILE_SIZE):"
+            find "$MOUNT" -xdev -type f -size +"$LARGE_FILE_SIZE" -exec ls -lh {} \; 2>/dev/null | awk '{print "    " $9 " (" $5 ")"}' | head -10 | tee -a "$REPORT_FILE"
         else
-            log_ok "  使用率正常"    
+            log_ok "  使用率正常"
         fi
         log ""
     done
 }
 
-# 2. Inode使用率检查
+# ==================== 2. Inode使用率检查（修复：根目录遍历BUG） ====================
 check_inode_usage() {
     log "============================================================"
     log "2. Inode使用率检查"
     log "============================================================"
     
-      
-    df -i | grep -vE '^Filesystem|tmpfs|cdrom|loop' | while read line; do
-        INODE_USAGE=$(echo $line | awk '{print $5}' | sed 's/%//')
-        MOUNT=$(echo $line | awk '{print $6}')
+    df -i | grep -vE '^Filesystem|tmpfs|cdrom|loop|udev' | while read -r line; do
+        INODE_USAGE=$(echo "$line" | awk '{print $5}' | sed 's/%//g')
+        MOUNT=$(echo "$line" | awk '{print $6}')
         
-        log "分区: $MOUNT"    
-        log "  Inode使用率: ${INODE_USAGE}%"    
+        if [[ -z "$INODE_USAGE" || ! $INODE_USAGE =~ ^[0-9]+$ ]]; then
+            log_warning "分区 $MOUNT Inode使用率解析失败，跳过"
+            continue
+        fi
+
+        log "分区: $MOUNT"
+        log "  Inode使用率: ${INODE_USAGE}%"
         
-        if [ "$INODE_USAGE" -gt "$INODE_WARNING" ]; then
-            log_error "  Inode使用率超过${INODE_WARNING}%!"    
+        if (( INODE_USAGE > INODE_WARNING )); then
+            log_error "  Inode使用率超过${INODE_WARNING}%!"
             
-            # 查找包含最多文件的目录
-            log "  文件数量TOP 10目录:"    
-            for dir in $(find ${MOUNT}/* -maxdepth 0 -type d 2>/dev/null); do
-                echo "$(find $dir -type f 2>/dev/null | wc -l) $dir"    
+            log "  文件数量TOP 10目录:"
+            # 修复根目录/* 遍历问题
+            find "$MOUNT" -xdev -maxdepth 1 -type d 2>/dev/null | while read -r dir; do
+                [[ "$dir" == "$MOUNT" ]] && continue
+                count=$(find "$dir" -xdev -type f 2>/dev/null | wc -l)
+                echo "$count $dir"
             done | sort -rn | head -10 | awk '{print "    " $1 " files: " $2}' | tee -a "$REPORT_FILE"
             
-            # 查找小文件聚集目录
-            log "  可能的小文件聚集目录:"    
-            find ${MOUNT} -type d -exec sh -c 'echo $(find "{}" -maxdepth 1 -type f | wc -l) "{}"' \; 2>/dev/null | sort -rn | head -10 | awk '{if($1>1000) print "    " $1 " files: " $2}' | tee -a "$REPORT_FILE"
+            log "  可能的小文件聚集目录:"
+            find "$MOUNT" -xdev -type d 2>/dev/null | head -20 | while read -r dir; do
+                count=$(find "$dir" -maxdepth 1 -type f 2>/dev/null | wc -l)
+                echo "$count $dir"
+            done | sort -rn | awk '{if($1>1000) print "    " $1 " files: " $2}' | tee -a "$REPORT_FILE"
         else
-            log_ok "  Inode使用率正常"    
+            log_ok "  Inode使用率正常"
         fi
         log ""
     done
 }
 
-# 3. 日志文件检查
+# ==================== 3. 日志文件检查 ====================
 check_log_files() {
     log "============================================================"
     log "3. 日志文件大小检查"
     log "============================================================"
     
-    # 常见日志目录（修复：数组元素缺少空格）
     LOG_DIRS=("/var/log" "/opt/logs" "/data/logs" "/app/logs")
     
     for log_dir in "${LOG_DIRS[@]}"; do
         if [ -d "$log_dir" ]; then
-            log "检查目录: $log_dir"    
+            log "检查目录: $log_dir"
             
-            # 显示大于100MB的日志文件
-            log "  大日志文件(>100MB):"    
-            find $log_dir -type f -size +100M -exec ls -lh {} \; 2>/dev/null | awk '{print "    " $9 " (" $5 ")"}' | head -10 | tee -a "$REPORT_FILE"    
+            log "  大日志文件(>100MB):"
+            find "$log_dir" -type f -size +100M -exec ls -lh {} \; 2>/dev/null | awk '{print "    " $9 " (" $5 ")"}' | head -10 | tee -a "$REPORT_FILE"
             
-            # 统计总大小
-            TOTAL_SIZE=$(du -sh $log_dir 2>/dev/null | awk '{print $1}')
-            log "  总大小: $TOTAL_SIZE"    
+            TOTAL_SIZE=$(du -sh "$log_dir" 2>/dev/null | awk '{print $1}')
+            log "  总大小: $TOTAL_SIZE"
             log ""
         fi
     done
     
-    # 检查未轮转的日志
-    log "未压缩的旧日志文件(30天前):"    
-    find /var/log -type f -name "*.log" -mtime +30 ! -name "*.gz" -exec ls -lh {} \; 2>/dev/null | awk '{print "  " $9 " (" $5 ")"}' | head -10 | tee -a "$REPORT_FILE"    
+    log "未压缩的旧日志文件(30天前):"
+    find /var/log -type f -name "*.log" -mtime +30 ! -name "*.gz" -exec ls -lh {} \; 2>/dev/null | awk '{print "  " $9 " (" $5 ")"}' | head -10 | tee -a "$REPORT_FILE"
 }
 
-# 4. 临时文件检查
+# ==================== 4. 临时文件检查 ====================
 check_temp_files() {
     log "============================================================"
     log "4. 临时文件检查"
     log "============================================================"
     
-    # 检查/tmp目录
     if [ -d "/tmp" ]; then
         TMP_SIZE=$(du -sh /tmp 2>/dev/null | awk '{print $1}')
         TMP_FILE_COUNT=$(find /tmp -type f 2>/dev/null | wc -l)
         
-        log "/tmp目录:"    
-        log "  总大小: $TMP_SIZE"    
-        log "  文件数: $TMP_FILE_COUNT"    
+        log "/tmp目录:"
+        log "  总大小: $TMP_SIZE"
+        log "  文件数: $TMP_FILE_COUNT"
         
-        # 检查超过7天未使用的临时文件
         OLD_TMP=$(find /tmp -type f -atime +7 2>/dev/null | wc -l)
-        if [ "$OLD_TMP" -gt 0 ]; then
-            log_warning "  发现 $OLD_TMP 个超过7天未访问的临时文件"    
-            log "  占用空间TOP 10:"    
-            find /tmp -type f -atime +7 -exec ls -lh {} \; 2>/dev/null | sort -k5 -rh | head -10 | awk '{print "    " $9 " (" $5 ")"}' | tee -a "$REPORT_FILE"    
+        if (( OLD_TMP > 0 )); then
+            log_warning "  发现 $OLD_TMP 个超过7天未访问的临时文件"
+            log "  占用空间TOP 10:"
+            find /tmp -type f -atime +7 -exec ls -lh {} \; 2>/dev/null | sort -k5 -rh | head -10 | awk '{print "    " $9 " (" $5 ")"}' | tee -a "$REPORT_FILE"
         fi
     fi
     
-    # 检查/var/tmp
     if [ -d "/var/tmp" ]; then
         VAR_TMP_SIZE=$(du -sh /var/tmp 2>/dev/null | awk '{print $1}')
         log ""
-        log "/var/tmp目录:"    
-        log "  总大小: $VAR_TMP_SIZE"    
+        log "/var/tmp目录:"
+        log "  总大小: $VAR_TMP_SIZE"
     fi
 }
 
-# 5. 磁盘IO检查
+# ==================== 5. 磁盘IO检查（修复：IO等待取值BUG） ====================
 check_disk_io() {
     log "============================================================"
     log "5. 磁盘IO统计"
     log "============================================================"
     
     if command -v iostat &> /dev/null; then
-        log "磁盘IO统计(最近1分钟):"    
-        iostat -x 1 2 | tail -n +4 | awk 'NF' | tail -n +2 | tee -a "$REPORT_FILE"
+        log "磁盘IO统计:"
+        iostat -x 1 2 | grep -A 20 "Device" | tail -n +3 | tee -a "$REPORT_FILE"
     else
-        log_warning "未安装iostat工具 (yum install sysstat)"    
+        log_warning "未安装iostat工具 (yum install sysstat / apt install sysstat)"
     fi
     
-    # 检查IO等待（修复：全角空格→半角，比较表达式空格）
-    IO_WAIT=$(top -bn1 | grep "Cpu(s)" | awk '{print $10}' | sed 's/%wa,//')
+    # 修复：兼容所有Linux系统获取IO等待
+    IO_WAIT=$(top -bn1 | grep -i "cpu(s)" | sed -E 's/.*ni, +([0-9.]+)% wa,.*/\1/')
+    IO_WAIT=${IO_WAIT:-0}  # 空值默认0
     log ""
-    log "当前IO等待: ${IO_WAIT}%"    
+    log "当前IO等待: ${IO_WAIT}%"
     
-    if (( $(echo "$IO_WAIT > 20" | bc -l) )); then    
+    if (( $(echo "$IO_WAIT > 20" | bc -l 2>/dev/null) )); then
         log_warning "IO等待过高!"
     fi
 }
 
-# 6. 清理建议
+# ==================== 6. 清理建议 ====================
 generate_cleanup_suggestions() {
     log "============================================================"
     log "6. 磁盘清理建议"
     log "============================================================"
     
-    log "可以考虑清理的内容:"    
-    log "1. 压缩或删除旧日志文件:"    
-    log "   find /var/log -type f -name '*.log' -mtime +30 -exec gzip {} \;"    
+    log "可以考虑清理的内容:"
+    log "1. 压缩或删除旧日志文件:"
+    log "   sudo find /var/log -type f -name '*.log' -mtime +30 -exec gzip {} \;"
     log ""
-    log "2. 清理超过7天的临时文件:"    
-    log "   find /tmp -type f -atime +7 -delete"    
+    log "2. 清理超过7天的临时文件:"
+    log "   sudo find /tmp -type f -atime +7 -delete"
     log ""
-    log "3. 清理yum缓存(CentOS/RHEL):"    
-    log "   yum clean all"    
+    log "3. 清理yum缓存(CentOS/RHEL):"
+    log "   sudo yum clean all"
     log ""
-    log "4. 清理apt缓存(Ubuntu/Debian):"    
-    log "   apt-get clean"    
+    log "4. 清理apt缓存(Ubuntu/Debian):"
+    log "   sudo apt-get clean"
     log ""
-    log "5. 清理Docker未使用的镜像和容器:"    
-    log "   docker system prune -a"    
+    log "5. 清理Docker未使用的镜像和容器:"
+    log "   sudo docker system prune -a"
     log ""
-    log "6. 清理journal日志:"    
-    log "   journalctl --vacuum-time=7d"    
+    log "6. 清理journal日志:"
+    log "   sudo journalctl --vacuum-time=7d"
 }
 
-# 主函数
+# ==================== 主函数 ====================
 main() {
     echo "=========================================="
-    echo "    磁盘空间深度检查脚本 v1.5"    
+    echo "    磁盘空间深度检查脚本 v2.0（修复版）"
     echo "=========================================="
     echo ""
     
@@ -225,8 +239,8 @@ main() {
     log ""
     log "============================================================"
     log "检查完成!"
-    log "报告保存至: $REPORT_FILE"    
+    log "报告保存至: $REPORT_FILE"
     log "============================================================"
 }
 
-main "$@"    
+main "$@"

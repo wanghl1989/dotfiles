@@ -2,6 +2,11 @@
 # 辅助包装函数：执行 fzf 前设置环境变量
 # ------------------------------
 _fzf_wrapper() {
+    if ! command -v fzf &>/dev/null; then
+        echo "fzf 未安装"
+        return 0
+    fi
+        
     # 仅当两个变量都不存在时，设置默认 FZF 选项
     if [[ ! -v FZF_DEFAULT_OPTS && ! -v FZF_DEFAULT_OPTS_FILE ]]; then
         export FZF_DEFAULT_OPTS='--cycle --layout=reverse --border --height=90% --popup 85%,90% --preview-window=right:55% --marker="*"'
@@ -10,8 +15,6 @@ _fzf_wrapper() {
     # 执行 fzf，绑定快捷键 + 传递所有参数
     fzf --bind="ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down" "$@"
 }
-
-
 
 # ------------------------------
 # 文件预览核心函数
@@ -101,12 +104,12 @@ _fzf_preview_changed_file() {
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 主功能函数
+# fzf搜索函数
 # ─────────────────────────────────────────────────────────────────────────────
 # ------------------------------
-# 模糊搜索 Git Log (git_log)
+# 模糊搜索 Git Log
 # ------------------------------
-git_log() {
+_git_log() {
     local desc="模糊搜索 git log，选中后将完整 commit hash 插入命令行"
     # 检查是否在 Git 仓库
     if ! git rev-parse --git-dir >/dev/null 2>&1; then
@@ -150,9 +153,9 @@ git_log() {
 }
 
 # ------------------------------
-# 模糊搜索 Git Status (git_search)
+# 模糊搜索 Git Status
 # ------------------------------
-git_status() {
+_git_status() {
     local desc="模糊搜索 git status，选中后将文件路径插入命令行"
     # 检查 Git 仓库
     if ! git rev-parse --git-dir >/dev/null 2>&1; then
@@ -257,9 +260,9 @@ git_status() {
 }
 
 # ------------------------------
-# 模糊搜索 Git 分支 (gb)
+# 模糊搜索 Git 分支
 # ------------------------------
-git_branch() {
+_git_branch() {
     local desc="模糊搜索本地 git 分支，按 Enter 切换到选中分支"
     # 检查 Git 仓库
     if ! git rev-parse --git-dir >/dev/null 2>&1; then
@@ -286,6 +289,30 @@ git_branch() {
         local branch_name=$(echo "$selected_branch" | sed 's/^\* //g' | xargs)
         git checkout "$branch_name"
     fi
+}
+
+# ------------------------------
+# 模糊搜索 Git 主函数gg
+# ------------------------------
+gg() {
+    case "$1" in
+        l)
+            _git_log
+            ;;
+        s)
+            _git_status
+            ;;
+        b)
+            _git_branch
+            ;;
+        # 帮助提示
+        *)
+            echo "用法：gg [命令]"
+            echo "  l   搜索git log"
+            echo "  s   查看git status"
+            echo "  b   搜索git branch"
+            ;;
+    esac
 }
 
 # ------------------------------
@@ -328,14 +355,20 @@ fp() {
 # 模糊搜索文件内容(fs)
 # ------------------------------
 fs() {
-  fd --type f --hidden --follow --exclude .git  . 2>/dev/null | _fzf_wrapper \
-    --ansi \
-    --disabled \
-    --prompt="Content Search > " \
-    --preview-window="right:60%" \
-    --preview="rg -n --color=always -C 3 '{q}' {} 2>/dev/null" \
-    --bind="change:reload:rg -l '{q}' 2>/dev/null || true" \
-    --bind="enter:execute(nvim +\$(rg -n '{q}' {} | head -n1 | cut -d: -f1) {})+abort"
+
+    if ! command -v fd &>/dev/null; then
+        echo "fd 未安装"
+        return 0
+    fi
+
+    fd --type f --hidden --follow --exclude .git  . 2>/dev/null | _fzf_wrapper \
+        --ansi \
+        --disabled \
+        --prompt="Content Search > " \
+        --preview-window="right:60%" \
+        --preview="rg -n --color=always -C 3 '{q}' {} 2>/dev/null" \
+        --bind="change:reload:rg -l '{q}' 2>/dev/null || true" \
+        --bind="enter:execute(nvim +\$(rg -n '{q}' {} | head -n1 | cut -d: -f1) {})+abort"
 }
 
 
@@ -343,6 +376,11 @@ fs() {
 # 模糊搜索文件名(ff)
 # ------------------------------
 ff(){
+    if ! command -v fd &>/dev/null; then
+        echo "fd 未安装"
+        return 0
+    fi
+
     fd --type f --hidden --follow --exclude .git  . 2>/dev/null | _fzf_wrapper \
         --ansi \
         --prompt="File Search > " \
@@ -355,16 +393,25 @@ ff(){
 # 模糊搜索图片(fimg)
 # ------------------------------
 fimg(){
+    if ! command -v fd &>/dev/null; then
+        echo "fd 未安装"
+        return 0
+    fi
 
-  fd -t f -e jpg -e jpeg -e png -e gif -e webp -e bmp . 2>/dev/null | _fzf_wrapper \
-    --ansi \
-    --prompt="Image Search > " \
-    --preview="kitty +kitten icat --clear --transfer-mode=memory --stdin=no  {}" \
-    --bind="enter:execute(open {})+abort"
+    fd -t f -e jpg -e jpeg -e png -e gif -e webp -e bmp . 2>/dev/null | _fzf_wrapper \
+        --ansi \
+        --prompt="Image Search > " \
+        --preview="kitty +kitten icat --clear --transfer-mode=memory --stdin=no  {}" \
+        --bind="enter:execute(open {})+abort"
 }
 
 
 fss(){
+  if ! command -v sesh &>/dev/null; then
+    echo "sesh 未安装"
+    return 0
+  fi
+
   sesh list --icons | _fzf_wrapper \
     --no-sort --ansi --border-label ' sesh ' --prompt '⚡  ' \
     --header '  ^a all ^t tmux ^g configs ^x zoxide ^d tmux kill ^f find' \
@@ -384,7 +431,6 @@ fss(){
 # 设置proxy
 # ------------------------------
 proxy() {
-    
     case "$1" in
         # 开启全局终端代理（所有命令生效：curl/git/npm/brew等）
         on)
@@ -433,26 +479,83 @@ proxy() {
 # ------------------------------
 # conda 手动启用
 # ------------------------------
-con(){
-  # 检查 CONDA_HOME 环境变量是否存在且为有效目录
-  if [ -z "${CONDA_HOME}" ] || [ ! -d "${CONDA_HOME}" ]; then
-      echo "请设置conda的安装路径： export CONDA_HOME=/path/to/miniconda3"
-      return 1
-  fi
+con() {
+    # ==================== 配置与基础检查 ====================
+    local usage="用法: con [on|off]  （on=启用Conda，off=关闭Conda）"
+    # 检查CONDA_HOME
+    if [ -z "${CONDA_HOME}" ] || [ ! -d "${CONDA_HOME}" ]; then
+        echo "错误: 请先设置Conda安装路径"
+        echo "示例: export CONDA_HOME=$HOME/miniconda3"
+        return 1
+    fi
+    # 无参数/非法参数提示
+    if [ $# -ne 1 ] || [[ ! "$1" =~ ^(on|off)$ ]]; then
+        echo "$usage"
+        return 1
+    fi
 
-  # >>> conda initialize >>>
-  # !! Contents within this block are managed by 'conda init' !!
-  __conda_setup="$("${CONDA_HOME}/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
-  if [ $? -eq 0 ]; then
-      eval "$__conda_setup"
-  else
-      if [ -f "${CONDA_HOME}/etc/profile.d/conda.sh" ]; then
-          . "${CONDA_HOME}/etc/profile.d/conda.sh"
-      else
-          export PATH="${CONDA_HOME}/bin:$PATH"
-      fi
-  fi
-  unset __conda_setup
-  # <<< conda initialize <<<
+    # ==================== 检测当前Shell类型 ====================
+    local current_shell
+    current_shell=$(basename "$SHELL")
+
+    # ==================== 核心功能：启用 Conda ====================
+    if [ "$1" = "on" ]; then
+        # 避免重复初始化
+        if [ -n "${__CONDA_ORIGINAL_PATH:-}" ]; then
+            echo "✅ Conda 已启用，无需重复操作"
+            return 0
+        fi
+        # 保存原始PATH（关闭时用于还原）
+        export __CONDA_ORIGINAL_PATH="$PATH"
+
+        local __conda_setup
+        # 根据Shell类型执行对应Hook
+        case "$current_shell" in
+            bash)
+                __conda_setup="$("${CONDA_HOME}/bin/conda" 'shell.bash' 'hook' 2>/dev/null)"
+                ;;
+            zsh)
+                __conda_setup="$("${CONDA_HOME}/bin/conda" 'shell.zsh' 'hook' 2>/dev/null)"
+                ;;
+            *)
+                echo "⚠️ 未适配 $current_shell，使用基础PATH模式"
+                export PATH="${CONDA_HOME}/bin:$PATH"
+                return 0
+                ;;
+        esac
+
+        # 加载Conda环境（官方标准方式）
+        if [ $? -eq 0 ]; then
+            eval "$__conda_setup"
+        else
+            # 兼容旧版Conda
+            if [ -f "${CONDA_HOME}/etc/profile.d/conda.sh" ]; then
+                . "${CONDA_HOME}/etc/profile.d/conda.sh"
+            else
+                export PATH="${CONDA_HOME}/bin:$PATH"
+            fi
+        fi
+
+        # 清理临时变量
+        unset __conda_setup
+        return 0
+    fi
+
+    # ==================== 核心功能：关闭 Conda ====================
+    if [ "$1" = "off" ]; then
+        # 检查是否已启用
+        if [ -z "${__CONDA_ORIGINAL_PATH:-}" ]; then
+            echo "✅ Conda 未启用，无需关闭"
+            return 0
+        fi
+
+        # 退出所有Conda环境
+        conda deactivate 2>/dev/null
+        # 还原原始PATH（彻底移除Conda环境）
+        export PATH="$__CONDA_ORIGINAL_PATH"
+        # 清理临时变量
+        unset __CONDA_ORIGINAL_PATH
+
+        return 0
+    fi
 }
-
