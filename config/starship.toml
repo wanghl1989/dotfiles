@@ -278,11 +278,11 @@ format = '[$symbol($version )]($style)'
 [character]
 disabled = false
 format = '$symbol '
-success_symbol = '[󰜴](bold #a9b665)'
-error_symbol = '[](bold #ea6962)'
-vimcmd_symbol = '[󰜱](bold #a9b665)'
-vimcmd_replace_one_symbol = '[](bold #7daea3)'
-vimcmd_replace_symbol = '[](bold #7daea3)'
+success_symbol = '[❯](bold #7daea3)'
+error_symbol = '[❮](bold #ea6962)'
+vimcmd_symbol = '[❮](bold #7daea3)'
+vimcmd_replace_one_symbol = '[](bold #a9b665)'
+vimcmd_replace_symbol = '[](bold #a9b665)'
 vimcmd_visual_symbol = '[󰜷](bold #e78a4e)'
 
 
