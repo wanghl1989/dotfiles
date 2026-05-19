@@ -24,10 +24,9 @@
 # """
 
 format = """
-[░▒▓](#7daea3)\
+[░▒▓](#a9b665)\
 $os\
-$username\
-[▓▒░](#7daea3)\
+[ ](bg:#a9b665)\
 $directory\
 $git_branch\
 $git_status\
@@ -57,7 +56,7 @@ $cmd_duration\
 
 [os]
 disabled = false
-style = "bold bg:#7daea3 fg:#1d2021"
+style = "bold bg:#a9b665 fg:#1d2021"
 format = '[ $symbol ]($style)'
 # format = '[$symbol ]($style)'
 
@@ -72,8 +71,8 @@ show_always = true
 # home_symbol = ""
 # truncation_length = 3
 # truncation_symbol = ""
-style = "bold fg:#a9b665"
-format = "[  $path]($style) "
+style = "bold fg:#d4be98 bg:#665c54"
+format = "[  $path ]($style)"
 
 [directory.substitutions]
 "Documents" = "󰈙 "
@@ -151,16 +150,16 @@ format = '[$symbol ($output)]($style) '
 
 [git_branch]
 symbol = " "
-style = "bold fg:#d3869b"
-format = '[$symbol$branch(:$remote_branch)]($style) '
+style = "bold fg:#d4be98 bg:#3c3836"
+format = '[ $symbol$branch(:$remote_branch) ]($style)'
 # format = '[ $symbol $branch]($style)'
 
 [git_status]
-style = "bold fg:#d3869b"
-format = '[\[($all_status$ahead_behind)\]]($style)'
+style = "bold fg:#d4be98 bg:#3c3836"
+format = '[\[($all_status$ahead_behind)\] ]($style)'
 
 [git_commit]
-style = "bold fg:#d3869b"
+style = "bold fg:#d4be98 bg:#3c3836 "
 tag_symbol = '  '
 
 [golang]
@@ -278,11 +277,11 @@ format = '[$symbol($version )]($style)'
 [character]
 disabled = false
 format = '$symbol '
-success_symbol = '[❯](bold #7daea3)'
+success_symbol = '[❯](bold #a9b665)'
 error_symbol = '[❮](bold #ea6962)'
-vimcmd_symbol = '[❮](bold #7daea3)'
-vimcmd_replace_one_symbol = '[](bold #a9b665)'
-vimcmd_replace_symbol = '[](bold #a9b665)'
+vimcmd_symbol = '[❮](bold #a9b665)'
+vimcmd_replace_one_symbol = '[](bold #7daea3)'
+vimcmd_replace_symbol = '[](bold #7daea3)'
 vimcmd_visual_symbol = '[󰜷](bold #e78a4e)'
 
 
