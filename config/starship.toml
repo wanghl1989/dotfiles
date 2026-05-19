@@ -26,7 +26,7 @@
 format = """
 [░▒▓](#a9b665)\
 $os\
-[ ](bg:#a9b665)\
+[](fg:#a9b665)\
 $directory\
 $git_branch\
 $git_status\
@@ -56,13 +56,13 @@ $cmd_duration\
 
 [os]
 disabled = false
-style = "bold bg:#a9b665 fg:#1d2021"
+style = "bold bg:#a9b665 fg:#0d1011"
 format = '[ $symbol ]($style)'
 # format = '[$symbol ]($style)'
 
 [username]
 disabled = false
-style_user = "bold bg:#7daea3 fg:#1d2021"
+style_user = "bold bg:#a9b665 fg:#0d1011"
 format = '[$user ]($style)'
 show_always = true
 
@@ -71,7 +71,7 @@ show_always = true
 # home_symbol = ""
 # truncation_length = 3
 # truncation_symbol = ""
-style = "bold fg:#d4be98 bg:#665c54"
+style = "bold fg:#89b482"
 format = "[  $path ]($style)"
 
 [directory.substitutions]
@@ -149,17 +149,18 @@ style = "bold fg:#d3869b"
 format = '[$symbol ($output)]($style) '
 
 [git_branch]
+
 symbol = " "
-style = "bold fg:#d4be98 bg:#3c3836"
-format = '[ $symbol$branch(:$remote_branch) ]($style)'
+style = "bold fg:#d8a657"
+format = '[$symbol$branch(:$remote_branch) ]($style)'
 # format = '[ $symbol $branch]($style)'
 
 [git_status]
-style = "bold fg:#d4be98 bg:#3c3836"
+style = "bold fg:#d8a657"
 format = '[\[($all_status$ahead_behind)\] ]($style)'
 
 [git_commit]
-style = "bold fg:#d4be98 bg:#3c3836 "
+style = "bold fg:#d8a657"
 tag_symbol = '  '
 
 [golang]
