@@ -40,8 +40,8 @@ map("v", "<A-k>", "<NOP>", opts)
 map("v", "<C-w>", "<NOP>", opts)
 
 -- split
-map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
-map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
+map("n", "<leader>-", ":split<CR>", { desc = "Split Window Below", remap = true })
+map("n", "<leader>|", ":vsplit<CR>", { desc = "Split Window Right", remap = true })
 
 -- safe file and quit
 map("n", "<Leader>wc", "<C-W>w", { noremap = true, silent = true, desc = "Switch windows" })
