@@ -405,7 +405,30 @@ fimg(){
         --bind="enter:execute(open {})+abort"
 }
 
+# ------------------------------
+# 模糊搜索已安装的deb包(fdp)
+# ------------------------------
+fdp(){
+    if ! command -v dpkg &>/dev/null; then
+        return 0
+    fi
+    # 检测剪贴板工具（Linux 通用）
+    if ! command -v xclip &>/dev/null && ! command -v wl-copy &>/dev/null; then
+        echo "请安装剪贴板工具：sudo apt install xclip wl-copy"
+    fi
 
+    # 列出已安装纯包名 + fzf 搜索 + 回车复制
+    dpkg --get-selections | awk '$2 == "install" {print $1}' | _fzf_wrapper \
+        --ansi \
+        --prompt="Deb Package Search > " \
+        --preview="dpkg -s {}" \
+        --bind="enter:execute(if command -v wl-copy &>/dev/null; then wl-copy {}; else xclip -selection clipboard {}; fi; echo -e '\033[32m✅ 已复制包名：{}\033[0m')+abort"
+}
+
+
+# ------------------------------
+# 模糊搜索session 基于sesh(fss)
+# ------------------------------
 fss(){
   if ! command -v sesh &>/dev/null; then
     echo "sesh 未安装"
