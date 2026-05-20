@@ -6,7 +6,6 @@ local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
 
 local header_art = vim.split([[
-
                                      d88b
                      _______________|8888|_______________
                     |_____________ ,~~~~~~. _____________|

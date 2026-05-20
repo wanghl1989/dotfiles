@@ -28,7 +28,7 @@ format = """
 $os\
 [](fg:#a9b665 bg:#444444)\
 $directory\
-[](fg:#444444)\
+[ ](fg:#444444)\
 $git_branch\
 $git_status\
 $git_commit\
@@ -67,7 +67,7 @@ show_always = true
 [directory]
 # read_only = "[󰌾]"
 # home_symbol = ""
-truncation_length = 4
+truncation_length = 2
 truncation_symbol = ""
 style = "bold fg:#d4be98 bg:#444444"
 format = "[  $path ]($style)"
@@ -86,12 +86,12 @@ disabled = false
 
 [c]
 symbol = " "
-style = "bold fg:#ea6962"
+style = "bold fg:#7daea3"
 format = '[ $symbol($version(-$name) )]($style)'
 
 [cpp]
 symbol = " "
-style = "bold fg:#ea6962"
+style = "bold fg:#7daea3"
 format = '[ $symbol($version(-$name) )]($style)'
 
 [custom.up_left]
@@ -126,7 +126,8 @@ format = '[ $symbol($version )]($style)'
 
 [conda]
 symbol = " "
-format = '[ $symbol$environment]($style) '
+style = 'bold #89b482'
+format = '[$symbol$environment ]($style)'
 
 
 [deno]
@@ -150,7 +151,7 @@ format = '[$symbol ($output)]($style) '
 
 symbol = " "
 style = "bold fg:#d8a657"
-format = '[ $symbol$branch(:$remote_branch) ]($style)'
+format = '[$symbol$branch(:$remote_branch) ]($style)'
 # format = '[ $symbol $branch]($style)'
 
 [git_status]
@@ -159,7 +160,7 @@ format = '[\[($all_status$ahead_behind)\] ]($style)'
 
 [git_commit]
 style = "bold fg:#d8a657"
-tag_symbol = '  '
+tag_symbol = ' '
 
 [golang]
 symbol = " "
@@ -202,8 +203,8 @@ symbol = " "
 
 [nodejs]
 symbol = " "
-style = "bold fg:#a9b665"
-format = '[ $symbol($version )]($style)'
+style = "bold fg:#7daea3"
+format = '[$symbol($version )]($style)'
 
 
 [os.symbols]
@@ -261,23 +262,23 @@ format = '[$symbol$version]($style) '
 
 [python]
 symbol = " "
-style = 'bold fg:#a9b665'
-format = '[ ${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+style = 'bold fg:#89b482'
+format = '[${symbol}${pyenv_prefix}(${version})(\($virtualenv\)) ]($style)'
 
 [ruby]
 symbol = " "
 
 [rust]
 symbol = "󱘗 "
-style = "bold fg:#d8a657"
-format = '[ $symbol($version )]($style)'
+style = "bold fg:#ea6962"
+format = '[ $symbol($version)]($style)'
 
 
 [character]
 disabled = false
 format = '$symbol '
 success_symbol = '[❯](bold #a9b665)'
-error_symbol = '[❮](bold #ea6962)'
+error_symbol = '[❯](bold #ea6962)'
 vimcmd_symbol = '[❮](bold #a9b665)'
 vimcmd_replace_one_symbol = '[](bold #7daea3)'
 vimcmd_replace_symbol = '[](bold #7daea3)'
