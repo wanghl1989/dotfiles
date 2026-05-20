@@ -26,13 +26,12 @@
 format = """
 [░▒▓](#a9b665)\
 $os\
-[](fg:#a9b665)\
+[](fg:#a9b665 bg:#444444)\
 $directory\
+[](fg:#444444)\
 $git_branch\
 $git_status\
 $git_commit\
-$fill\
-$package\
 $c\
 $cpp\
 $rust\
@@ -42,7 +41,6 @@ $nodejs\
 $python\
 $conda\
 $docker_context\
-$line_break\
 $character\
 """
 
@@ -51,7 +49,7 @@ $cmd_duration\
 """
 
 # add_newline = true
-# continuation_prompt = '▶▶ '
+continuation_prompt = '-> '
 
 
 [os]
@@ -69,9 +67,9 @@ show_always = true
 [directory]
 # read_only = "[󰌾]"
 # home_symbol = ""
-# truncation_length = 3
-# truncation_symbol = ""
-style = "bold fg:#89b482"
+truncation_length = 4
+truncation_symbol = ""
+style = "bold fg:#d4be98 bg:#444444"
 format = "[  $path ]($style)"
 
 [directory.substitutions]
@@ -89,12 +87,12 @@ disabled = false
 [c]
 symbol = " "
 style = "bold fg:#ea6962"
-format = '[$symbol($version(-$name) )]($style)'
+format = '[ $symbol($version(-$name) )]($style)'
 
 [cpp]
 symbol = " "
 style = "bold fg:#ea6962"
-format = '[$symbol($version(-$name) )]($style)'
+format = '[ $symbol($version(-$name) )]($style)'
 
 [custom.up_left]
 style = "bold fg:#a9b665"
@@ -124,11 +122,11 @@ style = 'bold #a9b665'
 
 [cmake]
 symbol = " "
-format = '[$symbol($version )]($style)'
+format = '[ $symbol($version )]($style)'
 
 [conda]
 symbol = " "
-format = '[$symbol$environment]($style) '
+format = '[ $symbol$environment]($style) '
 
 
 [deno]
@@ -152,7 +150,7 @@ format = '[$symbol ($output)]($style) '
 
 symbol = " "
 style = "bold fg:#d8a657"
-format = '[$symbol$branch(:$remote_branch) ]($style)'
+format = '[ $symbol$branch(:$remote_branch) ]($style)'
 # format = '[ $symbol $branch]($style)'
 
 [git_status]
@@ -205,7 +203,7 @@ symbol = " "
 [nodejs]
 symbol = " "
 style = "bold fg:#a9b665"
-format = '[$symbol($version )]($style)'
+format = '[ $symbol($version )]($style)'
 
 
 [os.symbols]
@@ -264,7 +262,7 @@ format = '[$symbol$version]($style) '
 [python]
 symbol = " "
 style = 'bold fg:#a9b665'
-format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+format = '[ ${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 
 [ruby]
 symbol = " "
@@ -272,7 +270,7 @@ symbol = " "
 [rust]
 symbol = "󱘗 "
 style = "bold fg:#d8a657"
-format = '[$symbol($version )]($style)'
+format = '[ $symbol($version )]($style)'
 
 
 [character]
