@@ -33,7 +33,7 @@ os_kernel=$(uname -s)
 
 # 在 ~/.config中的配置
 # macos linux通用
-ITEMS=("zed" "nvim" "kitty" "uv" "ruff" "starship.toml" "tmux" "ghostty" "lazygit" "bat" "yazi" "btop" "lazydocker" "lsd" "zellij" "eza" "newsboat" "pip" "fastfetch" "dict" "fish" "mpv" "alacritty")
+ITEMS=("zed" "nvim" "kitty" "uv" "ruff" "starship.toml" "tmux" "ghostty" "lazygit" "bat" "yazi" "btop" "lazydocker" "zellij" "eza" "newsboat" "pip" "fastfetch" "dict" "fish" "alacritty")
 BASE_ROOT=$(dirname $(dirname "$SCRIPT_PATH"))
 
 DEST_DIR="$HOME/.config"
@@ -54,7 +54,7 @@ if [ "$os_kernel" = "Darwin" ]; then
   MACOS_ITEMS=("aerospace")
 
   for item in "${MACOS_ITEMS[@]}"; do
-    source_path="$BASE_ROOT/macos/$item"
+    source_path="$BASE_ROOT/config/$item"
     link_path="$DEST_DIR/$item"
 
     create_symlink "$source_path" "$link_path"
@@ -66,7 +66,7 @@ if [ "$os_kernel" = "Linux" ]; then
   LINUX_ITEMS=("mpv" ".Xresources")
 
   for item in "${LINUX_ITEMS[@]}"; do
-    source_path="$BASE_ROOT/linux/$item"
+    source_path="$BASE_ROOT/config/$item"
     link_path="$DEST_DIR/$item"
 
     create_symlink "$source_path" "$link_path"

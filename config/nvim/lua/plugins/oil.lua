@@ -23,6 +23,7 @@ oil.setup({
 	show_file_highlights = true,
 	show_directory_highlights = false,
 	show_ignored_files = true,
+    watch_for_changes = false,
 	keymaps = {
 		["g?"] = { "actions.show_help", mode = "n" },
 		["<CR>"] = "actions.select",
