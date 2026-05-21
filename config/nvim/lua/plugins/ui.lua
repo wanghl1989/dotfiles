@@ -38,9 +38,9 @@ vim.api.nvim_create_autocmd({ "UIEnter" }, {
 					},
 				},
 				presets = {
-					bottom_search = true,
-					command_palette = true,
-					long_message_to_split = true,
+					bottom_search = false,
+					command_palette = false,
+					long_message_to_split = false,
 				},
 			})
 		end)
