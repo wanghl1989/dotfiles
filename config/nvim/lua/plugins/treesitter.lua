@@ -40,10 +40,11 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 		})
 
 		require("treesitter-context").setup({
-			max_lines = 3,
+			max_lines = 5,
 			min_lines = 1,
-			multiline_threshold = 2,
+			-- multiline_threshold = 5,
 			separator = "_",
+            -- trim_scope = "inner"
 		})
 
 		require("nvim-treesitter-textobjects").setup({
