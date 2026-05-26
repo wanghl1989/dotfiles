@@ -582,3 +582,24 @@ con() {
         return 0
     fi
 }
+
+# ------------------------------
+# 快速返回 N 级上级目录：cdb 数字
+# ------------------------------
+cdbd() {
+    local NUM
+    if [ $# -lt 1 ]; then
+        NUM=1
+    else
+        NUM=$1
+    fi
+
+    # 校验参数是否为正整数
+    if ! [[ $NUM =~ ^[1-9][0-9]*$ ]]; then
+        echo "❌ 错误: 参数必须是 正整数！"
+        return 1
+    fi
+
+    local upper_dir=$(printf "../%.0s" $(seq 1 $NUM))
+    cd "$upper_dir"
+}

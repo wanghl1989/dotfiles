@@ -22,7 +22,7 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter", "LspAttach" }, {
 				["<Esc>"] = { "hide", "fallback" },
 				["<C-j>"] = { "select_next", "fallback" },
 				["<C-k>"] = { "select_prev", "fallback" },
-				["<Tab>"] = { "select_and_accept" },
+				["<Tab>"] = { "select_and_accept", "fallback"},
 			},
 			completion = {
 				accept = {

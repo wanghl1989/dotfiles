@@ -63,7 +63,6 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 		require("mini.indentscope").setup({
 			draw = {
 				delay = 0,
-
 				predicate = function(scope)
 					return not scope.body.is_incomplete
 				end,
