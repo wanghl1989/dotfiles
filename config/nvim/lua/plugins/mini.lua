@@ -160,10 +160,10 @@ MiniNotify.setup({
 		config = {},
 		max_width_share = 0.382,
 		-- Value of 'winblend' option
-		winblend = 25,
+		winblend = 35,
 	},
 })
-vim.notify = MiniNotify.make_notify({ ERROR = { duration = 10000 } })
+vim.notify = MiniNotify.make_notify({ ERROR = { duration = 1000 } })
 
 MiniPick.setup(
 	-- No need to copy this inside `setup()`. Will be used automatically.

@@ -192,57 +192,95 @@ vim.api.nvim_create_user_command("LspRestart", function()
 	end, 100)
 end, { desc = "Restart LSP clients for current buffer" })
 
--- LspStatus: Show brief LSP status
 vim.api.nvim_create_user_command("LspStatus", function()
-	local bufnr = vim.api.nvim_get_current_buf()
-	local clients = vim.lsp.get_clients({ bufnr = bufnr })
+	local clients = vim.lsp.get_clients()
+	local lines = {}
 
+	-- 无LSP客户端时直接提示
 	if #clients == 0 then
-		print("󰅚 No LSP clients attached")
-		return
+		lines = { "󰅚 No LSP clients attached" }
+	else
+		-- 标题行
+		table.insert(lines, "󰒋 LSP Status active now")
+		table.insert(
+			lines,
+			"─────────────────────────────────"
+		)
+		table.insert(lines, "")
+
+		-- 遍历所有客户端，拼接信息
+		for i, client in ipairs(clients) do
+			table.insert(lines, string.format("󰌘 Client %d: %s (ID: %d)", i, client.name, client.id))
+			table.insert(lines, "  Root: " .. (client.config.root_dir or "N/A"))
+			table.insert(lines, "  Filetypes: " .. table.concat(client.config.filetypes or {}, ", "))
+
+			-- 收集支持的功能
+			local caps = client.server_capabilities
+			local features = {}
+			if caps then
+				if caps.completionProvider then
+					table.insert(features, "completion")
+				end
+				if caps and caps.hoverProvider then
+					table.insert(features, "hover")
+				end
+				if caps.definitionProvider then
+					table.insert(features, "definition")
+				end
+				if caps.referencesProvider then
+					table.insert(features, "references")
+				end
+				if caps.renameProvider then
+					table.insert(features, "rename")
+				end
+				if caps.codeActionProvider then
+					table.insert(features, "code_action")
+				end
+				if caps.documentFormattingProvider then
+					table.insert(features, "formatting")
+				end
+			end
+
+			table.insert(lines, "  Features: " .. table.concat(features, ","))
+			table.insert(lines, "")
+		end
 	end
 
-	print("󰒋 LSP Status for buffer " .. bufnr .. ":")
-	print("─────────────────────────────────")
+	-- ===================== 悬浮窗口核心 =====================
+	-- 创建临时缓冲区
+	local float_buf = vim.api.nvim_create_buf(false, true)
+	-- 计算窗口尺寸（自适应内容+屏幕大小）
+	local width = math.floor(vim.o.columns * 0.5)
+	local height = math.min(#lines + 2, vim.o.lines - 10)
+	local row = math.floor((vim.o.lines - height) / 2)
+	local col = math.floor((vim.o.columns - width) / 2)
 
-	for i, client in ipairs(clients) do
-		print(string.format("󰌘 Client %d: %s (ID: %d)", i, client.name, client.id))
-		print("  Root: " .. (client.config.root_dir or "N/A"))
-		print("  Filetypes: " .. table.concat(client.config.filetypes or {}, ", "))
+	-- 创建悬浮窗口
+	vim.api.nvim_open_win(float_buf, true, {
+		relative = "editor",
+		row = row,
+		col = col,
+		width = width,
+		height = height,
+		style = "minimal", -- 无多余UI
+		border = "rounded", -- 圆角边框
+		title = " LSP Status ",
+		title_pos = "center",
+	})
 
-		local caps = client.server_capabilities
-		local features = {}
-		if caps.completionProvider then
-			table.insert(features, "completion")
-		end
-		if caps.hoverProvider then
-			table.insert(features, "hover")
-		end
-		if caps.definitionProvider then
-			table.insert(features, "definition")
-		end
-		if caps.referencesProvider then
-			table.insert(features, "references")
-		end
-		if caps.renameProvider then
-			table.insert(features, "rename")
-		end
-		if caps.codeActionProvider then
-			table.insert(features, "code_action")
-		end
-		if caps.documentFormattingProvider then
-			table.insert(features, "formatting")
-		end
+	-- 写入所有内容
+	vim.api.nvim_buf_set_lines(float_buf, 0, -1, false, lines)
 
-		print("  Features: " .. table.concat(features, ", "))
-		print("")
-	end
-end, { desc = "Show brief LSP status" })
+	-- 窗口设置：只读 + 关闭自动销毁
+	vim.bo[float_buf].modifiable = false
+	vim.bo[float_buf].bufhidden = "wipe"
+	-- 按键 q 关闭窗口
+	vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = float_buf, silent = true })
+end, { desc = "Show brief LSP status in float window" })
 
--- lsp
-local api, lsp = vim.api, vim.lsp
-api.nvim_create_user_command("LspLog", function()
-	vim.cmd(string.format("tabnew %s", lsp.get_log_path()))
+-- Lsp Log
+vim.api.nvim_create_user_command("LspLog", function()
+	vim.cmd(string.format("tabnew %s", vim.lsp.log.get_filename()))
 end, {
 	desc = "Opens the Nvim LSP client log.",
 })

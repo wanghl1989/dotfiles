@@ -503,84 +503,45 @@ proxy() {
 # conda 手动启用
 # ------------------------------
 con() {
-    # ==================== 配置与基础检查 ====================
-    local usage="用法: con [on|off]  （on=启用Conda，off=关闭Conda）"
     # 检查CONDA_HOME
     if [ -z "${CONDA_HOME}" ] || [ ! -d "${CONDA_HOME}" ]; then
         echo "错误: 请先设置Conda安装路径"
         echo "示例: export CONDA_HOME=$HOME/miniconda3"
         return 1
     fi
-    # 无参数/非法参数提示
-    if [ $# -ne 1 ] || [[ ! "$1" =~ ^(on|off)$ ]]; then
-        echo "$usage"
-        return 1
-    fi
+    local current_shell=$(basename "$SHELL")
 
-    # ==================== 检测当前Shell类型 ====================
-    local current_shell
-    current_shell=$(basename "$SHELL")
-
-    # ==================== 核心功能：启用 Conda ====================
-    if [ "$1" = "on" ]; then
-        # 避免重复初始化
-        if [ -n "${__CONDA_ORIGINAL_PATH:-}" ]; then
-            echo "✅ Conda 已启用，无需重复操作"
+    local __conda_setup
+    # 根据Shell类型执行对应Hook
+    case "$current_shell" in
+        bash)
+            __conda_setup="$("${CONDA_HOME}/bin/conda" 'shell.bash' 'hook' 2>/dev/null)"
+            ;;
+        zsh)
+            __conda_setup="$("${CONDA_HOME}/bin/conda" 'shell.zsh' 'hook' 2>/dev/null)"
+            ;;
+        *)
+            echo "⚠️ 未适配 $current_shell，使用基础PATH模式"
+            export PATH="${CONDA_HOME}/bin:$PATH"
             return 0
-        fi
-        # 保存原始PATH（关闭时用于还原）
-        export __CONDA_ORIGINAL_PATH="$PATH"
+            ;;
+    esac
 
-        local __conda_setup
-        # 根据Shell类型执行对应Hook
-        case "$current_shell" in
-            bash)
-                __conda_setup="$("${CONDA_HOME}/bin/conda" 'shell.bash' 'hook' 2>/dev/null)"
-                ;;
-            zsh)
-                __conda_setup="$("${CONDA_HOME}/bin/conda" 'shell.zsh' 'hook' 2>/dev/null)"
-                ;;
-            *)
-                echo "⚠️ 未适配 $current_shell，使用基础PATH模式"
-                export PATH="${CONDA_HOME}/bin:$PATH"
-                return 0
-                ;;
-        esac
-
-        # 加载Conda环境（官方标准方式）
-        if [ $? -eq 0 ]; then
-            eval "$__conda_setup"
+    # 加载Conda环境（官方标准方式）
+    if [ $? -eq 0 ]; then
+        eval "$__conda_setup"
+    else
+        # 兼容旧版Conda
+        if [ -f "${CONDA_HOME}/etc/profile.d/conda.sh" ]; then
+            . "${CONDA_HOME}/etc/profile.d/conda.sh"
         else
-            # 兼容旧版Conda
-            if [ -f "${CONDA_HOME}/etc/profile.d/conda.sh" ]; then
-                . "${CONDA_HOME}/etc/profile.d/conda.sh"
-            else
-                export PATH="${CONDA_HOME}/bin:$PATH"
-            fi
+            export PATH="${CONDA_HOME}/bin:$PATH"
         fi
-
-        # 清理临时变量
-        unset __conda_setup
-        return 0
     fi
 
-    # ==================== 核心功能：关闭 Conda ====================
-    if [ "$1" = "off" ]; then
-        # 检查是否已启用
-        if [ -z "${__CONDA_ORIGINAL_PATH:-}" ]; then
-            echo "✅ Conda 未启用，无需关闭"
-            return 0
-        fi
-
-        # 退出所有Conda环境
-        conda deactivate 2>/dev/null
-        # 还原原始PATH（彻底移除Conda环境）
-        export PATH="$__CONDA_ORIGINAL_PATH"
-        # 清理临时变量
-        unset __CONDA_ORIGINAL_PATH
-
-        return 0
-    fi
+    # 清理临时变量
+    unset __conda_setup
+    return 0
 }
 
 # ------------------------------
