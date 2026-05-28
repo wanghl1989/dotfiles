@@ -1,7 +1,7 @@
 patch:
   schema_list:
-    - schema: luna_pinyin_simp
     - schema: rime_ice
+    - schema: luna_pinyin_simp
     - schema: numbers
 
   menu/page_size: 9 # 候选词个数
