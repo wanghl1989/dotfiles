@@ -49,6 +49,9 @@ local function set_custom_highlights()
         bg = theme_colors.bg,
         fg = theme_colors.green
     })
+    vim.api.nvim_set_hl(0, "Visual", {
+        bg = "#5d6e63",  -- 背景色（十六进制）
+    })
 end
 
 vim.api.nvim_create_autocmd("ColorScheme", { callback = set_custom_highlights })

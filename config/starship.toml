@@ -117,7 +117,7 @@ format = '[ ─┘]($style)'
 
 [fill]
 symbol = ' '
-style = 'bold #a9b665'
+style = 'bold #89b482'
 
 
 [cmake]
@@ -126,7 +126,7 @@ format = '[ $symbol($version )]($style)'
 
 [conda]
 symbol = " "
-style = 'bold #89b482'
+style = 'bold #a9b665'
 format = '[$symbol$environment ]($style)'
 
 
@@ -262,7 +262,7 @@ format = '[$symbol$version]($style) '
 
 [python]
 symbol = " "
-style = 'bold fg:#89b482'
+style = 'bold fg:#a9b665'
 format = '[${symbol}${pyenv_prefix}(${version})(\($virtualenv\)) ]($style)'
 
 [ruby]
