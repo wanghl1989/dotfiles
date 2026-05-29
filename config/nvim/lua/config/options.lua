@@ -45,12 +45,15 @@ opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to qu
 opt.undofile = true
 opt.undolevels = 10000
 opt.updatetime = 200 -- Save swap file and trigger CursorHold
+opt.swapfile = false -- Save swap file or not
 opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
 opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
 opt.winborder = "rounded"
 opt.wrap = false -- Disable line wrap
 
+opt.completeopt = 'menu,menuone,fuzzy,noinsert'
+-- opt.grepprg = 'rg --vimgrep --no-messages --smart-case'
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
 vim.o.jumpoptions = "stack" -- or "view"
