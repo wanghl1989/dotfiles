@@ -49,7 +49,7 @@ $cmd_duration\
 """
 
 # add_newline = true
-continuation_prompt = '-> '
+continuation_prompt = '⇒ '
 
 
 [os]
