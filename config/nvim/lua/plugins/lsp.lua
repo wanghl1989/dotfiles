@@ -184,7 +184,7 @@ vim.api.nvim_create_user_command("LspRestart", function()
 
 	for _, client in ipairs(clients) do
 		vim.notify("Restarting " .. client.name, vim.log.levels.INFO)
-		vim.lsp.stop_client(client.id)
+		client:stop(true)
 	end
 
 	vim.defer_fn(function()
@@ -195,6 +195,58 @@ end, { desc = "Restart LSP clients for current buffer" })
 vim.api.nvim_create_user_command("LspStatus", function()
 	local clients = vim.lsp.get_clients()
 	local lines = {}
+	local function dump_yaml(tbl, indent)
+		indent = indent or 0
+		local res = {}
+		local pad = string.rep(" ", indent)
+
+		for k, v in pairs(tbl) do
+			local key = tostring(k)
+			if v == vim.NIL then
+				table.insert(res, pad .. key .. ": null")
+			elseif type(v) == "boolean" then
+				table.insert(res, pad .. key .. ": " .. tostring(v))
+			elseif type(v) == "number" then
+				table.insert(res, pad .. key .. ": " .. tostring(v))
+			elseif type(v) == "string" then
+				table.insert(res, pad .. key .. ': "' .. v .. '"')
+			elseif type(v) == "table" then
+				-- 判断是否为数组
+				local is_arr = true
+				local max_key = 0
+				for kk in pairs(v) do
+					if type(kk) ~= "number" or kk < 1 or kk ~= math.floor(kk) then
+						is_arr = false
+						break
+					end
+					max_key = math.max(max_key, kk)
+				end
+
+				table.insert(res, pad .. key .. ":")
+				local sub = indent + 2
+				if is_arr then
+					for _, item in ipairs(v) do
+						local sp = string.rep(" ", sub)
+						if type(item) == "table" then
+							table.insert(res, sp .. "-")
+							vim.list_extend(res, dump_yaml({ [""] = item }, sub + 2))
+						elseif item == vim.NIL then
+							table.insert(res, sp .. "- null")
+						elseif type(item) == "string" then
+							table.insert(res, sp .. '- "' .. item .. '"')
+						else
+							table.insert(res, sp .. "- " .. tostring(item))
+						end
+					end
+				else
+					vim.list_extend(res, dump_yaml(v, sub))
+				end
+			else
+				table.insert(res, pad .. key .. ": <" .. type(v) .. ">")
+			end
+		end
+		return res
+	end
 
 	-- 无LSP客户端时直接提示
 	if #clients == 0 then
@@ -211,8 +263,16 @@ vim.api.nvim_create_user_command("LspStatus", function()
 		-- 遍历所有客户端，拼接信息
 		for i, client in ipairs(clients) do
 			table.insert(lines, string.format("󰌘 Client %d: %s (ID: %d)", i, client.name, client.id))
-			table.insert(lines, "  Root: " .. (client.config.root_dir or "N/A"))
-			table.insert(lines, "  Filetypes: " .. table.concat(client.config.filetypes or {}, ", "))
+			table.insert(lines, "  Root: " .. (client.root_dir or "N/A"))
+			table.insert(lines, "  Settings:")
+			local sett = client.settings or {}
+			if vim.tbl_isempty(sett) then
+				table.insert(lines, "    <empty>")
+			else
+				-- 生成yaml，整体再缩进2空格
+				local yaml_list = dump_yaml(sett, 4)
+				vim.list_extend(lines, yaml_list)
+			end
 
 			-- 收集支持的功能
 			local caps = client.server_capabilities
