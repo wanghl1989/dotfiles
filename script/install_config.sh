@@ -87,6 +87,7 @@ create_symlink "$BASE_ROOT/Rime" "$RIME_PATH"
 HOME_ITEMS=(
   ".vimrc"             # vim config
   ".cargo/config.toml" # cargo
+  ".condarc"
 )
 
 for item in "${HOME_ITEMS[@]}"; do
