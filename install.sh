@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 echo "-----------------------------------------------------------------------"
 echo "🚀 Install config file"
 script/install_config.sh
