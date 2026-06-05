@@ -26,7 +26,7 @@
 format = """
 [░▒▓](#a9b665)\
 $os\
-[](fg:#a9b665 bg:#444444)\
+[ ](fg:#a9b665 bg:#444444)\
 $directory\
 [ ](fg:#444444)\
 $git_branch\
@@ -67,9 +67,9 @@ show_always = true
 [directory]
 # read_only = "[󰌾]"
 # home_symbol = ""
-truncation_length = 2
+truncation_length = 3
 truncation_symbol = ""
-style = "bold fg:#d4be98 bg:#444444"
+style = "bold fg:#dedede bg:#444444"
 format = "[  $path ]($style)"
 
 [directory.substitutions]
@@ -124,10 +124,7 @@ style = 'bold #89b482'
 symbol = " "
 format = '[ $symbol($version )]($style)'
 
-[conda]
-symbol = " "
-style = 'bold #a9b665'
-format = '[$symbol$environment ]($style)'
+
 
 
 [deno]
@@ -259,6 +256,10 @@ symbol = "󰏗 "
 style = "bold fg:#e78a4e"
 format = '[$symbol$version]($style) '
 
+[conda]
+symbol = " "
+style = 'bold #a9b665'
+format = '[$symbol$environment ]($style)'
 
 [python]
 symbol = " "
