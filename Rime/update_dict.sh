@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 names=("cn_dicts" "en_dicts" "opencc")
 base_url="https://github.com/iDvel/rime-ice/releases/download/nightly"

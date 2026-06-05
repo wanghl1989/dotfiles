@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 os_kernel=$(uname -s)
 

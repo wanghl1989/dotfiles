@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo "=========== 设置zsh和bash ==============="
 if command -v readlink &>/dev/null; then
