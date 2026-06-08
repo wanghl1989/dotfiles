@@ -260,6 +260,7 @@ format = '[$symbol$version]($style) '
 symbol = " "
 style = 'bold #a9b665'
 format = '[$symbol$environment ]($style)'
+ignore_base = false
 
 [python]
 symbol = " "

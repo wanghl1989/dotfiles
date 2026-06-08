@@ -3,3 +3,4 @@ channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
 show_channel_urls: true
 ssl_verify: false
+changeps1: false # 不显示默认的cli prompt, 用starship代替
