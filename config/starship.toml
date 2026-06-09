@@ -29,6 +29,8 @@ $os\
 [ ](fg:#a9b665 bg:#444444)\
 $directory\
 [ ](fg:#444444)\
+$time\
+$fill\
 $git_branch\
 $git_status\
 $git_commit\
@@ -41,6 +43,7 @@ $nodejs\
 $python\
 $conda\
 $docker_context\
+$line_break\
 $character\
 """
 
@@ -54,7 +57,7 @@ continuation_prompt = '⇒ '
 
 [os]
 disabled = false
-style = "bold bg:#a9b665 fg:#0d1011"
+style = "bg:#a9b665 fg:#1d2021"
 format = '[ $symbol ]($style)'
 # format = '[$symbol ]($style)'
 
