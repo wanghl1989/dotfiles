@@ -148,6 +148,8 @@ alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
 
 
+
+
 alt-ctrl-up = ['move-workspace-to-monitor up']
 alt-ctrl-right = ['move-workspace-to-monitor right']
 alt-ctrl-left = ['move-workspace-to-monitor left']
@@ -187,6 +189,9 @@ f = [
 backspace = ['close-all-windows-but-current', 'mode main']
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 #s = ['layout sticky tiling', 'mode main']
+
+alt-1 = 'focus-monitor 1'
+alt-2 = 'focus-monitor 2'
 
 alt-shift-h = ['join-with left', 'mode main']
 alt-shift-j = ['join-with down', 'mode main']

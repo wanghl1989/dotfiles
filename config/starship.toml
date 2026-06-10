@@ -26,14 +26,13 @@
 format = """
 [░▒▓](#a9b665)\
 $os\
-[ ](fg:#a9b665 bg:#444444)\
+[ ](fg:#a9b665 bg:#444444)\
 $directory\
-[ ](fg:#444444)\
-$time\
-$fill\
+[ ](fg:#444444)\
 $git_branch\
 $git_status\
 $git_commit\
+$fill\
 $c\
 $cpp\
 $rust\
@@ -43,6 +42,7 @@ $nodejs\
 $python\
 $conda\
 $docker_context\
+$time\
 $line_break\
 $character\
 """
@@ -51,8 +51,8 @@ right_format = """
 $cmd_duration\
 """
 
-# add_newline = true
-continuation_prompt = '⇒ '
+add_newline = true
+continuation_prompt = "[▸▹ ](dimmed white)"
 
 
 [os]
@@ -70,10 +70,10 @@ show_always = true
 [directory]
 # read_only = "[󰌾]"
 # home_symbol = ""
-truncation_length = 3
+truncation_length = 9
 truncation_symbol = ""
 style = "bold fg:#dedede bg:#444444"
-format = "[  $path ]($style)"
+format = "[ $path ]($style)"
 
 [directory.substitutions]
 "Documents" = "󰈙 "
