@@ -77,15 +77,16 @@ fi
 if command -v lazydocker &> /dev/null; then
   alias lzd="lazydocker"
 fi
-if [ "$TERM" = "xterm-kitty" ]; then
+
+if [ "$TERM" = "xterm-kitty" ] && [ -z "$SSH_TTY" ]; then
   alias ssh="kitten ssh"
   alias icat="kitten icat"
   alias kdiff="kitten diff"
   export TERMINAL=kitty
 fi
 
-# 仅在 Ghostty 终端中生效：用 ghostty ssh 替代 ssh
-if [ "$TERM" = "xterm-ghostty" ]; then
+# Ghostty 终端专属配置：仅本地非 SSH 环境生效
+if [ "$TERM" = "xterm-ghostty" ] && [ -z "$SSH_TTY" ]; then
   alias ssh="ghostty +ssh --"
 fi
 

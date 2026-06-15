@@ -26,7 +26,7 @@
 format = """
 [░▒▓](#a9b665)\
 $os\
-[ ](fg:#a9b665 bg:#444444)\
+[](fg:#a9b665 bg:#444444)\
 $directory\
 [ ](fg:#444444)\
 $git_branch\
