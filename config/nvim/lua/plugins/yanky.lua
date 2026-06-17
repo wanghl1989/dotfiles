@@ -5,11 +5,14 @@ vim.pack.add({
 require("yanky").setup({
 	system_clipboard = {
 		sync_with_ring = not vim.env.SSH_CONNECTION,
-		clipboard_register = nil,
+		clipboard_register = "+",
 	},
 	highlight = {
 		timer = 150,
 	},
+    ring = {
+        storage = "memory"
+    }
 })
 
 
