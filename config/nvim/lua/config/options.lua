@@ -3,7 +3,29 @@ local opt = vim.opt
 opt.autowrite = true -- Enable auto write
 -- only set clipboard if not in ssh, to make sure the OSC 52
 -- integration works automatically.
-opt.clipboard = vim.env.SSH_CONNECTION and "" or "unnamedplus" -- Sync with system clipboard
+-- opt.clipboard = vim.env.SSH_CONNECTION and "" or "unnamedplus" -- Sync with system clipboard
+-- 检测当前是否为 SSH 环境
+local is_ssh = vim.env.SSH_TTY ~= nil or vim.env.SSH_CONNECTION ~= nil
+
+if is_ssh then
+  -- SSH 环境下使用 OSC52 作为系统剪贴板提供者
+  vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+      ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+      ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+    },
+    -- OSC52 不支持从本地读取剪贴板，这里降级使用内部无名寄存器
+    paste = {
+      ['+'] = function() return vim.split(vim.fn.getreg('"'), '\n') end,
+      ['*'] = function() return vim.split(vim.fn.getreg('"'), '\n') end,
+    },
+  }
+end
+
+-- 让 y 操作默认同步到系统剪贴板
+vim.opt.clipboard:append('unnamedplus')
+
 opt.completeopt = "menu,menuone,noselect"
 opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
