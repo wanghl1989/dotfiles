@@ -23,12 +23,13 @@
 # $character\
 # """
 
+
 format = """
 [░▒▓](#a9b665)\
 $os\
-[](fg:#a9b665 bg:#444444)\
+[](fg:#a9b665 bg:#343434)\
 $directory\
-[ ](fg:#444444)\
+[ ](fg:#343434)\
 $git_branch\
 $git_status\
 $git_commit\
@@ -72,7 +73,7 @@ show_always = true
 # home_symbol = ""
 truncation_length = 9
 truncation_symbol = ""
-style = "bold fg:#dedede bg:#444444"
+style = "bold fg:#d4be98 bg:#343434"
 format = "[ $path ]($style)"
 
 [directory.substitutions]
@@ -292,7 +293,7 @@ vimcmd_visual_symbol = '[󰜷](bold #e78a4e)'
 
 [time]
 disabled = false
-style = "bold fg:#7daea3"
+style = "bold fg:#e78a4e"
 format = '[ $time]($style)'
 time_format = "%H:%M"
 
