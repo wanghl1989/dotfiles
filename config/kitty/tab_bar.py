@@ -23,11 +23,11 @@ right_status_length = -1
 opts = get_options()
 
 bar_fg = as_rgb(color_as_int(opts.foreground))
-bar_bg = as_rgb(color_as_int(opts.background))
+bar_bg = as_rgb(color_as_int(opts.tab_bar_background))
 
-ICON = "  \uf489 " + os.uname().nodename + " "
+ICON = " \uf489 " + os.uname().nodename + " "
 icon_fg = as_rgb(color_as_int(opts.color4))
-icon_bg = as_rgb(color_as_int(opts.background))
+icon_bg = as_rgb(color_as_int(opts.tab_bar_background))
 
 # CLOCK = " \ue641 %H:%M "
 # clock_fg = as_rgb(color_as_int(opts.foreground))
@@ -38,7 +38,11 @@ date_fg = as_rgb(color_as_int(opts.color3))
 date_bg = as_rgb(color_as_int(opts.background))
 
 # Requires nerdfont: https://www.nerdfonts.com
-SEPARATOR_SYMBOL_LEFT = ""
+SEPARATOR_SYMBOL_LEFT1 = "▓"
+SEPARATOR_SYMBOL_LEFT2 = "▒"
+SEPARATOR_SYMBOL_LEFT3 = "░"
+SEPARATOR_LEFT = ""
+SEPARATOR_RIGHT = ""
 SOFT_SEPARATOR_SYMBOL_LEFT = "\ue0b1"
 SEPARATOR_SYMBOL_RIGHT = "\ue0b2"
 SEPARATOR_DOT = "\ueb10"
@@ -50,15 +54,21 @@ def _draw_icon(screen: Screen, index: int) -> int:
     if index != 1:
         return 0
     # fg, bg = screen.cursor.fg, screen.cursor.bg
+
+    # screen.cursor.bg = icon_bg
+    # screen.draw(" ")
+    screen.cursor.fg = icon_bg
+    screen.cursor.bg = icon_fg
+    screen.cursor.bold = True
+    screen.draw(SEPARATOR_SYMBOL_LEFT1)
+    screen.draw(SEPARATOR_SYMBOL_LEFT2)
+    screen.draw(SEPARATOR_SYMBOL_LEFT3)
+    screen.draw(ICON)
     screen.cursor.fg = icon_fg
     screen.cursor.bg = icon_bg
-    screen.draw(ICON)
-
-    screen.cursor.fg = bar_fg
-    screen.cursor.bg = icon_bg
-    screen.draw(SEPARATOR_SYMBOL_LEFT)
+    screen.draw(SEPARATOR_LEFT)
     screen.cursor.fg = 0
-    screen.cursor.x = len(ICON) + len(SEPARATOR_SYMBOL_LEFT)
+    screen.cursor.x = len(ICON) + len(SEPARATOR_SYMBOL_LEFT1) +  len(SEPARATOR_SYMBOL_LEFT2) +  len(SEPARATOR_SYMBOL_LEFT3) + 2
     return screen.cursor.x
 
 
@@ -149,9 +159,13 @@ def _draw_right_status(screen: Screen, is_last: bool, cells: list) -> int:
     draw_attributed_string(Formatter.reset, screen)
     screen.cursor.x = screen.columns - right_status_length
     screen.cursor.bg = 0
-    for status, color_fg, _color_bg in cells:
+    for i, (status, color_fg, _color_bg) in enumerate(cells):
+        screen.cursor.bg = bar_bg if i == 0 else cells[i-1][1]
         screen.cursor.fg = color_fg
-        # screen.cursor.bg = color_bg
+        screen.draw(SEPARATOR_RIGHT)
+        
+        screen.cursor.fg = bar_bg
+        screen.cursor.bg = color_fg
         screen.draw(status)
     screen.cursor.fg = 0
     return screen.cursor.x
@@ -160,7 +174,7 @@ def _draw_right_status(screen: Screen, is_last: bool, cells: list) -> int:
 def _cell_length(cells):
     right_status_length = RIGHT_MARGIN
     for cell in cells:
-        right_status_length += len(str(cell[0]))
+        right_status_length += len(str(cell[0])) + len(SEPARATOR_RIGHT)
     return right_status_length
 
 
