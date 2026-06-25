@@ -18,24 +18,23 @@ else
 fi
   
 SCRIPT_PATH=$(cd "$(dirname "$0")" && pwd -P)/$(basename "$0")
-BASE_ROOT=$(dirname $(dirname "$SCRIPT_PATH"))
+BASE_ROOT=$(dirname "$SCRIPT_PATH")
 echo -e "-> Install config to server ${SERVER} on port ${PORT}"
 echo -e "$BASE_ROOT"
 
-CONFIG_ITEMS=("pip" "tmux" "uv" "ruff")
+CONFIG_ITEMS=("pip" "tmux" "uv")
 DEST_DIR="$SERVER/.config"
 for item in "${CONFIG_ITEMS[@]}"; do
   source_path="$BASE_ROOT/config/$item"
   link_path="$DEST_DIR/$item"
   scp -r -P "${PORT}" "${source_path}" "${link_path}"
-
 done
 
 
 CONFIG_ITEMS=(".condarc" ".vimrc")
 DEST_DIR="$SERVER"
 for item in "${CONFIG_ITEMS[@]}"; do
-  source_path="$BASE_ROOT/$item"
+  source_path="$BASE_ROOT/home/$item"
   link_path="$DEST_DIR/$item"
   scp -r -P $PORT $source_path  $link_path
 done
