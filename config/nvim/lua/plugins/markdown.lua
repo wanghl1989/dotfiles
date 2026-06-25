@@ -2,16 +2,18 @@ vim.pack.add({
     { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
     { src = "https://github.com/3rd/image.nvim" },
 })
-require("image").setup({
-    backend = "kitty",
-    processor = "magick_cli",
-    integrations = {
-        markdown = {
-            enabled = true,
-            clear_in_insert_mode = true,
+if vim.env.KITTY_SCROLLBACK_NVIM ~= 'true' then
+    require("image").setup({
+        backend = "kitty",
+        processor = "magick_cli",
+        integrations = {
+            markdown = {
+                enabled = true,
+                clear_in_insert_mode = true,
+            },
         },
-    },
-})
+    })
+end
 
 require("render-markdown").setup({
     file_types = { "markdown" },

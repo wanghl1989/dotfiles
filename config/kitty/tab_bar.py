@@ -34,15 +34,16 @@ icon_bg = as_rgb(color_as_int(opts.tab_bar_background))
 # clock_bg = as_rgb(color_as_int(opts.color0))
 
 DATE = " \uf073 %Y-%m-%d "
-date_fg = as_rgb(color_as_int(opts.color3))
-date_bg = as_rgb(color_as_int(opts.background))
+date_fg = as_rgb(color_as_int(opts.color8))
+date_bg = as_rgb(color_as_int(opts.foreground))
 
 # Requires nerdfont: https://www.nerdfonts.com
 SEPARATOR_SYMBOL_LEFT1 = "▓"
 SEPARATOR_SYMBOL_LEFT2 = "▒"
 SEPARATOR_SYMBOL_LEFT3 = "░"
 SEPARATOR_LEFT = ""
-SEPARATOR_RIGHT = ""
+# SEPARATOR_RIGHT = ""
+
 SOFT_SEPARATOR_SYMBOL_LEFT = "\ue0b1"
 SEPARATOR_SYMBOL_RIGHT = "\ue0b2"
 SEPARATOR_DOT = "\ueb10"
@@ -68,61 +69,9 @@ def _draw_icon(screen: Screen, index: int) -> int:
     screen.cursor.bg = icon_bg
     screen.draw(SEPARATOR_LEFT)
     screen.cursor.fg = 0
-    screen.cursor.x = len(ICON) + len(SEPARATOR_SYMBOL_LEFT1) +  len(SEPARATOR_SYMBOL_LEFT2) +  len(SEPARATOR_SYMBOL_LEFT3) + 2
+    screen.cursor.x = len(ICON) + len(SEPARATOR_SYMBOL_LEFT1) +  len(SEPARATOR_SYMBOL_LEFT2) +  len(SEPARATOR_SYMBOL_LEFT3) + len(SEPARATOR_LEFT)
     return screen.cursor.x
 
-
-UNPLUGGED_ICONS = {
-    10: "󰁺",
-    20: "󰁻",
-    30: "󰁼",
-    40: "󰁽",
-    50: "󰁾",
-    60: "󰁿",
-    70: "󰂀",
-    80: "󰂁",
-    90: "󰂂",
-    100: "󰁹",
-}
-PLUGGED_ICONS = {
-    10: "󰢜 ",
-    20: "󰂆 ",
-    30: "󰂇 ",
-    40: "󰂈 ",
-    50: "󰢝 ",
-    60: "󰂉 ",
-    70: "󰢞 ",
-    80: "󰂊 ",
-    90: "󰂋 ",
-    100: "󰂅 ",
-}
-ERROR_ICON = "󰂑"
-
-UNPLUGGED_COLORS = {
-    15: as_rgb(color_as_int(opts.color1)),
-    16: as_rgb(color_as_int(opts.color3)),
-    80: as_rgb(color_as_int(opts.color3)),
-    100: as_rgb(color_as_int(opts.color2)),
-}
-PLUGGED_COLORS = {
-    15: as_rgb(color_as_int(opts.color1)),
-    16: as_rgb(color_as_int(opts.color6)),
-    80: as_rgb(color_as_int(opts.color6)),
-    100: as_rgb(color_as_int(opts.color2)),
-}
-
-
-bat_fg = as_rgb(color_as_int(opts.color0))
-
-
-def _get_closest(dictionary, value):
-    keys = dictionary.keys()
-
-    def min_distance(x):
-        return abs(x - value)
-
-    closestIdx = min(keys, key=min_distance)
-    return dictionary[closestIdx]
 
 
 def _draw_left_status(
@@ -133,7 +82,7 @@ def _draw_left_status(
     max_title_length: int,
     index: int,
     is_last: bool,
-    extra_data: ExtraData,
+    _extra_data: ExtraData,
 ) -> int:
     draw_title(draw_data, screen, tab, index)
     trailing_spaces = min(max_title_length - 1, draw_data.trailing_spaces)
@@ -149,20 +98,20 @@ def _draw_left_status(
     if not is_last:
         screen.cursor.bg = bar_bg
         screen.draw(SEPARATOR_DOT)
-    screen.cursor.bg = 0
+    screen.cursor.bg = bar_bg
     return end
 
 
 def _draw_right_status(screen: Screen, is_last: bool, cells: list) -> int:
     if not is_last:
-        return 0
+        return screen.cursor.x
     draw_attributed_string(Formatter.reset, screen)
     screen.cursor.x = screen.columns - right_status_length
     screen.cursor.bg = 0
-    for i, (status, color_fg, _color_bg) in enumerate(cells):
-        screen.cursor.bg = bar_bg if i == 0 else cells[i-1][1]
-        screen.cursor.fg = color_fg
-        screen.draw(SEPARATOR_RIGHT)
+    for _i, (status, color_fg, _color_bg) in enumerate(cells):
+        # screen.cursor.bg = bar_bg if i == 0 else cells[i-1][1]
+        # screen.cursor.fg = color_fg
+        # screen.draw(SEPARATOR_RIGHT)
         
         screen.cursor.fg = bar_bg
         screen.cursor.bg = color_fg
@@ -174,7 +123,7 @@ def _draw_right_status(screen: Screen, is_last: bool, cells: list) -> int:
 def _cell_length(cells):
     right_status_length = RIGHT_MARGIN
     for cell in cells:
-        right_status_length += len(str(cell[0])) + len(SEPARATOR_RIGHT)
+        right_status_length += len(str(cell[0]))
     return right_status_length
 
 

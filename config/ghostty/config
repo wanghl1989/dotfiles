@@ -11,7 +11,7 @@ font-family = IosevkaTermSlab Nerd Font Mono
 
 font-size = 15
 
-background-opacity = 0.9
+background-opacity = 0.85
 background-blur = 20
 
 clipboard-write=allow

@@ -86,9 +86,9 @@ if [ "$TERM" = "xterm-kitty" ] && [ -z "$SSH_TTY" ]; then
 fi
 
 # Ghostty 终端专属配置：仅本地非 SSH 环境生效
-if [ "$TERM" = "xterm-ghostty" ] && [ -z "$SSH_TTY" ]; then
-  alias ssh="ghostty +ssh --"
-fi
+# if [ "$TERM" = "xterm-ghostty" ] && [ -z "$SSH_TTY" ]; then
+#   alias ssh="ghostty +ssh --"
+# fi
 
 # python
 alias vat="source .venv/bin/activate" # source python venv

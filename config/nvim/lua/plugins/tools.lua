@@ -1,5 +1,6 @@
 vim.pack.add({
-    "https://github.com/christoomey/vim-tmux-navigator",
+    { src = "https://github.com/christoomey/vim-tmux-navigator" }, 
+    { src = "https://github.com/mikesmithgh/kitty-scrollback.nvim"}
 })
 
 if vim.env.TMUX ~= nil and vim.env.TMUX ~= "" then
@@ -17,16 +18,4 @@ end
 
 
 
-
-vim.pack.add({
-    "https://github.com/mikesmithgh/kitty-scrollback.nvim",
-})
-
-
-vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
-	group = vim.api.nvim_create_augroup("SetupKitty", { clear = true }),
-	once = true,
-	callback = function()
-        require("kitty-scrollback").setup()
-    end
-})
+require("kitty-scrollback").setup()
