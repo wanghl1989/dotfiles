@@ -43,13 +43,14 @@ require("render-markdown").setup({
       "MiniStatusLineModeCommand",
       "MiniStatusLineModeOther",
     },
+
     icons = {
-      " ",
-      " ",
-      " ",
-      " ",
-      " ",
-      " ",
+      "󱪼 ",
+      "󱪼󱪼 ",
+      "󱪼󱪼󱪼 ",
+      "󱪼󱪼󱪼󱪼 ",
+      "󱪼󱪼󱪼󱪼󱪼 ",
+      "󱪼󱪼󱪼󱪼󱪼󱪼 ",
     },
     },
     bullet = {
