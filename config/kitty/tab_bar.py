@@ -61,6 +61,7 @@ def _draw_icon(screen: Screen, index: int) -> int:
     screen.cursor.fg = icon_bg
     screen.cursor.bg = icon_fg
     screen.cursor.bold = True
+    screen.cursor.italic = False
     screen.draw(SEPARATOR_SYMBOL_LEFT1)
     screen.draw(SEPARATOR_SYMBOL_LEFT2)
     screen.draw(SEPARATOR_SYMBOL_LEFT3)
@@ -84,6 +85,7 @@ def _draw_left_status(
     is_last: bool,
     _extra_data: ExtraData,
 ) -> int:
+    screen.cursor.bold = screen.cursor.italic = False
     draw_title(draw_data, screen, tab, index)
     trailing_spaces = min(max_title_length - 1, draw_data.trailing_spaces)
     max_title_length -= trailing_spaces
@@ -94,7 +96,6 @@ def _draw_left_status(
     if trailing_spaces:
         screen.draw(" " * trailing_spaces)
     end = screen.cursor.x
-    screen.cursor.bold = screen.cursor.italic = False
     if not is_last:
         screen.cursor.bg = bar_bg
         screen.draw(SEPARATOR_DOT)

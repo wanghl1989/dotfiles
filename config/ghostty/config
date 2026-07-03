@@ -6,8 +6,9 @@ window-padding-y = 10
 window-padding-balance = true
 
 #font-family = GoogleSansCode Nerd Font Mono
-font-family = IosevkaTermSlab Nerd Font Mono
+#font-family = IosevkaTermSlab Nerd Font Mono
 #font-family = ComicShannsMono Nerd Font Mono
+font-family = ZedMono Nerd Font Mono
 
 font-size = 15
 
