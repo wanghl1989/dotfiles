@@ -8,26 +8,9 @@ else
   FONTBASE="$HOME/.local/share/fonts"
 fi
 
-if [[ ! -e $FONTBASE ]]; then 
-  mkdir -p $FONTBASE
-fi 
-# FONT_DIR="$FONTBASE/ComicShannsMono"
-# if [[ ! -d "$FONT_DIR" ]]; then
-#   echo "Installing Nerd Fonts. If the download fails, you can try deleting the directory $FONT_DIR and restarting zsh."
-#   mkdir -p $FONT_DIR
-#   curl -L "https://github.com/cap153/config/releases/download/%E6%88%91%E4%BD%BF%E7%94%A8%E7%9A%84%E5%AD%97%E4%BD%93/ComicShannsMono.tar.gz" -o /tmp/font.tar.gz
-#   tar -zxvf /tmp/font.tar.gz -C $FONT_DIR
-# fi
-#
-# FONT_DIR="$FONTBASE/LxgwWenKai-Screen"
-# if [[ ! -d "$FONT_DIR" ]]; then
-#   echo "Installing Chinese fonts. If the download fails, you can try deleting the directory $FONT_DIR and restarting zsh."
-#   mkdir -p $FONT_DIR
-#   curl -L "https://github.com/cap153/config/releases/download/%E6%88%91%E4%BD%BF%E7%94%A8%E7%9A%84%E5%AD%97%E4%BD%93/LxgwWenKai-Screen.tar.gz" -o /tmp/font.tar.gz
-#   tar -zxvf /tmp/font.tar.gz -C $FONT_DIR
-# fi
-#
-#
+if [[ ! -e $FONTBASE ]]; then
+  mkdir -p "$FONTBASE"
+fi
 
 if command -v readlink &>/dev/null; then
   SCRIPT_PATH=$(readlink -f "$0")
@@ -36,15 +19,28 @@ else
   SCRIPT_PATH=$(cd "$(dirname "$0")" && pwd -P)/$(basename "$0")
 fi
 
-FONT_SRC="$(dirname $(dirname "$SCRIPT_PATH"))/font"
-find "$FONT_SRC/" -mindepth 1 -maxdepth 1 -print0 | while LFS= read -r -d '' src; do {
-   if [[ -d $src ]]; then 
-       cp -r $src $FONTBASE
-   fi
+FONT_SRC="$(dirname "$(dirname "$SCRIPT_PATH")")/font"
 
-   if [[ -f $src ]]; then 
-       cp  $src $FONTBASE
-   fi
-}
+if [[ ! -d "$FONT_SRC" ]]; then
+  echo "❌ 字体源目录不存在: $FONT_SRC"
+  exit 1
+fi
+
+find "$FONT_SRC/" -mindepth 1 -maxdepth 1 -print0 | while IFS= read -r -d '' src; do
+  basename=$(basename "$src")
+  if [[ -d "$src" ]]; then
+    cp -r "$src" "$FONTBASE/"
+    echo "📁 复制字体目录: $basename"
+  else
+    cp "$src" "$FONTBASE/"
+    echo "📄 复制字体文件: $basename"
+  fi
 done
+
+# Linux 上刷新字体缓存
+if [ "$os_kernel" != "Darwin" ] && command -v fc-cache &>/dev/null; then
+  echo "🔄 刷新字体缓存..."
+  fc-cache -f "$FONTBASE"
+fi
+
 echo "✅ 成功安装字体"
