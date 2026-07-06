@@ -62,4 +62,9 @@ dashboard.config.layout = {
 
 alpha.setup(dashboard.config)
 
-vim.cmd([[autocmd FileType alpha setlocal nofoldenable]])
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "alpha",
+	callback = function()
+		vim.opt_local.foldenable = false
+	end,
+})

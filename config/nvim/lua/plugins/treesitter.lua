@@ -30,12 +30,14 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 			auto_install = true,
 			highlight = {
 				enable = true,
-				disable = { "latex" },
+				disable = function(lang, bufnr)
+					if lang == "latex" then
+						return true
+					end
+					return lang == "yaml" and vim.api.nvim_buf_line_count(bufnr) > 5000
+				end,
 				additional_vim_regex_highlighting = {},
 			},
-			disable = function(lang, bufnr)
-				return lang == "yaml" and vim.api.nvim_buf_line_count(bufnr) > 5000
-			end,
 			indent = { enable = true },
 		})
 
@@ -116,4 +118,3 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.wo[0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
 	end,
 })
-vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"

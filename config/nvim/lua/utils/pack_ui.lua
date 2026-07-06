@@ -149,7 +149,10 @@ local function run_async_update(plugin_names)
     for _, name in ipairs(plugin_names) do
         local already_in_queue = false
         for _, qname in ipairs(task_queue) do
-            if qname == name then already_in_queue = true break end
+            if qname == name then
+                already_in_queue = true
+                break
+            end
         end
         
         if not updating_plugins[name] and not already_in_queue then

@@ -7,22 +7,48 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "language_models": {
+    "anthropic_compatible": {
+      "xf": {
+        "api_url": "https://maas-coding-api.cn-huabei-1.xf-yun.com/anthropic",
+        "available_models": [
+          {
+            "name": "astron-code-latest",
+            "max_tokens": 200000,
+            "max_output_tokens": 32000,
+            "extra_beta_headers": [],
+            "capabilities": {
+              "tools": true,
+              "images": false,
+              "prompt_caching": false
+            }
+          }
+        ]
+      }
+    }
+  },
+  "proxy": "",
   "project_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "outline_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "collaboration_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "agent": {
+    "default_model": {
+      "provider": "xf",
+      "model": "astron-code-latest",
+      "enable_thinking": false
+    },
     "dock": "right",
     "favorite_models": [],
-    "model_parameters": []
+    "model_parameters": [],
   },
   "git_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "edit_predictions": {
     "provider": "zed",
@@ -46,9 +72,9 @@
   "cursor_shape": "block",
   "vim_mode": true,
   "ui_font_size": 16,
-  "ui_font_family": "IosevkaTermSlab Nerd Font Mono",
+  "ui_font_family": "ZedMono Nerd Font Mono",
   "buffer_font_size": 16,
-  "buffer_font_family": "IosevkaTermSlab Nerd Font Mono",
+  "buffer_font_family": "ZedMono Nerd Font Mono",
   "buffer_font_weight": 500,
   "relative_line_numbers": "enabled",
   "tab_bar": {
@@ -179,7 +205,7 @@
   ],
   "terminal": {
     "blinking": "on",
-    "font_family": "FiraCode Nerd Font",
+    "font_family": "ZedMono Nerd Font Mono",
     "font_size": 12,
     "toolbar": {
       "breadcrumbs": true,
