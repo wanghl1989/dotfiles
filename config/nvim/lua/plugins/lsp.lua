@@ -49,14 +49,12 @@ vim.lsp.config("basedpyright", {
 })
 
 vim.lsp.enable({
-	"tree-sitter-cli",
 	"lua_ls",
 	"basedpyright",
 	"clangd",
 	"ruff",
-	"vue-language-server",
-	"prettier",
-	"json-lsp",
+	"vue_ls",
+	"jsonls",
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -73,8 +71,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		-- [folding]
 		if client and client:supports_method("textDocument/foldingRange") then
-			local win = vim.api.nvim_get_current_win()
-			vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+			vim.wo[0].foldexpr = "v:lua.vim.lsp.foldexpr()"
 		end
 
 		-- [keymaps]

@@ -65,10 +65,10 @@ map("n", "cL", "c$", { noremap = true, silent = true, desc = "Change to end of l
 map("n", "cH", "c^", { noremap = true, silent = true, desc = "Change to start of line" })
 
 map("n", "yL", "y$", { noremap = true, silent = true, desc = "Yank to end of line" })
-map("n", "yH", "y^", { noremap = true, silent = true, desc = "Change to start of line" })
+map("n", "yH", "y^", { noremap = true, silent = true, desc = "Yank to start of line" })
 
-map("n", "vL", "v$", { noremap = true, silent = true, desc = "Change to end of line" })
-map("n", "vH", "v^", { noremap = true, silent = true, desc = "Change to start of line" })
+map("n", "vL", "v$", { noremap = true, silent = true, desc = "Visual to end of line" })
+map("n", "vH", "v^", { noremap = true, silent = true, desc = "Visual to start of line" })
 
 map("v", "<leader>j", ":'<,'>join<CR>", { noremap = true, silent = true, desc = "Join the lines" })
 

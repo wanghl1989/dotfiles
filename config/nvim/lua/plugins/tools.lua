@@ -5,15 +5,10 @@ vim.pack.add({
 
 if vim.env.TMUX ~= nil and vim.env.TMUX ~= "" then
 	vim.g.tmux_navigator_no_mappings = 1
-	vim.keymap.set("n", "<C-h>", "<cmd>TmuxNavigateLeft<cr>")
-	vim.keymap.set("n", "<C-j>", "<cmd>TmuxNavigateDown<cr>")
-	vim.keymap.set("n", "<C-k>", "<cmd>TmuxNavigateUp<cr>")
-	vim.keymap.set("n", "<C-l>", "<cmd>TmuxNavigateRight<cr>")
-else
-	vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
-	vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Go to lower window" })
-	vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Go to upper window" })
-	vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
+	vim.keymap.set("n", "<C-h>", "<cmd>TmuxNavigateLeft<cr>", { desc = "Tmux Navigate Left" })
+	vim.keymap.set("n", "<C-j>", "<cmd>TmuxNavigateDown<cr>", { desc = "Tmux Navigate Down" })
+	vim.keymap.set("n", "<C-k>", "<cmd>TmuxNavigateUp<cr>", { desc = "Tmux Navigate Up" })
+	vim.keymap.set("n", "<C-l>", "<cmd>TmuxNavigateRight<cr>", { desc = "Tmux Navigate Right" })
 end
 
 

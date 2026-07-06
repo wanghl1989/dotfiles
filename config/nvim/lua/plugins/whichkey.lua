@@ -39,6 +39,6 @@ require("which-key").setup({
 	},
 })
 
-vim.keymap.set({ "n", "x", "v", "x" }, "<leader>?", function()
+vim.keymap.set({ "n", "x", "v" }, "<leader>?", function()
 	require("which-key").show({ global = false })
 end, { desc = "Open which-key" })

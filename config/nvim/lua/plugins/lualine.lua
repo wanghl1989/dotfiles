@@ -70,7 +70,21 @@ require("lualine").setup({
 			-- 	end,
 			-- },
 			{ "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
-			{ "venv-selector", icon = "\u{e606}", color = { fg = "#4fe88f" } },
+			{
+					function()
+						local venv_path = require("venv-selector").venv()
+						if not venv_path or venv_path == "" then
+							return ""
+						end
+						local venv_name = vim.fn.fnamemodify(venv_path, ":t")
+						return venv_name or ""
+					end,
+					icon = "\u{e606}",
+					color = { fg = "#4fe88f" },
+					cond = function()
+						return package.loaded["venv-selector"] ~= nil
+					end,
+				},
 		},
 		lualine_y = {
 			{ "progress", separator = " ", padding = { left = 1, right = 0 } },

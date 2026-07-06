@@ -19,12 +19,12 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 		})
 
 		-- 格式化
-		vim.keymap.set("n", "<leader>cf", function(buf)
-			require("conform").format({ bufnr = buf })
+		vim.keymap.set("n", "<leader>cf", function()
+			require("conform").format({ bufnr = 0 })
 		end, { desc = "Format Code" })
 
-		vim.keymap.set("n", "<leader>fm", function(buf)
-			require("conform").format({ bufnr = buf })
+		vim.keymap.set("n", "<leader>fm", function()
+			require("conform").format({ bufnr = 0 })
 		end, { desc = "Format Code" })
 	end,
 })
