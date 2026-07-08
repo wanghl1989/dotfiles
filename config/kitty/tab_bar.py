@@ -38,9 +38,6 @@ date_fg = as_rgb(color_as_int(opts.color8))
 date_bg = as_rgb(color_as_int(opts.foreground))
 
 # Requires nerdfont: https://www.nerdfonts.com
-SEPARATOR_SYMBOL_LEFT1 = "▓"
-SEPARATOR_SYMBOL_LEFT2 = "▒"
-SEPARATOR_SYMBOL_LEFT3 = "░"
 SEPARATOR_LEFT = ""
 # SEPARATOR_RIGHT = ""
 
@@ -62,15 +59,13 @@ def _draw_icon(screen: Screen, index: int) -> int:
     screen.cursor.bg = icon_fg
     screen.cursor.bold = True
     screen.cursor.italic = False
-    screen.draw(SEPARATOR_SYMBOL_LEFT1)
-    screen.draw(SEPARATOR_SYMBOL_LEFT2)
-    screen.draw(SEPARATOR_SYMBOL_LEFT3)
     screen.draw(ICON)
     screen.cursor.fg = icon_fg
     screen.cursor.bg = icon_bg
     screen.draw(SEPARATOR_LEFT)
     screen.cursor.fg = 0
-    screen.cursor.x = len(ICON) + len(SEPARATOR_SYMBOL_LEFT1) +  len(SEPARATOR_SYMBOL_LEFT2) +  len(SEPARATOR_SYMBOL_LEFT3) + len(SEPARATOR_LEFT)
+    screen.cursor.x = len(ICON) + len(SEPARATOR_LEFT)
+
     return screen.cursor.x
 
 
