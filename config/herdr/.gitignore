@@ -1,0 +1,6 @@
+*.log
+*.sock
+
+session.json
+plugins
+plugin
