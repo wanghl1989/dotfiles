@@ -112,9 +112,9 @@ cmd_add() {
 
     echo "正在将公钥复制到 $ssh_server (端口: $ssh_port)..."
     if [[ "$ssh_port" == "22" ]]; then
-        ssh-copy-id -i "${ssh_key_path}.pub" "$ssh_server"
+        ssh-copy-id -o PreferredAuthentications=password -o PubkeyAuthentication=no -i "${ssh_key_path}.pub" "$ssh_server"
     else
-        ssh-copy-id -i "${ssh_key_path}.pub" -p "$ssh_port" "$ssh_server"
+        ssh-copy-id -o PreferredAuthentications=password -o PubkeyAuthentication=no -i "${ssh_key_path}.pub" -p "$ssh_port" "$ssh_server"
     fi
 
     touch "$SSH_CONFIG"
@@ -140,6 +140,7 @@ cmd_add() {
         echo "    User ${ssh_user}"
         echo "    Port ${ssh_port}"
         echo "    IdentityFile ${ssh_key_path}"
+        echo "    IdentitiesOnly yes"
     } >> "$SSH_CONFIG"
 
     echo ""
