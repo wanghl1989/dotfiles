@@ -79,8 +79,8 @@ require("lualine").setup({
 						local venv_name = vim.fn.fnamemodify(venv_path, ":t")
 						return venv_name or ""
 					end,
-					icon = "\u{e606}",
-					color = { fg = "#4fe88f" },
+					icon = "",
+					color = { fg = "#FFD343" },
 					cond = function()
 						return package.loaded["venv-selector"] ~= nil
 					end,
