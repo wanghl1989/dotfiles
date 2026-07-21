@@ -16,7 +16,6 @@ from kitty.utils import color_as_int
 # GLOBAL STATE!
 right_status_length = -1
 
-
 opts = get_options()
 
 bar_fg = as_rgb(color_as_int(opts.foreground))
@@ -26,72 +25,9 @@ ICON = "   Kitty Tabs"
 icon_fg = as_rgb(color_as_int(opts.color4))
 icon_bg = as_rgb(color_as_int(opts.tab_bar_background))
 
-DATE = "  %Y-%m-%d "
-date_fg = as_rgb(color_as_int(opts.color8))
-date_bg = as_rgb(color_as_int(opts.foreground))
-
-# Requires nerdfont: https://www.nerdfonts.com
-SEPARATOR_LEFT = ""
-SOFT_SEPARATOR_SYMBOL_LEFT = ""
-SEPARATOR_SYMBOL_RIGHT = ""
-SEPARATOR_DOT = ""
-RIGHT_MARGIN = 0
-REFRESH_TIME = 1
-
-
-# Top decoration bar
+# Bottom decoration bar
 decoration_fg = as_rgb(color_as_int(opts.color4))
 decoration_bg = as_rgb(color_as_int(opts.tab_bar_background))
-
-
-def _draw_header(screen: Screen, max_tab_length: int) -> None:
-    """Draw the decoration header at the top of the vertical tab bar.
-
-    Draws HEADER_ROWS rows at the current cursor position:
-      Row 1: hostname icon (blue bg)
-      Row 2: separator line
-    After drawing, cursor.y is advanced by HEADER_ROWS.
-    """
-    # Row 1: hostname icon
-    max_tab_length += 1
-    screen.cursor.fg = decoration_bg
-    screen.cursor.bg = decoration_fg
-    screen.cursor.bold = True
-    screen.cursor.italic = False
-    screen.draw(ICON)
-    # Pad to full width
-    remaining = max_tab_length - len(ICON)
-    if remaining > 0:
-        screen.draw(" " * remaining)
-
-    # Row 2: separator line
-    screen.cursor.x = 0
-    screen.cursor.y += 1
-    screen.cursor.fg = as_rgb(color_as_int(opts.color4))
-    screen.cursor.bg = bar_bg
-    screen.cursor.bold = False
-    screen.draw("─" * max_tab_length)
-
-    # Advance cursor past the header
-    screen.cursor.x = 0
-    screen.cursor.y += 1
-
-
-def _draw_icon(screen: Screen, index: int) -> int:
-    """Draw the hostname icon at the top of the vertical tab bar (only for first tab)."""
-    if index != 1:
-        return 0
-
-    screen.cursor.fg = icon_bg
-    screen.cursor.bg = icon_fg
-    screen.cursor.bold = True
-    screen.cursor.italic = False
-    screen.draw(ICON)
-    screen.cursor.fg = icon_fg
-    screen.cursor.bg = icon_bg
-    screen.cursor.fg = 0
-
-    return screen.cursor.x
 
 
 def _draw_left_status(
@@ -104,7 +40,7 @@ def _draw_left_status(
     is_last: bool,
     _extra_data: ExtraData,
 ) -> int:
-    """Draw tab content for horizontal tab bar (original behavior)."""
+    """Draw tab content for horizontal tab bar."""
     screen.cursor.bold = screen.cursor.italic = False
     draw_title(draw_data, screen, tab, index)
     trailing_spaces = min(max_title_length - 1, draw_data.trailing_spaces)
@@ -120,62 +56,25 @@ def _draw_left_status(
     return end
 
 
-def _draw_vertical_tab(
+def _draw_tab_content(
     draw_data: DrawData,
     screen: Screen,
     tab: TabBarData,
     before: int,
     max_tab_length: int,
     index: int,
-    is_last: bool,
-    extra_data: ExtraData,
-) -> int:
-    """Draw a single tab in vertical (left/right edge) mode.
-
-    For the first tab (index == 1), draws a decoration header first,
-    then draws tab 1 below it. For subsequent tabs, shifts cursor.y
-    down to account for the header + spacing from previous tabs.
-
-    kitty's update_vertical() sets cursor.y before each draw_tab call
-    without knowing about our header/spacing, so we manually offset
-    cursor.y to compensate.
-
-    Layout (with TAB_SPACING=1):
-        Row 0-1: decoration header (hostname + separator)
-        Row 2:   tab 1
-        Row 3:   (spacing)
-        Row 4:   tab 2
-        Row 5:   (spacing)
-        Row 6:   tab 3
-        ...
-    """
+) -> None:
+    """Draw the tab indicator + title on the current line."""
     is_active = tab.is_active
     max_tab_length = max(1, max_tab_length)
-
-    # Calculate total y-offset: header rows + spacing from previous tabs
-    # Each previous tab (index 1..index-1) occupies 1 row + TAB_SPACING rows
-
-    if index == 1:
-        # Draw the header at the current position (row 0)
-        _draw_header(screen, max_tab_length)
-        # Now cursor.y is at row HEADER_ROWS, draw tab 1 here
-    else:
-        # Offset cursor.y to account for header + spacing from previous tabs
-        screen.cursor.y += 2
-
-    # --- Draw the tab content ---
 
     screen.cursor.x = 0
     screen.cursor.fg = bar_fg
     screen.cursor.bg = bar_bg
-
     screen.cursor.italic = False
-    if is_active:
-        screen.cursor.bold = True
-    else:
-        screen.cursor.bold = False
+    screen.cursor.bold = is_active
 
-    # Draw indicator
+    # Active indicator
     if is_active:
         screen.cursor.fg = as_rgb(color_as_int(opts.color4))
         screen.cursor.bg = bar_bg
@@ -189,7 +88,7 @@ def _draw_vertical_tab(
         screen.cursor.fg = as_rgb(draw_data.tab_fg(tab))
 
     # Draw title
-    used = 4  # indicator(1) + icon(1) + space(1) + trailing space(1)
+    used = 4
     available = max(1, max_tab_length - used)
     draw_title(draw_data, screen, tab, index, available)
 
@@ -207,9 +106,45 @@ def _draw_vertical_tab(
         else:
             screen.draw(" " * (before + max_tab_length - screen.cursor.x))
 
-
     screen.cursor.bold = False
     screen.cursor.italic = False
+
+
+def _draw_empty_line(screen: Screen, max_tab_length: int) -> None:
+    """Draw an empty line with bar_bg (used as spacing between tabs)."""
+    screen.cursor.x = 0
+    screen.cursor.fg = 0
+    screen.cursor.bg = bar_bg
+    screen.cursor.bold = False
+    screen.cursor.italic = False
+    screen.draw("─" * max(1, max_tab_length))
+
+
+def _draw_vertical_tab(
+    draw_data: DrawData,
+    screen: Screen,
+    tab: TabBarData,
+    before: int,
+    max_tab_length: int,
+    index: int,
+    is_last: bool,
+    extra_data: ExtraData,
+) -> int:
+    """Draw a single tab in vertical mode using kitty's native 2-line-per-tab.
+
+    Every tab uses the same layout:
+      Line 1: tab content
+      Line 2: empty spacing line
+
+    For the last tab, also draw the decoration bar at the bottom.
+
+    Because kitty manages cursor.y and tab_extents internally,
+    click detection is correct.
+    """
+    max_tab_length = max(1, max_tab_length)
+    # Line 1: tab content
+    _draw_tab_content(draw_data, screen, tab, before, max_tab_length, index)
+
     return screen.cursor.x
 
 
@@ -228,7 +163,7 @@ def _draw_right_status(screen: Screen, is_last: bool, cells: list) -> int:
 
 
 def _cell_length(cells):
-    right_status_length = RIGHT_MARGIN
+    right_status_length = 2
     for cell in cells:
         right_status_length += len(str(cell[0]))
     return right_status_length
@@ -254,23 +189,11 @@ def draw_tab(
 
     if is_vertical:
         return _draw_vertical_tab(
-            draw_data,
-            screen,
-            tab,
-            before,
-            max_tab_length,
-            index,
-            is_last,
-            extra_data,
+            draw_data, screen, tab, before, max_tab_length,
+            index, is_last, extra_data,
         )
     else:
         return _draw_left_status(
-            draw_data,
-            screen,
-            tab,
-            before,
-            max_tab_length,
-            index,
-            is_last,
-            extra_data,
+            draw_data, screen, tab, before, max_tab_length,
+            index, is_last, extra_data,
         )
