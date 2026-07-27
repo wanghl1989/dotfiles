@@ -18,9 +18,6 @@ right_status_length = -1
 
 opts = get_options()
 
-bar_fg = as_rgb(color_as_int(opts.foreground))
-bar_bg = as_rgb(color_as_int(opts.tab_bar_background))
-
 ICON = "   Kitty Tabs"
 icon_fg = as_rgb(color_as_int(opts.color4))
 icon_bg = as_rgb(color_as_int(opts.tab_bar_background))
@@ -52,7 +49,6 @@ def _draw_left_status(
     if trailing_spaces:
         screen.draw(" " * trailing_spaces)
     end = screen.cursor.x
-    screen.cursor.bg = bar_bg
     return end
 
 
@@ -68,24 +64,15 @@ def _draw_tab_content(
     is_active = tab.is_active
     max_tab_length = max(1, max_tab_length)
 
-    screen.cursor.x = 0
-    screen.cursor.fg = bar_fg
-    screen.cursor.bg = bar_bg
+    screen.cursor.x = 1
     screen.cursor.italic = False
     screen.cursor.bold = is_active
 
     # Active indicator
     if is_active:
-        screen.cursor.fg = as_rgb(color_as_int(opts.color4))
-        screen.cursor.bg = bar_bg
         screen.draw("▌")
-        screen.cursor.fg = as_rgb(draw_data.tab_fg(tab))
     else:
         screen.draw(" ")
-
-    if is_active:
-        screen.cursor.fg = as_rgb(color_as_int(opts.color4))
-        screen.cursor.fg = as_rgb(draw_data.tab_fg(tab))
 
     # Draw title
     used = 4
@@ -109,15 +96,6 @@ def _draw_tab_content(
     screen.cursor.bold = False
     screen.cursor.italic = False
 
-
-def _draw_empty_line(screen: Screen, max_tab_length: int) -> None:
-    """Draw an empty line with bar_bg (used as spacing between tabs)."""
-    screen.cursor.x = 0
-    screen.cursor.fg = 0
-    screen.cursor.bg = bar_bg
-    screen.cursor.bold = False
-    screen.cursor.italic = False
-    screen.draw("─" * max(1, max_tab_length))
 
 
 def _draw_vertical_tab(
@@ -144,7 +122,9 @@ def _draw_vertical_tab(
     max_tab_length = max(1, max_tab_length)
     # Line 1: tab content
     _draw_tab_content(draw_data, screen, tab, before, max_tab_length, index)
-
+    if is_last:
+        screen.cursor.bg = 0
+        screen.cursor.fg = 0
     return screen.cursor.x
 
 
@@ -155,8 +135,6 @@ def _draw_right_status(screen: Screen, is_last: bool, cells: list) -> int:
     screen.cursor.x = screen.columns - right_status_length
     screen.cursor.bg = 0
     for _i, (status, color_fg, _color_bg) in enumerate(cells):
-        screen.cursor.fg = bar_bg
-        screen.cursor.bg = color_fg
         screen.draw(status)
     screen.cursor.fg = 0
     return screen.cursor.x

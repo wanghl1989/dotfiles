@@ -81,7 +81,7 @@ for item in "${ZSH_ITEMS[@]}"; do
   fi
 done
 
-BASH_ITEMS=(".shell_alias" ".shell_images" ".shell_utils")
+BASH_ITEMS=(".shell_alias" ".shell_images" ".shell_utils" ".kitty_agent_status_integration")
 
 for item in "${BASH_ITEMS[@]}"; do
   zsh_source="$LINK_PATH/$item"
