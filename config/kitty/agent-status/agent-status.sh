@@ -18,9 +18,14 @@ case "${1:-idle}" in
   working)
     BG="#7daea3"; FG="#1d2021" ;;
   needs-input|attention)
-    BG="#e78a4e"; FG="#1d2021" ;;
-  done|idle|reset|*)
+    BG="#e78a4e"; FG="#1d2021" 
+    kitten notify -u critical "Agent Need input." >/dev/null 2>&1 || true;;
+  done)
+    BG="None"; FG="None" 
+    kitten notify -u critical "Agent job is done." >/dev/null 2>&1 || true;;
+  idle|reset|*)
     BG="None"; FG="None" ;;
+
 esac
 
 # set-tab-color targets the tab that contains this window. inactive_* is set too
@@ -29,6 +34,7 @@ kitten @ set-tab-color -m "window_id:${KITTY_WINDOW_ID}" \
   "active_bg=${BG}" "active_fg=${FG}" "inactive_bg=${BG}" "inactive_fg=${FG}" \
   >/dev/null 2>&1 || true
 
-if [ ${1:-idle} = "done" ]; then
-  kitten notify -u critical "Agent job is done!" >/dev/null 2>&1 || true
-fi
+# if [ ${1:-idle} = "done" ]; then
+# fi
+
+

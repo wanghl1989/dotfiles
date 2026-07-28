@@ -90,8 +90,9 @@ def _draw_tab_content(
         if is_active:
             screen.draw(" " * (before + max_tab_length - screen.cursor.x - 1))
             screen.draw(">")
+            screen.draw(" ")
         else:
-            screen.draw(" " * (before + max_tab_length - screen.cursor.x))
+            screen.draw(" " * (before + max_tab_length - screen.cursor.x + 1))
 
     screen.cursor.bold = False
     screen.cursor.italic = False

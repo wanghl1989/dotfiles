@@ -8,6 +8,15 @@ for a in "$@"; do [ "$a" = "--no-claude" ] && DO_CLAUDE=0; done
 
 command -v kitten >/dev/null 2>&1 || echo "  (warning: 'kitten' not on PATH — colors only show inside kitty)"
 
+echo "→ wiring shell integration"
+for rc in "$HOME/.zshrc" "$HOME/.bashrc"; do
+  [ -e "$rc" ] || continue
+  if ! grep -qF "$DEST/shell/integration.sh" "$rc"; then
+    printf '\n# kitty-agent-status\nsource "%s/shell/integration.sh"\n' "$DEST" >> "$rc"
+    echo "  + $rc"
+  fi
+done
+
 if [ "$DO_CLAUDE" = 1 ]; then
   SETTINGS="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/settings.json"
   if command -v python3 >/dev/null 2>&1; then
