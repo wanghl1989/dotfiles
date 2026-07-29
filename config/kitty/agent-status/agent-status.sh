@@ -16,22 +16,22 @@ set -u
 
 case "${1:-idle}" in
   working)
-    BG="#7daea3"; FG="#1d2021" ;;
+    BG="#7daea3"; FG="#1d2021"; IFG="#928374" ;;
   needs-input|attention)
-    BG="#e78a4e"; FG="#1d2021" 
+    BG="#e78a4e"; FG="#1d2021"; IFG="#928374";
     kitten notify -u critical "Agent Need input." >/dev/null 2>&1 || true;;
   done)
-    BG="None"; FG="None" 
+    BG="None"; FG="None"; IFG="None";
     kitten notify -u critical "Agent job is done." >/dev/null 2>&1 || true;;
   idle|reset|*)
-    BG="None"; FG="None" ;;
+    BG="None"; FG="None" IFG="None";;
 
 esac
 
 # set-tab-color targets the tab that contains this window. inactive_* is set too
 # so the state stays visible when the tab is not focused (the whole point).
 kitten @ set-tab-color -m "window_id:${KITTY_WINDOW_ID}" \
-  "active_bg=${BG}" "active_fg=${FG}" "inactive_bg=${BG}" "inactive_fg=${FG}" \
+  "active_bg=${BG}" "active_fg=${FG}" "inactive_bg=${BG}" "inactive_fg=${IFG}" \
   >/dev/null 2>&1 || true
 
 # if [ ${1:-idle} = "done" ]; then
