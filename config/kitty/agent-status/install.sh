@@ -45,7 +45,12 @@ def wire(event, arg, matcher=None):
     grps.append(grp)
 wire("UserPromptSubmit", "working")
 wire("Notification", "needs-input", "permission_prompt")  # amber only for blocking prompts, not idle
+wire("PermissionRequest", "attention")
+wire("PermissionDenied", "idle")
+wire("PreToolUse", "working")
 wire("Stop", "done")
+wire("StopFailure", "done")
+wire("SessionEnd", "done")
 json.dump(cfg, open(settings, "w"), indent=2); open(settings, "a").write("\n")
 PY
   else
