@@ -434,20 +434,33 @@ fss(){
     echo "sesh 未安装"
     return 0
   fi
-
-  sesh list --icons | _fzf_wrapper \
-    --no-sort --ansi --border-label ' sesh ' --prompt '⚡  ' \
-    --header '  ^a all ^t tmux ^g configs ^x zoxide ^d tmux kill ^f find' \
-    --layout=reverse\
+  exec </dev/tty
+  exec <&1
+  local session
+  session=$(sesh list --icons | _fzf_wrapper \
+    --no-sort --ansi --border-label ' TMUX Session Manager (sesh)' --prompt '⚡  ' \
+    --select-1 --exit-0 \
+    --header '  ^a all ^t tmux ^x zoxide ^d tmux kill ^f find' \
     --bind 'tab:down,btab:up' \
     --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list --icons)' \
     --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t --icons)' \
-    --bind 'ctrl-g:change-prompt(⚙️  )+reload(sesh list -c --icons)' \
     --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z --icons)' \
     --bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .Trash . ~)' \
-    --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list --icons)' \
-    --preview-window 'right:55%' \
-    --preview 'sesh preview {}'
+    --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list --icons)') 
+
+  # 空值直接返回
+  [[ -z "$session" ]] && return 0
+
+  # 提取实际名称（去除图标和颜色码）
+  local name
+  name=$(echo "$session" | sed $'s/\x1b\[[0-9;]*m//g' | sed 's/^[^[:space:]]*[[:space:]]*//')
+
+  # 目录以 ~ 或 / 开头，否则是 tmux session
+  if [[ "$name" == ~* || "$name" == /* ]]; then
+    cd "$(eval echo "$name")"
+  else
+    tmux attach -t "$name"
+  fi
 }
 
 # ------------------------------
