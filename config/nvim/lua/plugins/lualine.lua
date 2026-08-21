@@ -3,13 +3,13 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-lualine/lualine.nvim" },
 })
 
-vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
+-- vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
 
-local theme = require("gruvbox-material.lualine").theme("hard")
+-- local theme = require("gruvbox-material.lualine").theme("hard")
 require("lualine").setup({
 	options = {
 		icons_enabled = true,
-		theme = theme,
+		theme = "material-nvim",
 		disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter" } },
 		component_separators = { left = "", right = "" },
 		section_separators = { left = "|", right = "|" },
@@ -71,20 +71,21 @@ require("lualine").setup({
 			-- },
 			{ "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
 			{
-					function()
-						local venv_path = require("venv-selector").venv()
-						if not venv_path or venv_path == "" then
-							return ""
-						end
-						local venv_name = vim.fn.fnamemodify(venv_path, ":t")
-						return venv_name or ""
-					end,
-					icon = "",
-					color = { fg = "#FFD343" },
-					cond = function()
-						return package.loaded["venv-selector"] ~= nil
-					end,
-				},
+				function()
+					local venv_path = require("venv-selector").venv()
+					if not venv_path or venv_path == "" then
+						return ""
+					end
+					local venv_name = vim.fn.fnamemodify(venv_path, ":t")
+					return venv_name or ""
+				end,
+				icon = "",
+				-- Previous Python yellow: #FFD343
+				color = { fg = require("material.colors").main.yellow },
+				cond = function()
+					return package.loaded["venv-selector"] ~= nil
+				end,
+			},
 		},
 		lualine_y = {
 			{ "progress", separator = " ", padding = { left = 1, right = 0 } },
@@ -114,5 +115,5 @@ require("lualine").setup({
 	tabline = {},
 	winbar = {},
 	inactive_winbar = {},
-	extensions = { "oil", "toggleterm", "mason"},
+	extensions = { "oil", "toggleterm", "mason" },
 })

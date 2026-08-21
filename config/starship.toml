@@ -49,7 +49,9 @@ $time\
 $line_break\
 $character\
 """
-palette = 'gruvbox'
+# Previous theme: Gruvbox Material Dark Hard
+# palette = 'gruvbox'
+palette = 'material_deep_ocean'
 
 right_format = """
 $cmd_duration\
@@ -333,19 +335,37 @@ shell = ["bash", "--noprofile", "--norc"]
 format = " $output"
 
 
-[palettes.gruvbox]
-background = "#1d2021"
-foreground = "#d4be98"
-black = "#665c54"
-red = "#ea6962"
-green = "#a9b665"
-orange = "#e78a4e"
-yellow = "#d8a657"
-blue = "#7daea3"
-magenta = "#d3869b"
-cyan = "#89b482"
-white = "#d4be98"
-grey = "#282828"
-comment = "#444444"
-inactive = "#171a1a"
-dark = "#928374"
+# Previous Gruvbox Material palette:
+# [palettes.gruvbox]
+# background = "#1d2021"
+# foreground = "#d4be98"
+# black = "#665c54"
+# red = "#ea6962"
+# green = "#a9b665"
+# orange = "#e78a4e"
+# yellow = "#d8a657"
+# blue = "#7daea3"
+# magenta = "#d3869b"
+# cyan = "#89b482"
+# white = "#d4be98"
+# grey = "#282828"
+# comment = "#444444"
+# inactive = "#171a1a"
+# dark = "#928374"
+
+[palettes.material_deep_ocean]
+background = "#0F111A"
+foreground = "#A6ACCD"
+black = "#464B5D"
+red = "#F07178"
+green = "#C3E88D"
+orange = "#F78C6C"
+yellow = "#FFCB6B"
+blue = "#82AAFF"
+magenta = "#C792EA"
+cyan = "#89DDFF"
+white = "#EEFFFF"
+grey = "#1A1C25"
+comment = "#464B5D"
+inactive = "#090B10"
+dark = "#717CB4"

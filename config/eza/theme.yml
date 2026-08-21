@@ -1,106 +1,187 @@
 colourful: true
 
 filekinds:
-  normal: { foreground: "#d4be98" }
-  directory: { foreground: "#7daea3", is_bold: true }
-  symlink: { foreground: "#89b482" }
-  pipe: { foreground: "#e78a4e" }
-  block_device: { foreground: "#e78a4e", is_bold: true }
-  char_device: { foreground: "#e78a4e", is_bold: true }
-  socket: { foreground: "#ea6962", is_bold: true }
-  special: { foreground: "#e78a4e" }
-  executable: { foreground: "#a9b665", is_bold: true }
-  mount_point: { foreground: "#7daea3", is_bold: true, is_underline: true }
+  # Previous palette: normal: { foreground: "#d4be98" }
+  normal: { foreground: "#A6ACCD" }
+  # Previous palette: directory: { foreground: "#7daea3", is_bold: true }
+  directory: { foreground: "#82AAFF", is_bold: true }
+  # Previous palette: symlink: { foreground: "#89b482" }
+  symlink: { foreground: "#89DDFF" }
+  # Previous palette: pipe: { foreground: "#e78a4e" }
+  pipe: { foreground: "#F78C6C" }
+  # Previous palette: block_device: { foreground: "#e78a4e", is_bold: true }
+  block_device: { foreground: "#F78C6C", is_bold: true }
+  # Previous palette: char_device: { foreground: "#e78a4e", is_bold: true }
+  char_device: { foreground: "#F78C6C", is_bold: true }
+  # Previous palette: socket: { foreground: "#ea6962", is_bold: true }
+  socket: { foreground: "#F07178", is_bold: true }
+  # Previous palette: special: { foreground: "#e78a4e" }
+  special: { foreground: "#F78C6C" }
+  # Previous palette: executable: { foreground: "#a9b665", is_bold: true }
+  executable: { foreground: "#C3E88D", is_bold: true }
+  # Previous palette: mount_point: { foreground: "#7daea3", is_bold: true, is_underline: true }
+  mount_point: { foreground: "#82AAFF", is_bold: true, is_underline: true }
 
 perms:
-  user_read: { foreground: "#e78a4e", is_bold: true }
-  user_write: { foreground: "#ea6962", is_bold: true }
+  # Previous palette: user_read: { foreground: "#e78a4e", is_bold: true }
+  user_read: { foreground: "#F78C6C", is_bold: true }
+  # Previous palette: user_write: { foreground: "#ea6962", is_bold: true }
+  user_write: { foreground: "#F07178", is_bold: true }
   user_execute_file:
-    { foreground: "#a9b665", is_bold: true, is_underline: true }
-  user_execute_other: { foreground: "#a9b665", is_bold: true }
-  group_read: { foreground: "#e78a4e" }
-  group_write: { foreground: "#ea6962" }
-  group_execute: { foreground: "#a9b665" }
-  other_read: { foreground: "#e78a4e" }
-  other_write: { foreground: "#ea6962" }
-  other_execute: { foreground: "#a9b665" }
-  special_user_file: { foreground: "#d3869b" }
-  special_other: { foreground: "#d3869b" }
-  attribute: { foreground: "#d4be98" }
+    # Previous palette: { foreground: "#a9b665", is_bold: true, is_underline: true }
+    { foreground: "#C3E88D", is_bold: true, is_underline: true }
+  # Previous palette: user_execute_other: { foreground: "#a9b665", is_bold: true }
+  user_execute_other: { foreground: "#C3E88D", is_bold: true }
+  # Previous palette: group_read: { foreground: "#e78a4e" }
+  group_read: { foreground: "#F78C6C" }
+  # Previous palette: group_write: { foreground: "#ea6962" }
+  group_write: { foreground: "#F07178" }
+  # Previous palette: group_execute: { foreground: "#a9b665" }
+  group_execute: { foreground: "#C3E88D" }
+  # Previous palette: other_read: { foreground: "#e78a4e" }
+  other_read: { foreground: "#F78C6C" }
+  # Previous palette: other_write: { foreground: "#ea6962" }
+  other_write: { foreground: "#F07178" }
+  # Previous palette: other_execute: { foreground: "#a9b665" }
+  other_execute: { foreground: "#C3E88D" }
+  # Previous palette: special_user_file: { foreground: "#d3869b" }
+  special_user_file: { foreground: "#C792EA" }
+  # Previous palette: special_other: { foreground: "#d3869b" }
+  special_other: { foreground: "#C792EA" }
+  # Previous palette: attribute: { foreground: "#d4be98" }
+  attribute: { foreground: "#A6ACCD" }
 
 size:
-  major: { foreground: "#a9b665", is_bold: true }
-  minor: { foreground: "#a9b665" }
-  number_byte: { foreground: "#a9b665", is_bold: true }
-  number_kilo: { foreground: "#a9b665", is_bold: true }
-  number_mega: { foreground: "#a9b665", is_bold: true }
-  number_giga: { foreground: "#a9b665", is_bold: true }
-  number_huge: { foreground: "#a9b665", is_bold: true }
-  unit_byte: { foreground: "#a9b665" }
-  unit_kilo: { foreground: "#a9b665" }
-  unit_mega: { foreground: "#a9b665" }
-  unit_giga: { foreground: "#a9b665" }
-  unit_huge: { foreground: "#a9b665" }
+  # Previous palette: major: { foreground: "#a9b665", is_bold: true }
+  major: { foreground: "#C3E88D", is_bold: true }
+  # Previous palette: minor: { foreground: "#a9b665" }
+  minor: { foreground: "#C3E88D" }
+  # Previous palette: number_byte: { foreground: "#a9b665", is_bold: true }
+  number_byte: { foreground: "#C3E88D", is_bold: true }
+  # Previous palette: number_kilo: { foreground: "#a9b665", is_bold: true }
+  number_kilo: { foreground: "#C3E88D", is_bold: true }
+  # Previous palette: number_mega: { foreground: "#a9b665", is_bold: true }
+  number_mega: { foreground: "#C3E88D", is_bold: true }
+  # Previous palette: number_giga: { foreground: "#a9b665", is_bold: true }
+  number_giga: { foreground: "#C3E88D", is_bold: true }
+  # Previous palette: number_huge: { foreground: "#a9b665", is_bold: true }
+  number_huge: { foreground: "#C3E88D", is_bold: true }
+  # Previous palette: unit_byte: { foreground: "#a9b665" }
+  unit_byte: { foreground: "#C3E88D" }
+  # Previous palette: unit_kilo: { foreground: "#a9b665" }
+  unit_kilo: { foreground: "#C3E88D" }
+  # Previous palette: unit_mega: { foreground: "#a9b665" }
+  unit_mega: { foreground: "#C3E88D" }
+  # Previous palette: unit_giga: { foreground: "#a9b665" }
+  unit_giga: { foreground: "#C3E88D" }
+  # Previous palette: unit_huge: { foreground: "#a9b665" }
+  unit_huge: { foreground: "#C3E88D" }
 
 users:
-  user_you: { foreground: "#e78a4e", is_bold: true }
-  user_root: { foreground: "#d4be98" }
-  user_other: { foreground: "#d4be98" }
-  group_yours: { foreground: "#e78a4e", is_bold: true }
-  group_other: { foreground: "#d4be98" }
-  group_root: { foreground: "#d4be98" }
+  # Previous palette: user_you: { foreground: "#e78a4e", is_bold: true }
+  user_you: { foreground: "#F78C6C", is_bold: true }
+  # Previous palette: user_root: { foreground: "#d4be98" }
+  user_root: { foreground: "#A6ACCD" }
+  # Previous palette: user_other: { foreground: "#d4be98" }
+  user_other: { foreground: "#A6ACCD" }
+  # Previous palette: group_yours: { foreground: "#e78a4e", is_bold: true }
+  group_yours: { foreground: "#F78C6C", is_bold: true }
+  # Previous palette: group_other: { foreground: "#d4be98" }
+  group_other: { foreground: "#A6ACCD" }
+  # Previous palette: group_root: { foreground: "#d4be98" }
+  group_root: { foreground: "#A6ACCD" }
 
 links:
-  normal: { foreground: "#ea6962", is_bold: true }
-  multi_link_file: { foreground: "#ea6962", background: "#e78a4e" }
+  # Previous palette: normal: { foreground: "#ea6962", is_bold: true }
+  normal: { foreground: "#F07178", is_bold: true }
+  # Previous palette: multi_link_file: { foreground: "#ea6962", background: "#e78a4e" }
+  multi_link_file: { foreground: "#F07178", background: "#F78C6C" }
 
 git:
-  new: { foreground: "#a9b665" }
-  modified: { foreground: "#7daea3" }
-  deleted: { foreground: "#ea6962" }
-  renamed: { foreground: "#e78a4e" }
-  typechange: { foreground: "#d3869b" }
-  ignored: { foreground: "#d4be98", is_dimmed: true }
-  conflicted: { foreground: "#ea6962" }
+  # Previous palette: new: { foreground: "#a9b665" }
+  new: { foreground: "#C3E88D" }
+  # Previous palette: modified: { foreground: "#7daea3" }
+  modified: { foreground: "#82AAFF" }
+  # Previous palette: deleted: { foreground: "#ea6962" }
+  deleted: { foreground: "#F07178" }
+  # Previous palette: renamed: { foreground: "#e78a4e" }
+  renamed: { foreground: "#F78C6C" }
+  # Previous palette: typechange: { foreground: "#d3869b" }
+  typechange: { foreground: "#C792EA" }
+  # Previous palette: ignored: { foreground: "#d4be98", is_dimmed: true }
+  ignored: { foreground: "#A6ACCD", is_dimmed: true }
+  # Previous palette: conflicted: { foreground: "#ea6962" }
+  conflicted: { foreground: "#F07178" }
 
 git_repo:
-  branch_main: { foreground: "#a9b665" }
-  branch_other: { foreground: "#e78a4e" }
-  git_clean: { foreground: "#a9b665" }
-  git_dirty: { foreground: "#e78a4e" }
+  # Previous palette: branch_main: { foreground: "#a9b665" }
+  branch_main: { foreground: "#C3E88D" }
+  # Previous palette: branch_other: { foreground: "#e78a4e" }
+  branch_other: { foreground: "#F78C6C" }
+  # Previous palette: git_clean: { foreground: "#a9b665" }
+  git_clean: { foreground: "#C3E88D" }
+  # Previous palette: git_dirty: { foreground: "#e78a4e" }
+  git_dirty: { foreground: "#F78C6C" }
 
 security_context:
-  colon: { foreground: "#d4be98", is_dimmed: true }
-  user: { foreground: "#7daea3" }
-  role: { foreground: "#a9b665" }
-  typ: { foreground: "#e78a4e" }
-  range: { foreground: "#89b482" }
+  # Previous palette: colon: { foreground: "#d4be98", is_dimmed: true }
+  colon: { foreground: "#A6ACCD", is_dimmed: true }
+  # Previous palette: user: { foreground: "#7daea3" }
+  user: { foreground: "#82AAFF" }
+  # Previous palette: role: { foreground: "#a9b665" }
+  role: { foreground: "#C3E88D" }
+  # Previous palette: typ: { foreground: "#e78a4e" }
+  typ: { foreground: "#F78C6C" }
+  # Previous palette: range: { foreground: "#89b482" }
+  range: { foreground: "#89DDFF" }
 
 file_type:
-  image: { foreground: "#d3869b" }
-  video: { foreground: "#d3869b", is_bold: true }
-  music: { foreground: "#89b482" }
-  lossless: { foreground: "#89b482", is_bold: true }
-  crypto: { foreground: "#a9b665", is_bold: true }
-  document: { foreground: "#a9b665" }
-  compressed: { foreground: "#ea6962" }
-  temp: { foreground: White }
-  compiled: { foreground: "#e78a4e" }
-  build: { foreground: "#e78a4e", is_bold: true, is_underline: true }
-  source: { foreground: "#e78a4e", is_bold: true }
+  # Previous palette: image: { foreground: "#d3869b" }
+  image: { foreground: "#C792EA" }
+  # Previous palette: video: { foreground: "#d3869b", is_bold: true }
+  video: { foreground: "#C792EA", is_bold: true }
+  # Previous palette: music: { foreground: "#89b482" }
+  music: { foreground: "#89DDFF" }
+  # Previous palette: lossless: { foreground: "#89b482", is_bold: true }
+  lossless: { foreground: "#89DDFF", is_bold: true }
+  # Previous palette: crypto: { foreground: "#a9b665", is_bold: true }
+  crypto: { foreground: "#C3E88D", is_bold: true }
+  # Previous palette: document: { foreground: "#a9b665" }
+  document: { foreground: "#C3E88D" }
+  # Previous palette: compressed: { foreground: "#ea6962" }
+  compressed: { foreground: "#F07178" }
+  # Previous palette: temp: { foreground: White }
+  temp: { foreground: "#EEFFFF" }
+  # Previous palette: compiled: { foreground: "#e78a4e" }
+  compiled: { foreground: "#F78C6C" }
+  # Previous palette: build: { foreground: "#e78a4e", is_bold: true, is_underline: true }
+  build: { foreground: "#F78C6C", is_bold: true, is_underline: true }
+  # Previous palette: source: { foreground: "#e78a4e", is_bold: true }
+  source: { foreground: "#F78C6C", is_bold: true }
 
-punctuation: { foreground: "#7b8496", is_bold: true }
-date: { foreground: "#7daea3" }
-inode: { foreground: "#d3869b" }
-blocks: { foreground: "#89b482" }
-header: { foreground: "#d4be98", is_underline: true }
-octal: { foreground: "#d3869b" }
-flags: { foreground: "#d4be98" }
+# Previous palette: punctuation: { foreground: "#7b8496", is_bold: true }
+punctuation: { foreground: "#717CB4", is_bold: true }
+# Previous palette: date: { foreground: "#7daea3" }
+date: { foreground: "#82AAFF" }
+# Previous palette: inode: { foreground: "#d3869b" }
+inode: { foreground: "#C792EA" }
+# Previous palette: blocks: { foreground: "#89b482" }
+blocks: { foreground: "#89DDFF" }
+# Previous palette: header: { foreground: "#d4be98", is_underline: true }
+header: { foreground: "#A6ACCD", is_underline: true }
+# Previous palette: octal: { foreground: "#d3869b" }
+octal: { foreground: "#C792EA" }
+# Previous palette: flags: { foreground: "#d4be98" }
+flags: { foreground: "#A6ACCD" }
 
-symlink_path: { foreground: "#89b482" }
-control_char: { foreground: "#ea6962" }
-broken_symlink: { foreground: "#ea6962" }
-broken_path_overlay: { foreground: "#d4be98", is_underline: true }
+# Previous palette: symlink_path: { foreground: "#89b482" }
+symlink_path: { foreground: "#89DDFF" }
+# Previous palette: control_char: { foreground: "#ea6962" }
+control_char: { foreground: "#F07178" }
+# Previous palette: broken_symlink: { foreground: "#ea6962" }
+broken_symlink: { foreground: "#F07178" }
+# Previous palette: broken_path_overlay: { foreground: "#d4be98", is_underline: true }
+broken_path_overlay: { foreground: "#A6ACCD", is_underline: true }
 
 filenames:
   # Custom filename-based overrides
@@ -115,4 +196,5 @@ filenames:
 
 extensions:
   # Custom extension-based overrides
-  rs: { filename: { foreground: "#ea6962" }, icon: { glyph: 🦀 } }
+  # Previous palette: rs: { filename: { foreground: "#ea6962" }, icon: { glyph: 🦀 } }
+  rs: { filename: { foreground: "#F07178" }, icon: { glyph: 🦀 } }

@@ -4,7 +4,7 @@
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-  'exec-and-forget borders active_color=0xff89b482 inactive_color=0x404fe88f width=5 blacklist="iPhone Mirroring"',
+  'exec-and-forget borders active_color=0xff89ddff inactive_color=0x4089ddff width=5 blacklist="iPhone Mirroring"',
 ]
 
 # Start AeroSpace at login
