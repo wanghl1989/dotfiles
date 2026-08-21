@@ -41,13 +41,13 @@ if command -v trash &> /dev/null; then
   alias rm='trash'
 fi
 
-# zellij
-if command -v zellij &> /dev/null; then
-  alias zij="zellij"
-  alias zija='zellij attach'
-  alias zijk='zellij kill-session'
-  alias zijka='zellij kill-all-sessions'
-  alias zijl='zellij list-sessions'
+# herdr
+if command -v herdr &> /dev/null; then
+  alias hsl="herdr session list"
+  alias hsa='herdr session attach'
+  alias hsd='herdr session delete'
+  alias hss='herdr session stop'
+  alias hsn='herdr --session'
 fi
 
 # tmux 
