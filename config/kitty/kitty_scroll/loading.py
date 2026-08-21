@@ -4,7 +4,8 @@ import sys
 import time
 import os
 
-default_color = '#ffffff'
+# Previous color: '#ffffff'
+default_color = '#A6ACCD'
 
 
 def hex_to_fg_color(hex):

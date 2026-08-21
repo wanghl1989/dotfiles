@@ -1,4 +1,6 @@
-theme = gruvbox_material_dark.conf
+# Previous theme: Gruvbox Material Dark
+# theme = gruvbox_material_dark.conf
+theme = material_deep_ocean.conf
 background-blur = 20
 
 window-padding-x = 10
@@ -67,4 +69,3 @@ keybind = ctrl+w>j=goto_split:bottom
 keybind = ctrl+w>z=toggle_fullscreen
 keybind = ctrl+w>s=toggle_secure_input
 # keybind = ctrl+w>shift+c=clear_screen
-

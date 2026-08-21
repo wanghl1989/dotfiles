@@ -1,0 +1,6 @@
+WRN 2026-08-21T17:49:00.593 ?.71273    server_start:197: Failed to start server: operation not permitted: /var/folders/jw/_njrf1qn3sbfb2_7k0fj26lc0000gn/T/nvim.wanghl/ts6sG1/nvim.71273.0
+WRN 2026-08-21T17:49:41.732 ?.71310    server_start:197: Failed to start server: operation not permitted: /var/folders/jw/_njrf1qn3sbfb2_7k0fj26lc0000gn/T/nvim.wanghl/OB0u9A/nvim.71310.0
+WRN 2026-08-21T17:55:44.156 ?.74927    server_start:197: Failed to start server: operation not permitted: /var/folders/jw/_njrf1qn3sbfb2_7k0fj26lc0000gn/T/nvim.wanghl/dx2MUo/nvim.74927.0
+WRN 2026-08-21T18:02:17.686 ?.76560    server_start:197: Failed to start server: operation not permitted: /var/folders/jw/_njrf1qn3sbfb2_7k0fj26lc0000gn/T/nvim.wanghl/XlcyPl/nvim.76560.0
+WRN 2026-08-21T18:04:17.789 ?.76862    server_start:197: Failed to start server: operation not permitted: /var/folders/jw/_njrf1qn3sbfb2_7k0fj26lc0000gn/T/nvim.wanghl/WKtbcM/nvim.76862.0
+WRN 2026-08-21T18:04:40.319 ?.76942    server_start:197: Failed to start server: operation not permitted: /var/folders/jw/_njrf1qn3sbfb2_7k0fj26lc0000gn/T/nvim.wanghl/DCWEgo/nvim.76942.0

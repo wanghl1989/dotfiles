@@ -100,10 +100,12 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 		end
 		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
-        local colors = require("gruvbox-material.colors").get(vim.o.background, "hard")
+		-- Previous palette: require("gruvbox-material.colors").get(vim.o.background, "hard")
+		local colors = require("material.colors")
 		vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", {
 			bg = "NONE",
-			fg = colors.red,
+			-- Previous palette: colors.red
+			fg = colors.main.red,
 		})
 	end,
 })

@@ -7,7 +7,7 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 	once = true,
 	callback = function()
 		local bufferline = require("bufferline")
-		local colors = require("gruvbox-material.colors").get(vim.o.background, "hard")
+		local colors = require('material.colors')
 
 		bufferline.setup({
 			options = {
