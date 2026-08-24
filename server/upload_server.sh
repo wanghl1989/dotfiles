@@ -31,7 +31,7 @@ for item in "${CONFIG_ITEMS[@]}"; do
 done
 
 
-CONFIG_ITEMS=(".condarc" ".vimrc")
+CONFIG_ITEMS=(".bashrc" ".condarc" ".vimrc")
 DEST_DIR="$SERVER"
 for item in "${CONFIG_ITEMS[@]}"; do
   source_path="$BASE_ROOT/home/$item"

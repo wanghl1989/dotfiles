@@ -12,6 +12,11 @@ vim.api.nvim_create_autocmd({ "UIEnter" }, {
 					progress = {
 						enabled = false,
 					},
+					hover = {
+						-- Multiple Python clients can answer the same hover request;
+						-- do not notify when one returns empty and another has content.
+						silent = true,
+					},
 					override = {
 						["vim.lsp.util.convert_input_to_markdown_lines"] = true,
 						["vim.lsp.util.stylize_markdown"] = true,

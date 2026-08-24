@@ -67,7 +67,7 @@
   "cursor_blink": true,
   "linked_edits": true,
   "icon_theme": "Colored Zed Icons Theme Dark",
-  "theme": "Gruvbox Material Dark Hard",
+  "theme": "Maybe Material [Blurred] Blueprint (High)",
   "base_keymap": "VSCode",
   "cursor_shape": "block",
   "vim_mode": true,
