@@ -145,4 +145,8 @@ alias bing="search_engine bing"
 alias google="search_engine google"
 alias github="search_engine github"
 
+
+alias ..="cd .."
+alias ...="cd ../.."
+
 export PATH=$PATH:"$HOME/.shell/scripts"

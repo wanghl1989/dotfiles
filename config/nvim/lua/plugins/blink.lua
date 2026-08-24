@@ -37,12 +37,16 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter", "LspAttach" }, {
 					},
 				},
 				documentation = {
-					auto_show = true,
-					auto_show_delay_ms = 200,
+					-- Keep completion documentation manual. Use <C-Space> while the
+					-- completion menu is visible when documentation is needed.
+					auto_show = false,
 				},
 
 				list = { selection = { preselect = false, auto_insert = false } },
 			},
+			-- Function signatures are requested manually with Neovim's <C-S>
+			-- mapping instead of being opened while typing trigger characters.
+			signature = { enabled = false },
 			sources = {
 				default = { "lsp", "path", "snippets", "buffer", "git", "dictionary", "calc" },
 				providers = {

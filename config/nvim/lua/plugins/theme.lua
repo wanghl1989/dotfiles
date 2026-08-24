@@ -108,6 +108,9 @@ require("material").setup({
 	custom_highlights = function(colors)
 		local highlights = {
 			Visual = { bg = colors.editor.fg, fg = colors.editor.bg },
+			-- material.nvim links attributes to DiffChange, which gives Python
+			-- decorators such as @dataclass an unrelated diff background.
+			["@attribute"] = { fg = colors.main.cyan },
 			MiniPickMatchCurrent = {
 				bg = colors.editor.fg_dark,
 				fg = colors.editor.bg,

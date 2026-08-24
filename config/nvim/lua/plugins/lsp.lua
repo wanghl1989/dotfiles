@@ -4,7 +4,6 @@ vim.pack.add({
 })
 
 require("mason").setup()
-
 vim.lsp.config("*", {
 	capabilities = {
 		workspace = {
@@ -36,9 +35,9 @@ vim.lsp.config("basedpyright", {
 	settings = {
 		basedpyright = {
 			analysis = {
-				typeCheckingMode = "off",
+				typeCheckingMode = "basic",
 				autoImportCompletions = false,
-				diagnosticMode = "workspace",
+				diagnosticMode = "openFilesOnly",
 				inlayHints = {
 					variableTypes = true,
 					functionReturnTypes = true,
@@ -48,147 +47,157 @@ vim.lsp.config("basedpyright", {
 	},
 })
 
+-- vue_ls 3.x delegates TypeScript requests to vtsls. Mason installs the Vue
+-- TypeScript plugin together with vue-language-server.
+local vue_language_server_path = vim.fn.stdpath("data")
+	.. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+
+vim.lsp.config("vtsls", {
+	settings = {
+		vtsls = {
+			tsserver = {
+				globalPlugins = {
+					{
+						name = "@vue/typescript-plugin",
+						location = vue_language_server_path,
+						languages = { "vue" },
+						configNamespace = "typescript",
+					},
+				},
+			},
+		},
+	},
+	filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+})
+
 vim.lsp.enable({
 	"lua_ls",
 	"basedpyright",
 	"clangd",
 	"ruff",
 	"vue_ls",
+	"vtsls",
 	"jsonls",
 })
+
+vim.diagnostic.config({
+	virtual_text = true,
+	virtual_lines = false,
+	float = { source = true },
+})
+
+local function find_containing_symbol(symbols, line)
+	for _, symbol in ipairs(symbols) do
+		local range = symbol.range or (symbol.location and symbol.location.range)
+		if range and line >= range.start.line and line <= range["end"].line then
+			local child = symbol.children and find_containing_symbol(symbol.children, line)
+			return child or symbol
+		end
+	end
+end
+
+local function jump_to_current_symbol(bufnr, jump_to_end)
+	local winid = vim.api.nvim_get_current_win()
+	local line = vim.api.nvim_win_get_cursor(winid)[1] - 1
+	local params = { textDocument = vim.lsp.util.make_text_document_params(bufnr) }
+
+	vim.lsp.buf_request_all(bufnr, "textDocument/documentSymbol", params, function(responses)
+		if not vim.api.nvim_win_is_valid(winid) or vim.api.nvim_win_get_buf(winid) ~= bufnr then
+			return
+		end
+
+		for _, response in pairs(responses) do
+			local symbol = find_containing_symbol(response.result or {}, line)
+			local range = symbol and (symbol.range or (symbol.location and symbol.location.range))
+			if range then
+				local target = jump_to_end and range["end"] or range.start
+				vim.api.nvim_win_set_cursor(winid, { target.line + 1, 0 })
+				return
+			end
+		end
+	end)
+end
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("SetupLSP", {}),
 	callback = function(event)
 		local client = assert(vim.lsp.get_client_by_id(event.data.client_id))
+		local map_opts = { buffer = event.buf }
+
+		-- Keep signature help available through Neovim's insert-mode <C-S>
+		-- mapping, but prevent LSP trigger characters such as "(" and ","
+		-- from opening it automatically.
+		local signature_help = client.server_capabilities.signatureHelpProvider
+		if signature_help then
+			signature_help.triggerCharacters = {}
+			signature_help.retriggerCharacters = {}
+		end
 
 		-- [inlay hint]
-		if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+		if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
 			vim.keymap.set("n", "<leader>ch", function()
 				vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
 			end, { buffer = event.buf, desc = "LSP: Toggle Inlay Hints" })
 		end
 
 		-- [folding]
-		if client and client:supports_method("textDocument/foldingRange") then
-			vim.wo[0].foldexpr = "v:lua.vim.lsp.foldexpr()"
-		end
-
-		-- [keymaps]
-		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Goto Definition" })
-		vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "References", nowait = true })
-		vim.keymap.set("n", "gI", vim.lsp.buf.implementation, { desc = "Goto Implementation" })
-		vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, { desc = "Goto T[y]pe Definition" })
-		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Goto Declaration" })
-		vim.keymap.set("n", "K", function()
-			return vim.lsp.buf.hover()
-		end, { desc = "Hover" })
-		vim.keymap.set({ "n", "x" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
-
-		local function jump_to_current_function_start()
-			local params = { textDocument = vim.lsp.util.make_text_document_params() }
-			local responses = vim.lsp.buf_request_sync(0, "textDocument/documentSymbol", params, 1000)
-			if not responses then
-				return
-			end
-
-			local pos = vim.api.nvim_win_get_cursor(0)
-			local line = pos[1] - 1
-
-			local function find_symbol(symbols)
-				for _, s in ipairs(symbols) do
-					local range = s.range or (s.location and s.location.range)
-					if range and line >= range.start.line and line <= range["end"].line then
-						if s.children then
-							local child = find_symbol(s.children)
-							if child then
-								return child
-							end
-						end
-						return s
-					end
-				end
-			end
-
-			for _, resp in pairs(responses) do
-				local sym = find_symbol(resp.result or {})
-				if sym and sym.range then
-					vim.api.nvim_win_set_cursor(0, { sym.range.start.line + 1, 0 })
-					return
-				end
-			end
-		end
-		vim.keymap.set("n", "[f", jump_to_current_function_start, { desc = "Jump to start of current function" })
-
-		local function jump_to_current_function_end()
-			local params = { textDocument = vim.lsp.util.make_text_document_params() }
-			local responses = vim.lsp.buf_request_sync(0, "textDocument/documentSymbol", params, 1000)
-			if not responses then
-				return
-			end
-
-			local pos = vim.api.nvim_win_get_cursor(0)
-			local line = pos[1] - 1
-
-			local function find_symbol(symbols)
-				for _, s in ipairs(symbols) do
-					local range = s.range or (s.location and s.location.range)
-					if range and line >= range.start.line and line <= range["end"].line then
-						if s.children then
-							local child = find_symbol(s.children)
-							if child then
-								return child
-							end
-						end
-						return s
-					end
-				end
-			end
-
-			for _, resp in pairs(responses) do
-				local sym = find_symbol(resp.result or {})
-				if sym and sym.range then
-					-- jump to end of the symbol
-					vim.api.nvim_win_set_cursor(0, { sym.range["end"].line + 1, 0 })
-					return
-				end
+		if client:supports_method("textDocument/foldingRange") then
+			for _, winid in ipairs(vim.fn.win_findbuf(event.buf)) do
+				vim.wo[winid].foldexpr = "v:lua.vim.lsp.foldexpr()"
 			end
 		end
 
-		vim.keymap.set("n", "]f", jump_to_current_function_end, { desc = "Jump to end of current function" })
+		-- Keep hover manual and explicit: it should only open after pressing K.
+		vim.keymap.set(
+			"n",
+			"K",
+			vim.lsp.buf.hover,
+			vim.tbl_extend("force", map_opts, { desc = "LSP: Hover Documentation" })
+		)
 
-		-- LSP 诊断显示
-		vim.diagnostic.config({
-			virtual_text = true, -- 行内文本提示
-			virtual_lines = false, -- 虚拟行提示（可选）
-			float = { source = true },
-		})
+		-- Neovim already provides grn, gra, grr, gri and grt. Keep only
+		-- additional mappings here, scoped to the attached buffer.
+		vim.keymap.set(
+			"n",
+			"gd",
+			vim.lsp.buf.definition,
+			vim.tbl_extend("force", map_opts, { desc = "Goto Definition" })
+		)
+		vim.keymap.set(
+			"n",
+			"gI",
+			vim.lsp.buf.implementation,
+			vim.tbl_extend("force", map_opts, { desc = "Goto Implementation" })
+		)
+		vim.keymap.set(
+			"n",
+			"gy",
+			vim.lsp.buf.type_definition,
+			vim.tbl_extend("force", map_opts, { desc = "Goto Type Definition" })
+		)
+		vim.keymap.set(
+			"n",
+			"gD",
+			vim.lsp.buf.declaration,
+			vim.tbl_extend("force", map_opts, { desc = "Goto Declaration" })
+		)
+		vim.keymap.set(
+			{ "n", "x" },
+			"<leader>ca",
+			vim.lsp.buf.code_action,
+			vim.tbl_extend("force", map_opts, { desc = "Code action" })
+		)
+		vim.keymap.set("n", "[f", function()
+			jump_to_current_symbol(event.buf, false)
+		end, vim.tbl_extend("force", map_opts, { desc = "Jump to start of current function" }))
+		vim.keymap.set("n", "]f", function()
+			jump_to_current_symbol(event.buf, true)
+		end, vim.tbl_extend("force", map_opts, { desc = "Jump to end of current function" }))
 	end,
 })
 
--- LspRestart: Restart LSP clients for current buffer
-vim.api.nvim_create_user_command("LspInfo", ":checkhealth lsp", { desc = "Check LSP Info" })
-
--- LspRestart: Restart LSP clients for current buffer
-vim.api.nvim_create_user_command("LspRestart", function()
-	local bufnr = vim.api.nvim_get_current_buf()
-	local clients = vim.lsp.get_clients({ bufnr = bufnr })
-
-	if #clients == 0 then
-		vim.notify("No LSP clients attached to restart", vim.log.levels.WARN)
-		return
-	end
-
-	for _, client in ipairs(clients) do
-		vim.notify("Restarting " .. client.name, vim.log.levels.INFO)
-		client:stop(true)
-	end
-
-	vim.defer_fn(function()
-		vim.cmd("edit")
-	end, 100)
-end, { desc = "Restart LSP clients for current buffer" })
-
+-- Neovim 0.12 provides :lsp enable/disable/restart/stop. Keep only commands
+-- without a built-in equivalent.
 vim.api.nvim_create_user_command("LspStatus", function()
 	local clients = vim.lsp.get_clients()
 	local lines = {}
@@ -335,9 +344,6 @@ vim.api.nvim_create_user_command("LspStatus", function()
 	vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = float_buf, silent = true })
 end, { desc = "Show brief LSP status in float window" })
 
--- Lsp Log
 vim.api.nvim_create_user_command("LspLog", function()
-	vim.cmd(string.format("tabnew %s", vim.lsp.log.get_filename()))
-end, {
-	desc = "Opens the Nvim LSP client log.",
-})
+	vim.cmd.tabnew({ args = { vim.lsp.log.get_filename() } })
+end, { desc = "Open the Neovim LSP client log" })
