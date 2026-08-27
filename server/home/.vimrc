@@ -23,7 +23,6 @@ if version >= 603
         set helplang=cn
 endif
 set shortmess+=I
-colorscheme habamax
 set termguicolors
 
 set showmatch
@@ -70,6 +69,9 @@ nnoremap <C-l> <C-w>l<CR>
 
 vnoremap > >gv<CR>
 vnoremap < <gv<CR>
+
+vnoremap <leader>j <S-j>
+vnoremap <leader>k <S-k>
 
 vnoremap <S-j> <NOP>
 vnoremap <S-k> <NOP>
