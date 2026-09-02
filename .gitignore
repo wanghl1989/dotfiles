@@ -32,3 +32,4 @@ config/zed/prompts/prompts-library-db.0.mdb/lock.mdb
 /config/fish/completions/orbctl.fish
 lazy-lock.json
 nvim-pack-lock.json
+nvim.log
