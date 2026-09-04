@@ -1,6 +1,16 @@
 vim.pack.add({
 	{ src = "https://github.com/MunifTanjim/nui.nvim" },
 	{ src = "https://github.com/folke/noice.nvim" },
+	{ src = "https://github.com/sphamba/smear-cursor.nvim" },
+})
+
+require("smear_cursor").setup({
+	stiffness = 0.5,
+	trailing_stiffness = 0.2,
+	trailing_exponent = 5,
+	damping = 0.6,
+	hide_target_hack = true, -- same
+	min_distance_emit_particles = 0,
 })
 
 vim.api.nvim_create_autocmd({ "UIEnter" }, {
