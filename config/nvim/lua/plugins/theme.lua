@@ -107,7 +107,7 @@ require("material").setup({
 	-- asynchronous highlight loading.
 	custom_highlights = function(colors)
 		local highlights = {
-			Visual = { bg = "#232637"},
+			Visual = { bg = "#332687"},
 			-- material.nvim links attributes to DiffChange, which gives Python
 			-- decorators such as @dataclass an unrelated diff background.
 			["@attribute"] = { fg = colors.main.cyan },
