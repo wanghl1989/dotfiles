@@ -154,3 +154,9 @@ con() {
     unset __conda_setup
     return 0
 }
+
+alias tl="tmux list-session"
+alias ta="tmux attach -t"
+alias tk="tmux kill-session -t"
+alias tn="tmux new -s"
+
