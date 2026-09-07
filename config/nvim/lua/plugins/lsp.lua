@@ -47,6 +47,26 @@ vim.lsp.config("basedpyright", {
 	},
 })
 
+-- Vue's language server delegates TypeScript requests to vtsls.
+vim.lsp.config("vtsls", {
+	filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue" },
+	settings = {
+		vtsls = {
+			tsserver = {
+				globalPlugins = {
+					{
+						name = "@vue/typescript-plugin",
+						location = vim.fn.stdpath("data")
+							.. "/mason/packages/vue-language-server/node_modules/@vue/language-server",
+						languages = { "vue" },
+						configNamespace = "typescript",
+					},
+				},
+			},
+		},
+	},
+})
+
 vim.lsp.enable({
 	"lua_ls",
 	"basedpyright",
@@ -55,7 +75,6 @@ vim.lsp.enable({
 	"vue_ls",
 	"vtsls",
 	"jsonls",
-    "vue-language-server"
 })
 
 vim.diagnostic.config({
