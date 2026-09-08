@@ -48,7 +48,7 @@ vim.api.nvim_create_autocmd({ "InsertEnter", "CmdlineEnter", "LspAttach" }, {
 			-- mapping instead of being opened while typing trigger characters.
 			signature = { enabled = false },
 			sources = {
-				default = { "lsp", "path", "snippets", "buffer", "git", "dictionary", "calc" },
+				default = { "lsp", "path", "snippets", "buffer", "dictionary", "calc" }, -- git需要配置gh,
 				providers = {
 					buffer = {
 						module = "blink.cmp.sources.buffer",

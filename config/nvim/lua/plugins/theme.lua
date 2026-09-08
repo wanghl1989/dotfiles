@@ -107,13 +107,12 @@ require("material").setup({
 	-- asynchronous highlight loading.
 	custom_highlights = function(colors)
 		local highlights = {
-			Visual = { bg = "#332687"},
+			Visual = { bg = "#392f41"},
 			-- material.nvim links attributes to DiffChange, which gives Python
 			-- decorators such as @dataclass an unrelated diff background.
 			["@attribute"] = { fg = colors.main.cyan },
 			MiniPickMatchCurrent = {
 				bg = "#232637",
-				fg = colors.editor.bg,
 				bold = true,
 			},
 			CursorLineNr = {
@@ -151,7 +150,6 @@ require("material").setup({
 				undercurl = true,
 			}
 		end
-
 		return highlights
 	end,
 })

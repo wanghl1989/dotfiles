@@ -8,6 +8,10 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 	callback = function()
 		local bufferline = require("bufferline")
 		local colors = require('material.colors')
+		-- active 背景:用调色板里真实存在的 editor.border,
+		-- 比 editor.bg(#0F111A)明显亮一档,确保选中项可见。
+		-- 注意:旧配置用的 colors.bg0 在 material 里不存在,会是 nil。
+		local active_bg = colors.editor.border
 
 		bufferline.setup({
 			options = {
@@ -31,38 +35,45 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 				},
 			},
 			highlights = {
+				-- 选中的 buffer:白色文字 + 明显背景,确保可见
 				buffer_selected = {
-					fg = colors.green,
-					bold = false,
+					fg = colors.white,
+					bg = active_bg,
+					bold = true,
 				},
+				-- 未选中的 tab(标签页)
 				tab = {
 					bg = "none",
+					fg = colors.editor.fg_dark,
 				},
+				-- 选中的 tab:与选中 buffer 相同的背景
 				tab_selected = {
-					fg = colors.green,
-					bg = colors.bg0,
+					fg = colors.white,
+					bg = active_bg,
+					bold = true,
 				},
 				tab_separator = {
-					fg = colors.bg0,
+					fg = "none",
 					bg = "none",
 				},
 				tab_separator_selected = {
-					bg = colors.bg0,
-					fg = "none",
+					bg = "none",
+					fg = active_bg,
 				},
 				close_button_selected = {
-					fg = colors.green,
+					fg = colors.white,
 				},
+				-- 分隔符:fg 设为背景色以融入背景;选中项旁的分隔符融入 active 背景
 				separator = {
-					fg = colors.bg0,
+					fg = colors.editor.bg,
 					bg = "none",
 				},
 				separator_selected = {
-					fg = colors.bg0,
+					fg = active_bg,
 					bg = "none",
 				},
 				separator_visible = {
-					fg = colors.bg0,
+					fg = colors.editor.bg,
 					bg = "none",
 				},
 				indicator_selected = {
