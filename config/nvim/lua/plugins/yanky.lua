@@ -4,7 +4,7 @@ vim.pack.add({
 
 require("yanky").setup({
 	system_clipboard = {
-		sync_with_ring = not vim.env.SSH_CONNECTION,
+		sync_with_ring = false,
 		clipboard_register = "+",
 	},
 	highlight = {
