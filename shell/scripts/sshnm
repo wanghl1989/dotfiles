@@ -1,392 +1,521 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ============================================
 # sshnm - SSH 免密登录 & Git SSH 管理工具
 # 用法: sshnm <add|list|remove|git> [参数...]
-# ============================================
 
-SSH_KEY_DIR="$HOME/.ssh"
-SSH_CONFIG="$SSH_KEY_DIR/config"
+SSH_KEY_DIR="${HOME}/.ssh"
+SSH_CONFIG="${SSH_KEY_DIR}/config"
 HOST_TAG="$(hostname)"
+HOST_TAG="${HOST_TAG//[^[:alnum:]._-]/_}"
 
-# ---------- 通用函数 ----------
+# 记录临时路径，确保命令中断或失败时不会留下半成品。
+# Bash 3.2 在 nounset 模式下无法展开空数组，保留一个空哨兵值。
+TEMP_PATHS=("")
+STAGED_KEY=""
+
+cleanup() {
+    local path
+    for path in "${TEMP_PATHS[@]}"; do
+        [[ -e "$path" ]] || continue
+        if [[ -d "$path" ]]; then
+            rm -rf -- "$path"
+        else
+            rm -f -- "$path"
+        fi
+    done
+}
+
+abort_on_signal() {
+    local signal_name="$1"
+    local status="$2"
+
+    # 防止退出过程中再次收到信号，EXIT trap 仍会负责清理临时密钥。
+    trap - HUP INT TERM
+    printf '\n操作已中止（%s）\n' "$signal_name" >&2
+    exit "$status"
+}
+
+trap cleanup EXIT
+trap 'abort_on_signal HUP 129' HUP
+trap 'abort_on_signal INT 130' INT
+trap 'abort_on_signal TERM 143' TERM
 
 usage() {
-    echo "SSH 管理工具"
-    echo ""
-    echo "用法:"
-    echo "  sshnm add <user@host> <name> [port]   添加服务器，生成密钥并配置免密登录"
-    echo "  sshnm list                            列出已添加的服务器"
-    echo "  sshnm remove <name>                   删除服务器配置及密钥"
-    echo "  sshnm git <address> [port]            配置 Git SSH 认证"
-    echo ""
-    echo "示例:"
-    echo "  sshnm add user@10.0.0.1 myserver"
-    echo "  sshnm add user@10.0.0.1 myserver 2222"
-    echo "  sshnm list"
-    echo "  sshnm remove myserver"
-    echo "  sshnm git github.com"
-    echo "  sshnm git gitee.com 22"
+    local status="${1:-1}"
+
+    cat <<'EOF'
+SSH 管理工具
+
+用法:
+  sshnm add <user@host> <name> [port]   添加服务器，生成密钥并配置免密登录
+  sshnm list                            列出 SSH config 中的单一 Host 配置
+  sshnm remove <name>                   删除服务器配置及其托管密钥
+  sshnm git <address> [port]            配置 Git SSH 认证
+
+示例:
+  sshnm add user@10.0.0.1 myserver
+  sshnm add user@10.0.0.1 myserver 2222
+  sshnm list
+  sshnm remove myserver
+  sshnm git github.com
+  sshnm git gitee.com 22
+EOF
+    exit "$status"
+}
+
+die() {
+    printf '错误: %s\n' "$*" >&2
     exit 1
 }
 
-# 从 SSH config 中解析某个 Host 块的信息
-parse_host_block() {
-    local name="$1"
-    local in_block=0
-    local hostname="" user="" port="" identity=""
-
-    while IFS= read -r line; do
-        line="${line#"${line%%[![:space:]]*}"}"
-
-        if [[ "$line" =~ ^Host[[:space:]]+(.*)$ ]]; then
-            if [[ $in_block -eq 1 ]]; then
-                break
-            fi
-            if [[ "${BASH_REMATCH[1]}" == "$name" ]]; then
-                in_block=1
-            fi
-            continue
-        fi
-
-        if [[ $in_block -eq 1 ]]; then
-            if [[ "$line" =~ ^HostName[[:space:]]+(.*)$ ]]; then
-                hostname="${BASH_REMATCH[1]}"
-            elif [[ "$line" =~ ^User[[:space:]]+(.*)$ ]]; then
-                user="${BASH_REMATCH[1]}"
-            elif [[ "$line" =~ ^Port[[:space:]]+(.*)$ ]]; then
-                port="${BASH_REMATCH[1]}"
-            elif [[ "$line" =~ ^IdentityFile[[:space:]]+(.*)$ ]]; then
-                identity="${BASH_REMATCH[1]}"
-            fi
-        fi
-    done < "$SSH_CONFIG"
-
-    echo "$hostname"
-    echo "$user"
-    echo "$port"
-    echo "$identity"
+require_command() {
+    command -v "$1" >/dev/null 2>&1 || die "缺少依赖命令: $1"
 }
 
-# ---------- add 命令 ----------
+validate_port() {
+    local port="$1"
+    local decimal_port
+
+    [[ "$port" =~ ^[0-9]{1,5}$ ]] || die "端口必须为 1-5 位数字"
+    decimal_port=$((10#$port))
+    ((decimal_port >= 1 && decimal_port <= 65535)) || die "端口必须在 1-65535 之间"
+}
+
+validate_alias() {
+    [[ "$1" =~ ^[[:alnum:]][[:alnum:]._-]*$ ]] ||
+        die "名称只能包含字母、数字、点、下划线和连字符，且必须以字母或数字开头"
+}
+
+confirm() {
+    local prompt="$1"
+    local answer=""
+
+    read -rp "$prompt [y/N] " answer || true
+    [[ "$answer" == "y" || "$answer" == "Y" ]]
+}
+
+ensure_ssh_config() {
+    mkdir -p "$SSH_KEY_DIR"
+    chmod 700 "$SSH_KEY_DIR"
+    touch "$SSH_CONFIG"
+    chmod 600 "$SSH_CONFIG"
+}
+
+# 只匹配脚本创建的单一别名块，不误伤 "Host foo bar" 或通配符块。
+host_block_exists() {
+    local name="$1"
+    [[ -f "$SSH_CONFIG" ]] || return 1
+
+    awk -v name="$name" '
+        tolower($1) == "host" && NF == 2 && $2 == name { found = 1 }
+        END { exit(found ? 0 : 1) }
+    ' "$SSH_CONFIG"
+}
+
+# 输出顺序固定为 HostName、User、Port、IdentityFile，每项占一行。
+parse_host_block() {
+    local name="$1"
+
+    awk -v name="$name" '
+        function unquote(value) {
+            if (value ~ /^".*"$/) {
+                sub(/^"/, "", value)
+                sub(/"$/, "", value)
+            }
+            return value
+        }
+
+        {
+            line = $0
+            sub(/^[[:space:]]+/, "", line)
+            count = split(line, fields, /[[:space:]]+/)
+            keyword = tolower(fields[1])
+
+            if (keyword == "host") {
+                if (in_block) {
+                    exit
+                }
+                in_block = (count == 2 && fields[2] == name)
+                next
+            }
+
+            if (!in_block) {
+                next
+            }
+
+            value = line
+            sub(/^[^[:space:]]+[[:space:]]+/, "", value)
+            value = unquote(value)
+
+            if (keyword == "hostname" && hostname == "") {
+                hostname = value
+            } else if (keyword == "user" && user == "") {
+                user = value
+            } else if (keyword == "port" && port == "") {
+                port = value
+            } else if (keyword == "identityfile" && identity == "") {
+                identity = value
+            }
+        }
+
+        END {
+            print hostname
+            print user
+            print port
+            print identity
+        }
+    ' "$SSH_CONFIG"
+}
+
+# 原子地移除同名的单一 Host 块；其余配置原样保留。
+remove_host_block() {
+    local name="$1"
+    local temp_config
+
+    temp_config="$(mktemp "${SSH_CONFIG}.tmp.XXXXXX")"
+    TEMP_PATHS+=("$temp_config")
+
+    awk -v name="$name" '
+        tolower($1) == "host" {
+            skip = 0
+            if (NF == 2 && $2 == name) {
+                skip = 1
+                next
+            }
+        }
+        !skip { print }
+    ' "$SSH_CONFIG" > "$temp_config"
+
+    chmod 600 "$temp_config"
+    mv -f "$temp_config" "$SSH_CONFIG"
+}
+
+write_host_block() {
+    local name="$1"
+    local hostname="$2"
+    local user="$3"
+    local port="$4"
+    local identity="$5"
+    local temp_config
+
+    ensure_ssh_config
+    temp_config="$(mktemp "${SSH_CONFIG}.tmp.XXXXXX")"
+    TEMP_PATHS+=("$temp_config")
+
+    awk -v name="$name" '
+        tolower($1) == "host" {
+            skip = 0
+            if (NF == 2 && $2 == name) {
+                skip = 1
+                next
+            }
+        }
+        !skip { print }
+    ' "$SSH_CONFIG" > "$temp_config"
+
+    {
+        printf '\nHost %s\n' "$name"
+        printf '    HostName %s\n' "$hostname"
+        printf '    User %s\n' "$user"
+        printf '    Port %s\n' "$port"
+        printf '    IdentityFile "%s"\n' "$identity"
+        printf '    IdentitiesOnly yes\n'
+    } >> "$temp_config"
+
+    chmod 600 "$temp_config"
+    mv -f "$temp_config" "$SSH_CONFIG"
+}
+
+new_staged_key() {
+    local comment="$1"
+    local temp_dir
+
+    require_command ssh-keygen
+    mkdir -p "$SSH_KEY_DIR"
+    chmod 700 "$SSH_KEY_DIR"
+
+    temp_dir="$(mktemp -d "${SSH_KEY_DIR}/.sshnm-key.XXXXXX")"
+    TEMP_PATHS+=("$temp_dir")
+    ssh-keygen -q -t ed25519 -f "${temp_dir}/key" -C "$comment" -N ""
+    STAGED_KEY="${temp_dir}/key"
+}
+
+install_staged_key() {
+    local staged_key="$1"
+    local destination="$2"
+
+    mv -f "$staged_key" "$destination"
+    mv -f "${staged_key}.pub" "${destination}.pub"
+    chmod 600 "$destination"
+    chmod 644 "${destination}.pub"
+}
+
+key_exists() {
+    [[ -e "$1" || -L "$1" || -e "${1}.pub" || -L "${1}.pub" ]]
+}
+
+confirm_key_replacement() {
+    local key_path="$1"
+
+    if key_exists "$key_path"; then
+        printf '密钥文件已存在: %s（及可能存在的 .pub 文件）\n' "$key_path"
+        confirm "是否覆盖?" || {
+            echo "已取消"
+            exit 0
+        }
+    fi
+}
 
 cmd_add() {
-    if [[ $# -lt 2 ]]; then
-        echo "错误: add 需要至少两个参数"
-        echo "用法: sshnm add <user@host> <name> [port]"
-        exit 1
-    fi
+    (( $# >= 2 && $# <= 3 )) || die "用法: sshnm add <user@host> <name> [port]"
 
     local ssh_server="$1"
     local server_name="$2"
     local ssh_port="${3:-22}"
+    local ssh_user ssh_host ssh_key_path staged_key
 
-    if [[ "$ssh_server" != *"@"* ]]; then
-        echo "错误: 服务器地址格式不正确，应为 user@host"
-        exit 1
-    fi
+    [[ "$ssh_server" =~ ^[^@[:space:]]+@[^@[:space:]]+$ ]] ||
+        die "服务器地址格式不正确，应为 user@host"
+    validate_alias "$server_name"
+    validate_port "$ssh_port"
+    ssh_port=$((10#$ssh_port))
+    require_command ssh-copy-id
 
-    if ! [[ "$ssh_port" =~ ^[0-9]+$ ]]; then
-        echo "错误: 端口必须为数字"
-        exit 1
-    fi
+    ssh_user="${ssh_server%%@*}"
+    ssh_host="${ssh_server#*@}"
+    [[ "$ssh_user" =~ ^[[:alnum:]_][[:alnum:]_.-]*$ ]] ||
+        die "SSH 用户名格式不正确"
+    ssh_key_path="${SSH_KEY_DIR}/${HOST_TAG}_${server_name}"
 
-    local ssh_key_path="${SSH_KEY_DIR}/${HOST_TAG}_${server_name}"
-
-    mkdir -p "$SSH_KEY_DIR"
-    chmod 700 "$SSH_KEY_DIR"
-
-    if [[ -f "$ssh_key_path" ]]; then
-        echo "密钥文件已存在: $ssh_key_path"
-        read -rp "是否覆盖? [y/N] " confirm
-        if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
-            echo "已取消"
-            exit 0
-        fi
-        rm -f "$ssh_key_path" "${ssh_key_path}.pub"
+    confirm_key_replacement "$ssh_key_path"
+    if host_block_exists "$server_name"; then
+        printf 'SSH config 中已存在 Host %s，将更新该配置。\n' "$server_name"
     fi
 
     echo "正在生成 SSH 密钥: $ssh_key_path"
-    ssh-keygen -t ed25519 -f "$ssh_key_path" -C "${HOST_TAG}_${server_name}" -N ""
+    new_staged_key "${HOST_TAG}_${server_name}"
+    staged_key="$STAGED_KEY"
 
-    echo "正在将公钥复制到 $ssh_server (端口: $ssh_port)..."
-    if [[ "$ssh_port" == "22" ]]; then
-        ssh-copy-id -o PreferredAuthentications=password -o PubkeyAuthentication=no -i "${ssh_key_path}.pub" "$ssh_server"
-    else
-        ssh-copy-id -o PreferredAuthentications=password -o PubkeyAuthentication=no -i "${ssh_key_path}.pub" -p "$ssh_port" "$ssh_server"
-    fi
+    printf '正在将公钥复制到 %s（端口: %s）...\n' "$ssh_server" "$ssh_port"
+    ssh-copy-id \
+        -o PreferredAuthentications=password,keyboard-interactive \
+        -o PubkeyAuthentication=no \
+        -i "${staged_key}.pub" \
+        -p "$ssh_port" \
+        "$ssh_server"
 
-    touch "$SSH_CONFIG"
-    chmod 600 "$SSH_CONFIG"
+    # ssh-copy-id 成功后才替换旧密钥，失败时原配置仍然可用。
+    install_staged_key "$staged_key" "$ssh_key_path"
+    write_host_block "$server_name" "$ssh_host" "$ssh_user" "$ssh_port" "$ssh_key_path"
 
-    if grep -q "^Host ${server_name}$" "$SSH_CONFIG" 2>/dev/null; then
-        echo "SSH config 中已存在 Host ${server_name}，更新配置..."
-        awk -v name="$server_name" '
-            /^Host / { in_block = 0 }
-            $0 == "Host " name { in_block = 1; next }
-            in_block { next }
-            { print }
-        ' "$SSH_CONFIG" > "${SSH_CONFIG}.tmp" && mv "${SSH_CONFIG}.tmp" "$SSH_CONFIG"
-    fi
-
-    local ssh_user="${ssh_server%%@*}"
-    local ssh_host="${ssh_server#*@}"
-
-    {
-        echo ""
-        echo "Host ${server_name}"
-        echo "    HostName ${ssh_host}"
-        echo "    User ${ssh_user}"
-        echo "    Port ${ssh_port}"
-        echo "    IdentityFile ${ssh_key_path}"
-        echo "    IdentitiesOnly yes"
-    } >> "$SSH_CONFIG"
-
-    echo ""
-    echo "✅ 添加完成！现在可以通过以下命令免密登录:"
-    echo "   ssh ${server_name}"
+    printf '\n✅ 添加完成！现在可以通过以下命令免密登录:\n'
+    printf '   ssh %s\n' "$server_name"
 }
 
-# ---------- list 命令 ----------
-
 cmd_list() {
-    if [[ ! -f "$SSH_CONFIG" ]]; then
+    (( $# == 0 )) || die "用法: sshnm list"
+
+    if [[ ! -s "$SSH_CONFIG" ]]; then
         echo "尚未添加任何服务器"
-        exit 0
+        return 0
     fi
 
-    local hosts
-    hosts=$(grep "^Host " "$SSH_CONFIG" | awk '{print $2}')
-
-    if [[ -z "$hosts" ]]; then
-        echo "尚未添加任何服务器"
-        exit 0
-    fi
-
-    local entries=()
+    local names=() addresses=() ports=() users=() keys=()
+    local name info hostname user port identity address key_name
     local max_name=4 max_addr=7 max_port=4 max_user=4 max_key=3
+    local index count=0 separator_name separator_addr separator_port separator_user separator_key
 
     while IFS= read -r name; do
-        [[ -z "$name" ]] && continue
+        [[ -n "$name" ]] || continue
 
-        local info
-        info=$(parse_host_block "$name")
-        local hostname user port identity
-        hostname=$(echo "$info" | sed -n '1p')
-        user=$(echo "$info" | sed -n '2p')
-        port=$(echo "$info" | sed -n '3p')
-        identity=$(echo "$info" | sed -n '4p')
+        info="$(parse_host_block "$name")"
+        hostname="$(printf '%s\n' "$info" | sed -n '1p')"
+        user="$(printf '%s\n' "$info" | sed -n '2p')"
+        port="$(printf '%s\n' "$info" | sed -n '3p')"
+        identity="$(printf '%s\n' "$info" | sed -n '4p')"
 
-        local key_name=""
-        if [[ -n "$identity" ]]; then
-            key_name=$(basename "$identity")
-        fi
+        address="${user:+${user}@}${hostname:-?}"
+        port="${port:-22}"
+        key_name="${identity##*/}"
 
-        local addr="${user}@${hostname}"
-        local p="${port:-22}"
+        names+=("$name")
+        addresses+=("$address")
+        ports+=("$port")
+        users+=("$user")
+        keys+=("$key_name")
+        count=$((count + 1))
 
         (( ${#name} > max_name )) && max_name=${#name}
-        (( ${#addr} > max_addr )) && max_addr=${#addr}
-        (( ${#p}    > max_port )) && max_port=${#p}
+        (( ${#address} > max_addr )) && max_addr=${#address}
+        (( ${#port} > max_port )) && max_port=${#port}
         (( ${#user} > max_user )) && max_user=${#user}
         (( ${#key_name} > max_key )) && max_key=${#key_name}
+    done < <(
+        awk '
+            tolower($1) == "host" && NF == 2 && $2 !~ /[*?!]/ { print $2 }
+        ' "$SSH_CONFIG"
+    )
 
-        entries+=("$name|$addr|$p|$user|$key_name")
-    done <<< "$hosts"
+    if ((count == 0)); then
+        echo "尚未添加任何服务器"
+        return 0
+    fi
+
+    printf -v separator_name '%*s' "$max_name" ''
+    printf -v separator_addr '%*s' "$max_addr" ''
+    printf -v separator_port '%*s' "$max_port" ''
+    printf -v separator_user '%*s' "$max_user" ''
+    printf -v separator_key '%*s' "$max_key" ''
+    separator_name="${separator_name// /-}"
+    separator_addr="${separator_addr// /-}"
+    separator_port="${separator_port// /-}"
+    separator_user="${separator_user// /-}"
+    separator_key="${separator_key// /-}"
 
     printf "%-${max_name}s  %-${max_addr}s  %-${max_port}s  %-${max_user}s  %-${max_key}s\n" \
         "Name" "Address" "Port" "User" "Key"
-
     printf "%-${max_name}s  %-${max_addr}s  %-${max_port}s  %-${max_user}s  %-${max_key}s\n" \
-        "$(printf '%0.s-' $(seq 1 $max_name))" \
-        "$(printf '%0.s-' $(seq 1 $max_addr))" \
-        "$(printf '%0.s-' $(seq 1 $max_port))" \
-        "$(printf '%0.s-' $(seq 1 $max_user))" \
-        "$(printf '%0.s-' $(seq 1 $max_key))"
+        "$separator_name" "$separator_addr" "$separator_port" "$separator_user" "$separator_key"
 
-    for entry in "${entries[@]}"; do
-        IFS='|' read -r name addr p user key_name <<< "$entry"
+    for ((index = 0; index < count; index++)); do
         printf "%-${max_name}s  %-${max_addr}s  %-${max_port}s  %-${max_user}s  %-${max_key}s\n" \
-            "$name" "$addr" "$p" "$user" "$key_name"
+            "${names[index]}" "${addresses[index]}" "${ports[index]}" "${users[index]}" "${keys[index]}"
     done
 }
 
-# ---------- remove 命令 ----------
-
 cmd_remove() {
-    if [[ $# -lt 1 ]]; then
-        echo "错误: remove 需要指定服务器名称"
-        echo "用法: sshnm remove <name>"
-        exit 1
-    fi
+    (( $# == 1 )) || die "用法: sshnm remove <name>"
 
     local server_name="$1"
+    local info identity expected_identity=""
 
-    if [[ ! -f "$SSH_CONFIG" ]] || ! grep -q "^Host ${server_name}$" "$SSH_CONFIG" 2>/dev/null; then
-        echo "错误: 未找到名为 '${server_name}' 的服务器配置"
-        exit 1
+    validate_alias "$server_name"
+    host_block_exists "$server_name" || die "未找到名为 '${server_name}' 的单一 Host 配置"
+
+    info="$(parse_host_block "$server_name")"
+    identity="$(printf '%s\n' "$info" | sed -n '4p')"
+    expected_identity="${SSH_KEY_DIR}/${HOST_TAG}_${server_name}"
+
+    printf "即将删除服务器 '%s' 的配置:\n" "$server_name"
+    if [[ "$identity" == "$expected_identity" ]]; then
+        printf '  密钥文件: %s（及 %s.pub）\n' "$identity" "$identity"
+    elif [[ -n "$identity" ]]; then
+        printf '  密钥文件: %s（不是 sshnm 托管路径，将保留）\n' "$identity"
     fi
+    printf '  SSH config 中的 Host %s 配置块\n' "$server_name"
 
-    local info
-    info=$(parse_host_block "$server_name")
-    local identity
-    identity=$(echo "$info" | sed -n '4p')
-
-    echo "即将删除服务器 '${server_name}' 的配置:"
-    if [[ -n "$identity" ]]; then
-        echo "  密钥文件: ${identity} (及 ${identity}.pub)"
-    fi
-    echo "  SSH config 中的 Host ${server_name} 配置块"
-    read -rp "确认删除? [y/N] " confirm
-    if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+    confirm "确认删除?" || {
         echo "已取消"
-        exit 0
+        return 0
+    }
+
+    remove_host_block "$server_name"
+
+    if [[ "$identity" == "$expected_identity" ]]; then
+        rm -f -- "$identity" "${identity}.pub"
+        echo "已删除 sshnm 托管的密钥文件"
     fi
 
-    if [[ -n "$identity" ]]; then
-        rm -f "$identity" "${identity}.pub"
-        echo "已删除密钥文件"
-    fi
-
-    awk -v name="$server_name" '
-        /^Host / { in_block = 0 }
-        $0 == "Host " name { in_block = 1; next }
-        in_block { next }
-        { print }
-    ' "$SSH_CONFIG" > "${SSH_CONFIG}.tmp" && mv "${SSH_CONFIG}.tmp" "$SSH_CONFIG"
-
-    echo "✅ 已删除服务器 '${server_name}'"
+    printf "✅ 已删除服务器 '%s'\n" "$server_name"
 }
 
-# ---------- git 命令 ----------
+copy_public_key() {
+    local public_key="$1"
+
+    if command -v c >/dev/null 2>&1; then
+        c < "$public_key"
+    elif command -v pbcopy >/dev/null 2>&1; then
+        pbcopy < "$public_key"
+    elif command -v wl-copy >/dev/null 2>&1; then
+        wl-copy < "$public_key"
+    elif command -v xclip >/dev/null 2>&1; then
+        xclip -selection clipboard < "$public_key"
+    else
+        return 1
+    fi
+}
 
 cmd_git() {
-    if [[ $# -lt 1 ]]; then
-        echo "错误: git 需要指定 Git 服务器地址"
-        echo "用法: sshnm git <address> [port]"
-        echo "示例: sshnm git github.com"
-        echo "      sshnm git gitee.com 22"
-        exit 1
-    fi
+    (( $# >= 1 && $# <= 2 )) || die "用法: sshnm git <address> [port]"
 
     local git_host="$1"
     local git_port="${2:-22}"
+    local key_name ssh_key_path staged_key ssh_output ssh_status=0
 
-    if ! [[ "$git_port" =~ ^[0-9]+$ ]]; then
-        echo "错误: 端口必须为数字"
-        exit 1
+    [[ "$git_host" =~ ^[[:alnum:]][[:alnum:]._-]*$ ]] ||
+        die "Git 服务器地址格式不正确，请只输入主机名或 IP"
+    validate_port "$git_port"
+    git_port=$((10#$git_port))
+    require_command ssh
+
+    key_name="${git_host//./_}"
+    validate_alias "$key_name"
+    ssh_key_path="${SSH_KEY_DIR}/${HOST_TAG}_${key_name}"
+
+    confirm_key_replacement "$ssh_key_path"
+    if host_block_exists "$key_name"; then
+        printf 'SSH config 中已存在 Host %s，将更新该配置。\n' "$key_name"
     fi
 
-    # 从地址生成密钥名：将 . 替换为 _，如 github.com -> github_com
-    local key_name="${git_host//./_}"
-    local ssh_key_path="${SSH_KEY_DIR}/${HOST_TAG}_${key_name}"
-
-    mkdir -p "$SSH_KEY_DIR"
-    chmod 700 "$SSH_KEY_DIR"
-
-    # 检查密钥是否已存在
-    if [[ -f "$ssh_key_path" ]]; then
-        echo "密钥文件已存在: $ssh_key_path"
-        read -rp "是否覆盖? [y/N] " confirm
-        if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
-            echo "已取消"
-            exit 0
-        fi
-        rm -f "$ssh_key_path" "${ssh_key_path}.pub"
-    fi
-
-    # 生成密钥
     echo "正在生成 SSH 密钥: $ssh_key_path"
-    ssh-keygen -t ed25519 -f "$ssh_key_path" -C "${HOST_TAG}_${key_name}" -N ""
+    new_staged_key "${HOST_TAG}_${key_name}"
+    staged_key="$STAGED_KEY"
 
-    # 打印公钥并复制到剪贴板
-    echo ""
-    echo "公钥内容:"
-    cat "${ssh_key_path}.pub"
-    echo ""
+    printf '\n公钥内容:\n'
+    cat "${staged_key}.pub"
+    echo
 
-    if command -v c &>/dev/null; then
-        c < "${ssh_key_path}.pub"
+    if copy_public_key "${staged_key}.pub"; then
         echo "📋 公钥已复制到剪贴板"
     else
-        echo "提示: 安装 'c' 命令可自动复制公钥到剪贴板"
+        echo "提示: 未找到可用的剪贴板命令，请手动复制上面的公钥"
     fi
 
-    # 配置 SSH config
-    touch "$SSH_CONFIG"
-    chmod 600 "$SSH_CONFIG"
+    printf '\n⏳ 请在 %s 网站上添加 SSH 公钥。\n' "$git_host"
+    echo "添加完成后按 Enter 继续；按 Ctrl-C 可取消且不会覆盖原密钥。"
+    read -r
 
-    if grep -q "^Host ${key_name}$" "$SSH_CONFIG" 2>/dev/null; then
-        echo "SSH config 中已存在 Host ${key_name}，更新配置..."
-        awk -v name="$key_name" '
-            /^Host / { in_block = 0 }
-            $0 == "Host " name { in_block = 1; next }
-            in_block { next }
-            { print }
-        ' "$SSH_CONFIG" > "${SSH_CONFIG}.tmp" && mv "${SSH_CONFIG}.tmp" "$SSH_CONFIG"
-    fi
+    install_staged_key "$staged_key" "$ssh_key_path"
+    write_host_block "$key_name" "$git_host" "git" "$git_port" "$ssh_key_path"
 
-    {
-        echo ""
-        echo "Host ${key_name}"
-        echo "    HostName ${git_host}"
-        echo "    User git"
-        echo "    Port ${git_port}"
-        echo "    IdentityFile ${ssh_key_path}"
-    } >> "$SSH_CONFIG"
+    printf '\n正在通过配置别名验证 SSH 连接（ssh -T %s）...\n' "$key_name"
+    ssh_output="$(ssh -o BatchMode=yes -T "$key_name" 2>&1)" || ssh_status=$?
+    [[ -n "$ssh_output" ]] && printf '%s\n' "$ssh_output"
 
-    echo ""
-    echo "⏳ 请在 ${git_host} 网站上添加 SSH 公钥:"
-    echo "   1. 打开 https://${git_host}/settings/keys (GitHub) 或 https://${git_host}/profile/sshkeys (Gitee)"
-    echo "   2. 点击 'New SSH key'"
-    echo "   3. 粘贴公钥内容并保存"
-    echo ""
-    read -rp "添加完成后按 Enter 验证连接..."
-
-    # 验证连接
-    echo ""
-    echo "正在验证 SSH 连接 (ssh -T git@${git_host})..."
-    if ssh -T "git@${git_host}" 2>&1 | grep -qi "success\|authenticated\|welcome\|Hi"; then
-        echo ""
+    # GitHub 等服务认证成功后仍会以非零状态退出，因此同时检查其成功提示。
+    if ((ssh_status == 0)) || grep -Eqi 'successfully authenticated|authenticated (to|via)|welcome to|logged in as' <<< "$ssh_output"; then
+        echo
         echo "✅ Git SSH 认证配置成功！"
-        echo ""
+        echo
         echo "Git 仓库使用方式:"
-        echo "   git clone git@${key_name}:user/repo.git"
-        echo ""
+        printf '   git clone git@%s:user/repo.git\n' "$key_name"
+        echo
         echo "已有仓库切换远程地址:"
-        echo "   git remote set-url origin git@${key_name}:user/repo.git"
+        printf '   git remote set-url origin git@%s:user/repo.git\n' "$key_name"
     else
-        echo ""
-        echo "⚠️  验证未通过，请确认公钥已正确添加到 ${git_host}"
-        echo "   可手动验证: ssh -T git@${git_host}"
+        echo
+        printf '⚠️  验证未通过，请确认公钥已正确添加到 %s\n' "$git_host"
+        printf '   可手动验证: ssh -T %s\n' "$key_name"
+        return 1
     fi
 }
 
-# ---------- 主入口 ----------
-
-if [[ $# -lt 1 ]]; then
-    usage
+if (( $# == 0 )); then
+    usage 1
 fi
 
 command="$1"
 shift
 
 case "$command" in
-    add)
-        cmd_add "$@"
-        ;;
-    list)
-        cmd_list
-        ;;
-    remove)
-        cmd_remove "$@"
-        ;;
-    git)
-        cmd_git "$@"
-        ;;
+    add) cmd_add "$@" ;;
+    list) cmd_list "$@" ;;
+    remove) cmd_remove "$@" ;;
+    git) cmd_git "$@" ;;
+    help | -h | --help) usage 0 ;;
     *)
-        echo "错误: 未知命令 '${command}'"
-        usage
+        printf "错误: 未知命令 '%s'\n" "$command" >&2
+        usage 1
         ;;
 esac
