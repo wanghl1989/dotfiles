@@ -1,6 +1,21 @@
 # Place a copy of this config to ~/.aerospace.toml
 # After that, you can edit ~/.aerospace.toml to your liking
 
+# Use explicit workspace persistence instead of inferring it from key bindings.
+config-version = 2
+persistent-workspaces = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+]
+
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
@@ -207,45 +222,76 @@ shift-down = ['volume set 0', 'mode main']
 
 
 [[on-window-detected]]
-if.app-id = 'net.kovidgoyal.kitty'
+if = 'test %{app-bundle-id} = net.kovidgoyal.kitty'
 run = ['layout tiling']
 
+# OpenCV windows normally have no app bundle ID. The Python-name rule is a
+# fallback for Python distributions that do provide one.
 [[on-window-detected]]
-if.app-id = 'NULL-APP-BUNDLE-ID'
+if = 'test %{app-bundle-id} = NULL-APP-BUNDLE-ID'
 run = ['layout floating']
 
 [[on-window-detected]]
-if.app-id = 'com.apple.Music'
+if = 'test %{app-name} ~= ^python'
+run = ['layout floating']
+
+# Keep the main WeChat window tiled, but float its detached child windows.
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = com.tencent.xinWeChat && test %{window-title} ~= 窗口'
 run = ['layout floating']
 
 [[on-window-detected]]
-if.app-id = 'com.kapeli.dashdoc'
+if = 'test %{app-bundle-id} = com.tencent.flue.WeChatAppEx'
 run = ['layout floating']
 
 [[on-window-detected]]
-if.app-id = 'io.github.clash-verge-rev.clash-verge-rev'
+if = 'test %{app-bundle-id} = com.apple.Music'
 run = ['layout floating']
 
 [[on-window-detected]]
-if.app-id = 'com.jordanbaird.Ice'
+if = 'test %{app-bundle-id} = com.apple.finder'
 run = ['layout floating']
 
 [[on-window-detected]]
-if.app-id = 'com.apple.Notes'
+if = 'test %{app-bundle-id} = com.kapeli.dashdoc'
 run = ['layout floating']
 
 [[on-window-detected]]
-if.app-id = 'com.apple.Preview'
+if = 'test %{app-bundle-id} = io.github.clash-verge-rev.clash-verge-rev'
 run = ['layout floating']
 
 [[on-window-detected]]
-if.app-id = 'com.apple.AppStore'
+if = 'test %{app-bundle-id} = com.jordanbaird.Ice'
 run = ['layout floating']
 
 [[on-window-detected]]
-if.app-id = 'com.apple.calculator'
+if = 'test %{app-bundle-id} = com.apple.Notes'
+run = ['layout floating']
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = com.apple.Preview'
+run = ['layout floating']
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = com.apple.AppStore'
+run = ['layout floating']
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = com.apple.calculator'
 run = ['layout floating']
 # ghostty bug: https://ghostty.org/docs/help/macos-tiling-wms
 [[on-window-detected]]
-if.app-id = "com.mitchellh.ghostty"
+if = 'test %{app-bundle-id} = com.mitchellh.ghostty'
+run = ['layout floating']
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = sh.brew.app'
+run = ['layout floating']
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = easytier-gui'
+run = ['layout floating']
+
+[[on-window-detected]]
+if = 'test %{app-bundle-id} = eu.exelban.Stats'
 run = ['layout floating']
