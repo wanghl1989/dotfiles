@@ -1,8 +1,12 @@
 *.log
 *.sock
+*.agent
 
+release-notes.json
 session.json
 plugins
 plugin
 
 release-notes.json
+session/
+session-snapshots/
