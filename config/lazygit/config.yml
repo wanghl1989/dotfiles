@@ -27,10 +27,9 @@ gui:
     optionsTextColor:
       # Previous palette: - "#7daea3"
       - "#82AAFF"
-
-  authorColors:
-    # Previous palette: "*": "#d8a657"
-    "*": "#FFCB6B"
+    authorColors:
+      # Previous palette: "*": "#d8a657"
+      "*": "#FFCB6B"
   showBottomLine: true
   border: rounded
   nerdFontsVersion: "3"
