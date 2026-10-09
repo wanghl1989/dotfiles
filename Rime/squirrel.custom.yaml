@@ -444,4 +444,8 @@ patch:
       ascii_mode: true
       vim_mode: true
       ascii_punct: true
-
+    com.tencent.codebuddycn:
+      ascii_mode: true
+      vim_mode: true
+      ascii_punct: true
+      
