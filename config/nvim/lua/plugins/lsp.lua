@@ -178,6 +178,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			vim.lsp.buf.declaration,
 			vim.tbl_extend("force", map_opts, { desc = "Goto Declaration" })
 		)
+
+		vim.keymap.set(
+			"n",
+			"gr",
+			vim.lsp.buf.references,
+			vim.tbl_extend("force", map_opts, { desc = "Goto Reference" })
+		)
 		vim.keymap.set(
 			{ "n", "x" },
 			"<leader>ca",

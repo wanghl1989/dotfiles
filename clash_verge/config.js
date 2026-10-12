@@ -46,6 +46,30 @@ const dnsConfig = {
   },
 };
 
+/**
+ * 自定义直连规则。
+ *
+ * 规则按照从上到下的顺序匹配，因此这里的规则会优先于中国大陆规则和
+ * 最终的“自动选择”。取消注释并替换示例内容即可使用。
+ */
+const customDirectRules = [
+  "DOMAIN,nas.282217645.xyz,DIRECT",
+
+  // 单个域名（只匹配 example.com 本身）：
+  // "DOMAIN,example.com,DIRECT",
+
+  // 整个域名及其所有子域名：
+  // "DOMAIN-SUFFIX,example.com,DIRECT",
+
+  // 目标 IPv4/IPv6 网段：
+  // "IP-CIDR,203.0.113.0/24,DIRECT,no-resolve",
+  // "IP-CIDR6,2001:db8::/32,DIRECT,no-resolve",
+
+  // macOS 应用进程名或完整路径：
+  // "PROCESS-NAME,Example,DIRECT",
+  // "PROCESS-PATH,/Applications/Example.app/Contents/MacOS/Example,DIRECT",
+];
+
 const autoSelectGroup = {
   name: "自动选择",
   type: "url-test",
@@ -121,8 +145,9 @@ function main(config) {
   // 只保留一个可见策略组：自动测试并选择延迟最低的节点。
   config["proxy-groups"] = [autoSelectGroup];
 
-  // 规则按顺序匹配：私有网络、中国大陆、其余流量。
+  // 规则按顺序匹配：自定义直连、私有网络、中国大陆、其余流量。
   config.rules = [
+    ...customDirectRules,
     "GEOSITE,private,DIRECT",
     "GEOIP,private,DIRECT,no-resolve",
     "GEOSITE,cn,DIRECT",
