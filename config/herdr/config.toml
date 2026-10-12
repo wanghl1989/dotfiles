@@ -26,10 +26,10 @@ copy_mode = "prefix+v"
 # focus_pane_down = "prefix+j"
 # focus_pane_up = "prefix+k"
 # focus_pane_right = "prefix+l"
-focus_pane_left =["ctrl+h", "prefix+h"]
-focus_pane_down = ["ctrl+j", "prefix+j"]
-focus_pane_up = ["ctrl+k", "prefix+k"]
-focus_pane_right = ["ctrl+l", "prefix+l"]
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
 swap_pane_left = "prefix+shift+h"
 swap_pane_down = "prefix+shift+j"
 swap_pane_up = "prefix+shift+k"
@@ -57,6 +57,29 @@ switch_workspace = "prefix+shift+1..9"
 
 focus_agent = "prefix+ctrl+1..9"
 
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "local.vim-navigator.left"
+description = "Vim-aware pane left"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "local.vim-navigator.down"
+description = "Vim-aware pane down"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "local.vim-navigator.up"
+description = "Vim-aware pane up"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "local.vim-navigator.right"
+description = "Vim-aware pane right"
 
 
 [theme]

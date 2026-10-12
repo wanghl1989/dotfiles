@@ -307,7 +307,7 @@ vimcmd_visual_symbol = '[󰜷](bold yellow)'
 [time]
 disabled = false
 style = "bold fg:yelow"
-format = '[ $time]($style)'
+format = '[ $time]($style) '
 time_format = "%H:%M"
 
 [cmd_duration]

@@ -7,25 +7,22 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "ssh_connections": [
+    {
+      "host": "g1d3",
+      "args": [],
+      "projects": [
+        {
+          "paths": ["/home/alg"],
+        },
+        {
+          "paths": ["/home/alg/dagger_ws"],
+        },
+      ],
+    },
+  ],
   "language_models": {
-    "anthropic_compatible": {
-      "xf": {
-        "api_url": "https://maas-coding-api.cn-huabei-1.xf-yun.com/anthropic",
-        "available_models": [
-          {
-            "name": "astron-code-latest",
-            "max_tokens": 200000,
-            "max_output_tokens": 32000,
-            "extra_beta_headers": [],
-            "capabilities": {
-              "tools": true,
-              "images": false,
-              "prompt_caching": false
-            }
-          }
-        ]
-      }
-    }
+    "anthropic_compatible": {},
   },
   "proxy": "",
   "project_panel": {
@@ -41,7 +38,7 @@
     "default_model": {
       "provider": "xf",
       "model": "astron-code-latest",
-      "enable_thinking": false
+      "enable_thinking": false,
     },
     "dock": "right",
     "favorite_models": [],
@@ -66,8 +63,44 @@
   },
   "cursor_blink": true,
   "linked_edits": true,
-  "icon_theme": "Colored Zed Icons Theme Dark",
-  "theme": "Maybe Material [Blurred] Blueprint (High)",
+  "icon_theme": {
+    "mode": "light",
+    "light": "Colored Zed Icons Theme Dark",
+    "dark": "Colored Zed Icons Theme Dark",
+  },
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "Ayu Dark",
+  },
+  "theme_overrides": {
+    "Modest Dark": {
+      "syntax": {
+        "comment": {
+          "font_style": "normal",
+        },
+        "comment.doc": {
+          "font_style": "normal",
+        },
+        "keyword": {
+          "font_style": "normal",
+        },
+        "type": {
+          "font_style": "normal",
+        },
+        "attribute": {
+          "font_style": "normal",
+        },
+      },
+    },
+  },
+  "global_lsp_settings": {
+    "semantic_token_rules": [
+      {
+        "font_style": "normal",
+      },
+    ],
+  },
   "base_keymap": "VSCode",
   "cursor_shape": "block",
   "vim_mode": true,
@@ -76,6 +109,9 @@
   "buffer_font_size": 16,
   "buffer_font_family": "ZedMono Nerd Font Mono",
   "buffer_font_weight": 500,
+  "ui_font_features": {
+    "italy": false,
+  },
   "relative_line_numbers": "enabled",
   "tab_bar": {
     "show_nav_history_buttons": false,
