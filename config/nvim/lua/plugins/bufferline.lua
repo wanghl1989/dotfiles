@@ -62,6 +62,7 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 				},
 				close_button_selected = {
 					fg = colors.white,
+					bg = active_bg,
 				},
 				-- 分隔符:fg 设为背景色以融入背景;选中项旁的分隔符融入 active 背景
 				separator = {
@@ -78,6 +79,7 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 				},
 				indicator_selected = {
 					fg = colors.green,
+					bg = active_bg,
 				},
 				modified = {
 					fg = colors.red,
@@ -87,6 +89,7 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 				},
 				modified_selected = {
 					fg = colors.red,
+					bg = active_bg,
 				},
 			},
 		})
