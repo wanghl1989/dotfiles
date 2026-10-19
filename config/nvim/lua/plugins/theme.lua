@@ -107,6 +107,8 @@ require("material").setup({
 	-- asynchronous highlight loading.
 	custom_highlights = function(colors)
 		local highlights = {
+			-- Noice displays the search count at the right edge of the line.
+			NoiceVirtualText = { fg = "#ffb3b3" },
 			Visual = { bg = "#392f41"},
 			-- material.nvim links attributes to DiffChange, which gives Python
 			-- decorators such as @dataclass an unrelated diff background.

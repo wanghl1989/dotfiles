@@ -34,16 +34,6 @@
   "collaboration_panel": {
     "dock": "left",
   },
-  "agent": {
-    "default_model": {
-      "provider": "xf",
-      "model": "astron-code-latest",
-      "enable_thinking": false,
-    },
-    "dock": "right",
-    "favorite_models": [],
-    "model_parameters": [],
-  },
   "git_panel": {
     "dock": "left",
   },
@@ -71,7 +61,7 @@
   "theme": {
     "mode": "system",
     "light": "One Light",
-    "dark": "Ayu Dark",
+    "dark": "Lucent Blur Flat [Heavy]",
   },
   "theme_overrides": {
     "Modest Dark": {
