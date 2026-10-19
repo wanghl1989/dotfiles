@@ -33,6 +33,13 @@ gui:
   showBottomLine: true
   border: rounded
   nerdFontsVersion: "3"
+  language: en
+  sidePanels:
+    - [status]
+    - [files, worktrees, submodules]
+    - [branches, remotes, tags]
+    - [commits, reflog]
+    - [stash]
   spiner:
     frames:
       - ⣾
@@ -45,7 +52,4 @@ gui:
       - ⣷
 os:
   edit: "nvim"
-# promptToReturnFromSubprocess:
-#   false
-# universal:
-#   quit: Q
+
