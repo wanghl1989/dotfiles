@@ -20,12 +20,18 @@
         },
       ],
     },
+    {
+      "host": "server5",
+      "args": [],
+      "projects": [],
+    },
   ],
   "language_models": {
     "anthropic_compatible": {},
   },
   "proxy": "",
   "project_panel": {
+    "button": false,
     "dock": "left",
   },
   "outline_panel": {
@@ -36,6 +42,9 @@
   },
   "git_panel": {
     "dock": "left",
+  },
+  "agent": {
+    "dock": "right",
   },
   "edit_predictions": {
     "provider": "zed",
@@ -99,6 +108,7 @@
   "buffer_font_size": 16,
   "buffer_font_family": "ZedMono Nerd Font Mono",
   "buffer_font_weight": 500,
+  "agent_ui_font_size": 16,
   "ui_font_features": {
     "italy": false,
   },
@@ -232,7 +242,7 @@
   "terminal": {
     "blinking": "on",
     "font_family": "ZedMono Nerd Font Mono",
-    "font_size": 12,
+    "font_size": 16,
     "toolbar": {
       "breadcrumbs": true,
     },
@@ -322,23 +332,9 @@
   "lsp": {
     "rust-analyzer": {
       "initialization_options": {
-        "checkOnSave": {
-          // rust-analyzer.check.command (default: "check")
-          // "command": "clippy"
-        },
+        "checkOnSave": {},
       },
     },
-    // "ty": {
-    //   "settings": {
-    //     "inlayHints": {
-    //       "callArgumentNames": false,
-    //     },
-    //     "diagnosticMode": "workspace",
-    //     "initialization_options": {
-    //       "logLevel": "debug",
-    //     },
-    //   },
-    // },
     "basedpyright": {
       "settings": {
         "python": {
