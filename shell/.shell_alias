@@ -70,6 +70,12 @@ if command -v git &> /dev/null; then
 fi
 
 
+# yazi
+if command -v yazi &> /dev/null; then
+  alias yy="yazi"
+fi
+
+
 if command -v lazygit &> /dev/null; then
   alias lzg="lazygit"
 fi
