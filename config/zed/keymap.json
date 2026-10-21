@@ -19,6 +19,7 @@
       "ctrl-e": "project_panel::Toggle",
       "ctrl-g": "git_panel::Toggle",
       "ctrl-w": "agent::Toggle",
+      "ctrl-t": "terminal_panel::ToggleFocus",
     },
   },
   {
