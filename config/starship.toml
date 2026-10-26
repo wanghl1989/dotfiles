@@ -51,7 +51,9 @@ $character\
 """
 # Previous theme: Gruvbox Material Dark Hard
 # palette = 'gruvbox'
-palette = 'material_deep_ocean'
+# Previous theme: Material Deep Ocean
+# palette = 'material_deep_ocean'
+palette = 'neofusion'
 
 right_format = """
 $cmd_duration\
@@ -369,3 +371,20 @@ grey = "#1A1C25"
 comment = "#464B5D"
 inactive = "#090B10"
 dark = "#717CB4"
+
+[palettes.neofusion]
+background = "#070F1C"
+foreground = "#E0D9C7"
+black = "#2F516C"
+red = "#EA6847"
+green = "#35B5FF"
+orange = "#FA7A61"
+yellow = "#FD5E3A"
+blue = "#5DB2F8"
+magenta = "#D943A8"
+cyan = "#86DBF5"
+white = "#E0D9C7"
+grey = "#031B26"
+comment = "#22536F"
+inactive = "#06101E"
+dark = "#22536F"

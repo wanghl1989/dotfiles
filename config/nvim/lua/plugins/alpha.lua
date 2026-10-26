@@ -49,7 +49,7 @@ local greeting = get_greeting() .. "  |  " .. datetime
 
 dashboard.section.footer.val = greeting
 dashboard.section.footer.opts.position = "center"
-dashboard.section.footer.opts.hl = "gruvbox-material"
+dashboard.section.footer.opts.hl = "NeofusionGray"
 
 dashboard.config.layout = {
 	{ type = "padding", val = 2 },

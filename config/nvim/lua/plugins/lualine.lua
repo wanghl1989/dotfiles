@@ -3,16 +3,27 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-lualine/lualine.nvim" },
 })
 
+local lualine_theme = vim.deepcopy(require("neofusion.lualine"))
+for _, mode in pairs(lualine_theme) do
+	-- Preserve the existing layout: only A is solid; B/C (and therefore Y/X)
+	-- use the terminal background. Z is overridden on the component below.
+	for _, section in ipairs({ "b", "c" }) do
+		if mode[section] then
+			mode[section].bg = "NONE"
+		end
+	end
+end
+
 -- vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
 
--- local theme = require("gruvbox-material.lualine").theme("hard")
 require("lualine").setup({
 	options = {
 		icons_enabled = true,
-		theme = require("plugins.theme"),
+		-- Official Neofusion theme with the existing transparent B/C sections.
+		theme = lualine_theme,
 		disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter" } },
 		-- component_separators = { left = "", right = "" },
-        component_separators  = { left = "|", right = "|" },
+		component_separators = { left = "|", right = "|" },
 		section_separators = { left = "", right = "" },
 		ignore_focus = {},
 		always_divide_middle = true,
@@ -81,8 +92,7 @@ require("lualine").setup({
 					return venv_name or ""
 				end,
 				icon = "",
-				-- Previous Python yellow: #FFD343
-				color = { fg = require("material.colors").main.yellow },
+				color = { fg = require("neofusion.palette").bright_red },
 				cond = function()
 					return package.loaded["venv-selector"] ~= nil
 				end,
@@ -95,8 +105,8 @@ require("lualine").setup({
 			{
 				"lsp_status",
 				icon = false,
-				-- Keep Z transparent and use its former accent background as text.
-				color = { fg = "#84FFFF", bg = "NONE", gui = "bold" },
+				-- Keep Z transparent and use Neofusion's ice accent as text.
+				color = { fg = require("neofusion.palette").light0, bg = "NONE", gui = "bold" },
 				symbols = {
 					spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
 					done = "✓",

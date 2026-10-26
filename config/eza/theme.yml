@@ -2,186 +2,267 @@ colourful: true
 
 filekinds:
   # Previous palette: normal: { foreground: "#d4be98" }
-  normal: { foreground: "#A6ACCD" }
+  # Previous Material Deep Ocean: normal: { foreground: "#A6ACCD" }
+  normal: { foreground: "#E0D9C7" }
   # Previous palette: directory: { foreground: "#7daea3", is_bold: true }
-  directory: { foreground: "#82AAFF", is_bold: true }
+  # Previous Material Deep Ocean: directory: { foreground: "#82AAFF", is_bold: true }
+  directory: { foreground: "#5DB2F8", is_bold: true }
   # Previous palette: symlink: { foreground: "#89b482" }
-  symlink: { foreground: "#89DDFF" }
+  # Previous Material Deep Ocean: symlink: { foreground: "#89DDFF" }
+  symlink: { foreground: "#86DBF5" }
   # Previous palette: pipe: { foreground: "#e78a4e" }
-  pipe: { foreground: "#F78C6C" }
+  # Previous Material Deep Ocean: pipe: { foreground: "#F78C6C" }
+  pipe: { foreground: "#FA7A61" }
   # Previous palette: block_device: { foreground: "#e78a4e", is_bold: true }
-  block_device: { foreground: "#F78C6C", is_bold: true }
+  # Previous Material Deep Ocean: block_device: { foreground: "#F78C6C", is_bold: true }
+  block_device: { foreground: "#FA7A61", is_bold: true }
   # Previous palette: char_device: { foreground: "#e78a4e", is_bold: true }
-  char_device: { foreground: "#F78C6C", is_bold: true }
+  # Previous Material Deep Ocean: char_device: { foreground: "#F78C6C", is_bold: true }
+  char_device: { foreground: "#FA7A61", is_bold: true }
   # Previous palette: socket: { foreground: "#ea6962", is_bold: true }
-  socket: { foreground: "#F07178", is_bold: true }
+  # Previous Material Deep Ocean: socket: { foreground: "#F07178", is_bold: true }
+  socket: { foreground: "#EA6847", is_bold: true }
   # Previous palette: special: { foreground: "#e78a4e" }
-  special: { foreground: "#F78C6C" }
+  # Previous Material Deep Ocean: special: { foreground: "#F78C6C" }
+  special: { foreground: "#FA7A61" }
   # Previous palette: executable: { foreground: "#a9b665", is_bold: true }
-  executable: { foreground: "#C3E88D", is_bold: true }
+  # Previous Material Deep Ocean: executable: { foreground: "#C3E88D", is_bold: true }
+  executable: { foreground: "#35B5FF", is_bold: true }
   # Previous palette: mount_point: { foreground: "#7daea3", is_bold: true, is_underline: true }
-  mount_point: { foreground: "#82AAFF", is_bold: true, is_underline: true }
+  # Previous Material Deep Ocean: mount_point: { foreground: "#82AAFF", is_bold: true, is_underline: true }
+  mount_point: { foreground: "#5DB2F8", is_bold: true, is_underline: true }
 
 perms:
   # Previous palette: user_read: { foreground: "#e78a4e", is_bold: true }
-  user_read: { foreground: "#F78C6C", is_bold: true }
+  # Previous Material Deep Ocean: user_read: { foreground: "#F78C6C", is_bold: true }
+  user_read: { foreground: "#FA7A61", is_bold: true }
   # Previous palette: user_write: { foreground: "#ea6962", is_bold: true }
-  user_write: { foreground: "#F07178", is_bold: true }
+  # Previous Material Deep Ocean: user_write: { foreground: "#F07178", is_bold: true }
+  user_write: { foreground: "#EA6847", is_bold: true }
   user_execute_file:
     # Previous palette: { foreground: "#a9b665", is_bold: true, is_underline: true }
-    { foreground: "#C3E88D", is_bold: true, is_underline: true }
+    # Previous Material Deep Ocean: { foreground: "#C3E88D", is_bold: true, is_underline: true }
+    { foreground: "#35B5FF", is_bold: true, is_underline: true }
   # Previous palette: user_execute_other: { foreground: "#a9b665", is_bold: true }
-  user_execute_other: { foreground: "#C3E88D", is_bold: true }
+  # Previous Material Deep Ocean: user_execute_other: { foreground: "#C3E88D", is_bold: true }
+  user_execute_other: { foreground: "#35B5FF", is_bold: true }
   # Previous palette: group_read: { foreground: "#e78a4e" }
-  group_read: { foreground: "#F78C6C" }
+  # Previous Material Deep Ocean: group_read: { foreground: "#F78C6C" }
+  group_read: { foreground: "#FA7A61" }
   # Previous palette: group_write: { foreground: "#ea6962" }
-  group_write: { foreground: "#F07178" }
+  # Previous Material Deep Ocean: group_write: { foreground: "#F07178" }
+  group_write: { foreground: "#EA6847" }
   # Previous palette: group_execute: { foreground: "#a9b665" }
-  group_execute: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: group_execute: { foreground: "#C3E88D" }
+  group_execute: { foreground: "#35B5FF" }
   # Previous palette: other_read: { foreground: "#e78a4e" }
-  other_read: { foreground: "#F78C6C" }
+  # Previous Material Deep Ocean: other_read: { foreground: "#F78C6C" }
+  other_read: { foreground: "#FA7A61" }
   # Previous palette: other_write: { foreground: "#ea6962" }
-  other_write: { foreground: "#F07178" }
+  # Previous Material Deep Ocean: other_write: { foreground: "#F07178" }
+  other_write: { foreground: "#EA6847" }
   # Previous palette: other_execute: { foreground: "#a9b665" }
-  other_execute: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: other_execute: { foreground: "#C3E88D" }
+  other_execute: { foreground: "#35B5FF" }
   # Previous palette: special_user_file: { foreground: "#d3869b" }
-  special_user_file: { foreground: "#C792EA" }
+  # Previous Material Deep Ocean: special_user_file: { foreground: "#C792EA" }
+  special_user_file: { foreground: "#D943A8" }
   # Previous palette: special_other: { foreground: "#d3869b" }
-  special_other: { foreground: "#C792EA" }
+  # Previous Material Deep Ocean: special_other: { foreground: "#C792EA" }
+  special_other: { foreground: "#D943A8" }
   # Previous palette: attribute: { foreground: "#d4be98" }
-  attribute: { foreground: "#A6ACCD" }
+  # Previous Material Deep Ocean: attribute: { foreground: "#A6ACCD" }
+  attribute: { foreground: "#E0D9C7" }
 
 size:
   # Previous palette: major: { foreground: "#a9b665", is_bold: true }
-  major: { foreground: "#C3E88D", is_bold: true }
+  # Previous Material Deep Ocean: major: { foreground: "#C3E88D", is_bold: true }
+  major: { foreground: "#35B5FF", is_bold: true }
   # Previous palette: minor: { foreground: "#a9b665" }
-  minor: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: minor: { foreground: "#C3E88D" }
+  minor: { foreground: "#35B5FF" }
   # Previous palette: number_byte: { foreground: "#a9b665", is_bold: true }
-  number_byte: { foreground: "#C3E88D", is_bold: true }
+  # Previous Material Deep Ocean: number_byte: { foreground: "#C3E88D", is_bold: true }
+  number_byte: { foreground: "#35B5FF", is_bold: true }
   # Previous palette: number_kilo: { foreground: "#a9b665", is_bold: true }
-  number_kilo: { foreground: "#C3E88D", is_bold: true }
+  # Previous Material Deep Ocean: number_kilo: { foreground: "#C3E88D", is_bold: true }
+  number_kilo: { foreground: "#35B5FF", is_bold: true }
   # Previous palette: number_mega: { foreground: "#a9b665", is_bold: true }
-  number_mega: { foreground: "#C3E88D", is_bold: true }
+  # Previous Material Deep Ocean: number_mega: { foreground: "#C3E88D", is_bold: true }
+  number_mega: { foreground: "#35B5FF", is_bold: true }
   # Previous palette: number_giga: { foreground: "#a9b665", is_bold: true }
-  number_giga: { foreground: "#C3E88D", is_bold: true }
+  # Previous Material Deep Ocean: number_giga: { foreground: "#C3E88D", is_bold: true }
+  number_giga: { foreground: "#35B5FF", is_bold: true }
   # Previous palette: number_huge: { foreground: "#a9b665", is_bold: true }
-  number_huge: { foreground: "#C3E88D", is_bold: true }
+  # Previous Material Deep Ocean: number_huge: { foreground: "#C3E88D", is_bold: true }
+  number_huge: { foreground: "#35B5FF", is_bold: true }
   # Previous palette: unit_byte: { foreground: "#a9b665" }
-  unit_byte: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: unit_byte: { foreground: "#C3E88D" }
+  unit_byte: { foreground: "#35B5FF" }
   # Previous palette: unit_kilo: { foreground: "#a9b665" }
-  unit_kilo: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: unit_kilo: { foreground: "#C3E88D" }
+  unit_kilo: { foreground: "#35B5FF" }
   # Previous palette: unit_mega: { foreground: "#a9b665" }
-  unit_mega: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: unit_mega: { foreground: "#C3E88D" }
+  unit_mega: { foreground: "#35B5FF" }
   # Previous palette: unit_giga: { foreground: "#a9b665" }
-  unit_giga: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: unit_giga: { foreground: "#C3E88D" }
+  unit_giga: { foreground: "#35B5FF" }
   # Previous palette: unit_huge: { foreground: "#a9b665" }
-  unit_huge: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: unit_huge: { foreground: "#C3E88D" }
+  unit_huge: { foreground: "#35B5FF" }
 
 users:
   # Previous palette: user_you: { foreground: "#e78a4e", is_bold: true }
-  user_you: { foreground: "#F78C6C", is_bold: true }
+  # Previous Material Deep Ocean: user_you: { foreground: "#F78C6C", is_bold: true }
+  user_you: { foreground: "#FA7A61", is_bold: true }
   # Previous palette: user_root: { foreground: "#d4be98" }
-  user_root: { foreground: "#A6ACCD" }
+  # Previous Material Deep Ocean: user_root: { foreground: "#A6ACCD" }
+  user_root: { foreground: "#E0D9C7" }
   # Previous palette: user_other: { foreground: "#d4be98" }
-  user_other: { foreground: "#A6ACCD" }
+  # Previous Material Deep Ocean: user_other: { foreground: "#A6ACCD" }
+  user_other: { foreground: "#E0D9C7" }
   # Previous palette: group_yours: { foreground: "#e78a4e", is_bold: true }
-  group_yours: { foreground: "#F78C6C", is_bold: true }
+  # Previous Material Deep Ocean: group_yours: { foreground: "#F78C6C", is_bold: true }
+  group_yours: { foreground: "#FA7A61", is_bold: true }
   # Previous palette: group_other: { foreground: "#d4be98" }
-  group_other: { foreground: "#A6ACCD" }
+  # Previous Material Deep Ocean: group_other: { foreground: "#A6ACCD" }
+  group_other: { foreground: "#E0D9C7" }
   # Previous palette: group_root: { foreground: "#d4be98" }
-  group_root: { foreground: "#A6ACCD" }
+  # Previous Material Deep Ocean: group_root: { foreground: "#A6ACCD" }
+  group_root: { foreground: "#E0D9C7" }
 
 links:
   # Previous palette: normal: { foreground: "#ea6962", is_bold: true }
-  normal: { foreground: "#F07178", is_bold: true }
+  # Previous Material Deep Ocean: normal: { foreground: "#F07178", is_bold: true }
+  normal: { foreground: "#EA6847", is_bold: true }
   # Previous palette: multi_link_file: { foreground: "#ea6962", background: "#e78a4e" }
-  multi_link_file: { foreground: "#F07178", background: "#F78C6C" }
+  # Previous Material Deep Ocean: multi_link_file: { foreground: "#F07178", background: "#F78C6C" }
+  multi_link_file: { foreground: "#EA6847", background: "#FA7A61" }
 
 git:
   # Previous palette: new: { foreground: "#a9b665" }
-  new: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: new: { foreground: "#C3E88D" }
+  new: { foreground: "#35B5FF" }
   # Previous palette: modified: { foreground: "#7daea3" }
-  modified: { foreground: "#82AAFF" }
+  # Previous Material Deep Ocean: modified: { foreground: "#82AAFF" }
+  modified: { foreground: "#5DB2F8" }
   # Previous palette: deleted: { foreground: "#ea6962" }
-  deleted: { foreground: "#F07178" }
+  # Previous Material Deep Ocean: deleted: { foreground: "#F07178" }
+  deleted: { foreground: "#EA6847" }
   # Previous palette: renamed: { foreground: "#e78a4e" }
-  renamed: { foreground: "#F78C6C" }
+  # Previous Material Deep Ocean: renamed: { foreground: "#F78C6C" }
+  renamed: { foreground: "#FA7A61" }
   # Previous palette: typechange: { foreground: "#d3869b" }
-  typechange: { foreground: "#C792EA" }
+  # Previous Material Deep Ocean: typechange: { foreground: "#C792EA" }
+  typechange: { foreground: "#D943A8" }
   # Previous palette: ignored: { foreground: "#d4be98", is_dimmed: true }
-  ignored: { foreground: "#A6ACCD", is_dimmed: true }
+  # Previous Material Deep Ocean: ignored: { foreground: "#A6ACCD", is_dimmed: true }
+  ignored: { foreground: "#E0D9C7", is_dimmed: true }
   # Previous palette: conflicted: { foreground: "#ea6962" }
-  conflicted: { foreground: "#F07178" }
+  # Previous Material Deep Ocean: conflicted: { foreground: "#F07178" }
+  conflicted: { foreground: "#EA6847" }
 
 git_repo:
   # Previous palette: branch_main: { foreground: "#a9b665" }
-  branch_main: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: branch_main: { foreground: "#C3E88D" }
+  branch_main: { foreground: "#35B5FF" }
   # Previous palette: branch_other: { foreground: "#e78a4e" }
-  branch_other: { foreground: "#F78C6C" }
+  # Previous Material Deep Ocean: branch_other: { foreground: "#F78C6C" }
+  branch_other: { foreground: "#FA7A61" }
   # Previous palette: git_clean: { foreground: "#a9b665" }
-  git_clean: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: git_clean: { foreground: "#C3E88D" }
+  git_clean: { foreground: "#35B5FF" }
   # Previous palette: git_dirty: { foreground: "#e78a4e" }
-  git_dirty: { foreground: "#F78C6C" }
+  # Previous Material Deep Ocean: git_dirty: { foreground: "#F78C6C" }
+  git_dirty: { foreground: "#FA7A61" }
 
 security_context:
   # Previous palette: colon: { foreground: "#d4be98", is_dimmed: true }
-  colon: { foreground: "#A6ACCD", is_dimmed: true }
+  # Previous Material Deep Ocean: colon: { foreground: "#A6ACCD", is_dimmed: true }
+  colon: { foreground: "#E0D9C7", is_dimmed: true }
   # Previous palette: user: { foreground: "#7daea3" }
-  user: { foreground: "#82AAFF" }
+  # Previous Material Deep Ocean: user: { foreground: "#82AAFF" }
+  user: { foreground: "#5DB2F8" }
   # Previous palette: role: { foreground: "#a9b665" }
-  role: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: role: { foreground: "#C3E88D" }
+  role: { foreground: "#35B5FF" }
   # Previous palette: typ: { foreground: "#e78a4e" }
-  typ: { foreground: "#F78C6C" }
+  # Previous Material Deep Ocean: typ: { foreground: "#F78C6C" }
+  typ: { foreground: "#FA7A61" }
   # Previous palette: range: { foreground: "#89b482" }
-  range: { foreground: "#89DDFF" }
+  # Previous Material Deep Ocean: range: { foreground: "#89DDFF" }
+  range: { foreground: "#86DBF5" }
 
 file_type:
   # Previous palette: image: { foreground: "#d3869b" }
-  image: { foreground: "#C792EA" }
+  # Previous Material Deep Ocean: image: { foreground: "#C792EA" }
+  image: { foreground: "#D943A8" }
   # Previous palette: video: { foreground: "#d3869b", is_bold: true }
-  video: { foreground: "#C792EA", is_bold: true }
+  # Previous Material Deep Ocean: video: { foreground: "#C792EA", is_bold: true }
+  video: { foreground: "#D943A8", is_bold: true }
   # Previous palette: music: { foreground: "#89b482" }
-  music: { foreground: "#89DDFF" }
+  # Previous Material Deep Ocean: music: { foreground: "#89DDFF" }
+  music: { foreground: "#86DBF5" }
   # Previous palette: lossless: { foreground: "#89b482", is_bold: true }
-  lossless: { foreground: "#89DDFF", is_bold: true }
+  # Previous Material Deep Ocean: lossless: { foreground: "#89DDFF", is_bold: true }
+  lossless: { foreground: "#86DBF5", is_bold: true }
   # Previous palette: crypto: { foreground: "#a9b665", is_bold: true }
-  crypto: { foreground: "#C3E88D", is_bold: true }
+  # Previous Material Deep Ocean: crypto: { foreground: "#C3E88D", is_bold: true }
+  crypto: { foreground: "#35B5FF", is_bold: true }
   # Previous palette: document: { foreground: "#a9b665" }
-  document: { foreground: "#C3E88D" }
+  # Previous Material Deep Ocean: document: { foreground: "#C3E88D" }
+  document: { foreground: "#35B5FF" }
   # Previous palette: compressed: { foreground: "#ea6962" }
-  compressed: { foreground: "#F07178" }
+  # Previous Material Deep Ocean: compressed: { foreground: "#F07178" }
+  compressed: { foreground: "#EA6847" }
   # Previous palette: temp: { foreground: White }
-  temp: { foreground: "#EEFFFF" }
+  # Previous Material Deep Ocean: temp: { foreground: "#EEFFFF" }
+  temp: { foreground: "#E0D9C7" }
   # Previous palette: compiled: { foreground: "#e78a4e" }
-  compiled: { foreground: "#F78C6C" }
+  # Previous Material Deep Ocean: compiled: { foreground: "#F78C6C" }
+  compiled: { foreground: "#FA7A61" }
   # Previous palette: build: { foreground: "#e78a4e", is_bold: true, is_underline: true }
-  build: { foreground: "#F78C6C", is_bold: true, is_underline: true }
+  # Previous Material Deep Ocean: build: { foreground: "#F78C6C", is_bold: true, is_underline: true }
+  build: { foreground: "#FA7A61", is_bold: true, is_underline: true }
   # Previous palette: source: { foreground: "#e78a4e", is_bold: true }
-  source: { foreground: "#F78C6C", is_bold: true }
+  # Previous Material Deep Ocean: source: { foreground: "#F78C6C", is_bold: true }
+  source: { foreground: "#FA7A61", is_bold: true }
 
 # Previous palette: punctuation: { foreground: "#7b8496", is_bold: true }
-punctuation: { foreground: "#717CB4", is_bold: true }
+# Previous Material Deep Ocean: punctuation: { foreground: "#717CB4", is_bold: true }
+punctuation: { foreground: "#2F516C", is_bold: true }
 # Previous palette: date: { foreground: "#7daea3" }
-date: { foreground: "#82AAFF" }
+# Previous Material Deep Ocean: date: { foreground: "#82AAFF" }
+date: { foreground: "#5DB2F8" }
 # Previous palette: inode: { foreground: "#d3869b" }
-inode: { foreground: "#C792EA" }
+# Previous Material Deep Ocean: inode: { foreground: "#C792EA" }
+inode: { foreground: "#D943A8" }
 # Previous palette: blocks: { foreground: "#89b482" }
-blocks: { foreground: "#89DDFF" }
+# Previous Material Deep Ocean: blocks: { foreground: "#89DDFF" }
+blocks: { foreground: "#86DBF5" }
 # Previous palette: header: { foreground: "#d4be98", is_underline: true }
-header: { foreground: "#A6ACCD", is_underline: true }
+# Previous Material Deep Ocean: header: { foreground: "#A6ACCD", is_underline: true }
+header: { foreground: "#E0D9C7", is_underline: true }
 # Previous palette: octal: { foreground: "#d3869b" }
-octal: { foreground: "#C792EA" }
+# Previous Material Deep Ocean: octal: { foreground: "#C792EA" }
+octal: { foreground: "#D943A8" }
 # Previous palette: flags: { foreground: "#d4be98" }
-flags: { foreground: "#A6ACCD" }
+# Previous Material Deep Ocean: flags: { foreground: "#A6ACCD" }
+flags: { foreground: "#E0D9C7" }
 
 # Previous palette: symlink_path: { foreground: "#89b482" }
-symlink_path: { foreground: "#89DDFF" }
+# Previous Material Deep Ocean: symlink_path: { foreground: "#89DDFF" }
+symlink_path: { foreground: "#86DBF5" }
 # Previous palette: control_char: { foreground: "#ea6962" }
-control_char: { foreground: "#F07178" }
+# Previous Material Deep Ocean: control_char: { foreground: "#F07178" }
+control_char: { foreground: "#EA6847" }
 # Previous palette: broken_symlink: { foreground: "#ea6962" }
-broken_symlink: { foreground: "#F07178" }
+# Previous Material Deep Ocean: broken_symlink: { foreground: "#F07178" }
+broken_symlink: { foreground: "#EA6847" }
 # Previous palette: broken_path_overlay: { foreground: "#d4be98", is_underline: true }
-broken_path_overlay: { foreground: "#A6ACCD", is_underline: true }
+# Previous Material Deep Ocean: broken_path_overlay: { foreground: "#A6ACCD", is_underline: true }
+broken_path_overlay: { foreground: "#E0D9C7", is_underline: true }
 
 filenames:
   # Custom filename-based overrides
@@ -197,4 +278,5 @@ filenames:
 extensions:
   # Custom extension-based overrides
   # Previous palette: rs: { filename: { foreground: "#ea6962" }, icon: { glyph: 🦀 } }
-  rs: { filename: { foreground: "#F07178" }, icon: { glyph: 🦀 } }
+  # Previous Material Deep Ocean: rs: { filename: { foreground: "#F07178" }, icon: { glyph: 🦀 } }
+  rs: { filename: { foreground: "#EA6847" }, icon: { glyph: 🦀 } }

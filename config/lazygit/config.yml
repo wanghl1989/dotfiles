@@ -2,34 +2,44 @@ gui:
   theme: # catppuccin palette of course
     activeBorderColor:
       # Previous palette: - "#ea6962"
-      - "#F07178"
+      # Previous Material Deep Ocean: - "#F07178"
+      - "#EA6847"
     inactiveBorderColor:
       # Previous palette: - "#665c54"
-      - "#464B5D"
+      # Previous Material Deep Ocean: - "#464B5D"
+      - "#22536F"
     searchingActiveBorderColor:
       # Previous palette: - "#a9b665"
-      - "#C3E88D"
+      # Previous Material Deep Ocean: - "#C3E88D"
+      - "#86DBF5"
     selectedLineBgColor:
       # Previous palette: - "#928374"
-      - "#717CB4"
+      # Previous Material Deep Ocean: - "#717CB4"
+      - "#06364B"
     cherryPickedCommitBgColor:
       # Previous palette: - "#d3869b"
-      - "#C792EA"
+      # Previous Material Deep Ocean: - "#C792EA"
+      - "#D943A8"
     cherryPickedCommitFgColor:
       # Previous palette: - "#7daea3"
-      - "#82AAFF"
+      # Previous Material Deep Ocean: - "#82AAFF"
+      - "#5DB2F8"
     unstagedChangesColor:
       # Previous palette: - "#e78a4e"
-      - "#F78C6C"
+      # Previous Material Deep Ocean: - "#F78C6C"
+      - "#FA7A61"
     defaultFgColor:
       # Previous palette: - "#d4be98"
-      - "#A6ACCD"
+      # Previous Material Deep Ocean: - "#A6ACCD"
+      - "#E0D9C7"
     optionsTextColor:
       # Previous palette: - "#7daea3"
-      - "#82AAFF"
+      # Previous Material Deep Ocean: - "#82AAFF"
+      - "#5DB2F8"
     authorColors:
       # Previous palette: "*": "#d8a657"
-      "*": "#FFCB6B"
+      # Previous Material Deep Ocean: "*": "#FFCB6B"
+      "*": "#FD5E3A"
   showBottomLine: true
   border: rounded
   nerdFontsVersion: "3"

@@ -25,4 +25,6 @@
 #--map-syntax ".ignore:Git Ignore"
 # Previous theme: Gruvbox Dark
 # --theme "gruvbox-dark"
---theme "Material Deep Ocean"
+# Previous theme: Material Deep Ocean
+# --theme "Material Deep Ocean"
+--theme "neofusion"
