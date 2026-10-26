@@ -100,10 +100,10 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 		end
 		vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
-		local colors = require("neofusion.palette")
+		local colors = require("config.appearance").colors
 		vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", {
 			bg = "NONE",
-			fg = colors.bright_red,
+			fg = colors.error,
 		})
 	end,
 })

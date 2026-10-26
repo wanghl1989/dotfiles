@@ -1,0 +1,67 @@
+# Material Deep Ocean; matches the Ghostty terminal palette.
+
+[colors.primary]
+background = "#0F111A"
+foreground = "#A6ACCD"
+dim_foreground = "#A6ACCD"
+bright_foreground = "#A6ACCD"
+
+[colors.cursor]
+text = "#0F111A"
+cursor = "#FFCC00"
+
+[colors.vi_mode_cursor]
+text = "#0F111A"
+cursor = "#89DDFF"
+
+[colors.search.matches]
+foreground = "#0F111A"
+background = "#A6ACCD"
+
+[colors.search.focused_match]
+foreground = "#0F111A"
+background = "#89DDFF"
+
+[colors.footer_bar]
+foreground = "#0F111A"
+background = "#A6ACCD"
+
+[colors.hints.start]
+foreground = "#0F111A"
+background = "#F07178"
+
+[colors.hints.end]
+foreground = "#0F111A"
+background = "#A6ACCD"
+
+[colors.selection]
+text = "#EEFFFF"
+background = "#1F2233"
+
+[colors.normal]
+black = "#000000"
+red = "#DC6068"
+green = "#ABCF76"
+yellow = "#E6B455"
+blue = "#6E98EB"
+magenta = "#B480D6"
+cyan = "#71C6E7"
+white = "#EEFFFF"
+
+[colors.bright]
+black = "#464B5D"
+red = "#F07178"
+green = "#C3E88D"
+yellow = "#FFCB6B"
+blue = "#82AAFF"
+magenta = "#C792EA"
+cyan = "#89DDFF"
+white = "#EEFFFF"
+
+[[colors.indexed_colors]]
+index = 16
+color = "#F78C6C"
+
+[[colors.indexed_colors]]
+index = 17
+color = "#FFCB6B"

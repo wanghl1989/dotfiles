@@ -1,8 +1,4 @@
-# Previous theme: Gruvbox Material Dark
-# theme = gruvbox_material_dark.conf
-# Previous theme: Material Deep Ocean
-# theme = material_deep_ocean.conf
-theme = neofusion.conf
+theme = theme.conf
 background-blur = 20
 
 window-padding-x = 10

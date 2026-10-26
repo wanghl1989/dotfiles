@@ -1,5 +1,5 @@
 [general]
-import = ["~/.config/alacritty/themes/neofusion.toml"]
+import = ["~/.config/alacritty/themes/theme.toml"]
 
 # Previous inline Gruvbox Material theme:
 # [colors.primary]

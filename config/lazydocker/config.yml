@@ -1,10 +1,1 @@
-gui:
-  theme:
-    activeBorderColor:
-      - "#a9b665"
-    inactiveBorderColor:
-      - "#d4be98"
-    selectedLineBgColor:
-      - "#e78a4e"
-    optionsTextColor:
-      - "#d3869b"
+theme.yml

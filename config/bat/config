@@ -23,8 +23,4 @@
 #   Example 2: Use ".gitignore"-style highlighting for ".ignore" files
 #--map-syntax "*.ino:C++"
 #--map-syntax ".ignore:Git Ignore"
-# Previous theme: Gruvbox Dark
-# --theme "gruvbox-dark"
-# Previous theme: Material Deep Ocean
-# --theme "Material Deep Ocean"
---theme "neofusion"
+--theme "theme"

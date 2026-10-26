@@ -3,7 +3,7 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-lualine/lualine.nvim" },
 })
 
-local lualine_theme = vim.deepcopy(require("neofusion.lualine"))
+local lualine_theme = vim.deepcopy(require("config.appearance").lualine)
 for _, mode in pairs(lualine_theme) do
 	-- Preserve the existing layout: only A is solid; B/C (and therefore Y/X)
 	-- use the terminal background. Z is overridden on the component below.
@@ -19,7 +19,7 @@ end
 require("lualine").setup({
 	options = {
 		icons_enabled = true,
-		-- Official Neofusion theme with the existing transparent B/C sections.
+		-- Selected theme with the existing transparent B/C sections.
 		theme = lualine_theme,
 		disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter" } },
 		-- component_separators = { left = "", right = "" },
@@ -92,7 +92,7 @@ require("lualine").setup({
 					return venv_name or ""
 				end,
 				icon = "",
-				color = { fg = require("neofusion.palette").bright_red },
+				color = { fg = require("config.appearance").colors.error },
 				cond = function()
 					return package.loaded["venv-selector"] ~= nil
 				end,
@@ -105,8 +105,8 @@ require("lualine").setup({
 			{
 				"lsp_status",
 				icon = false,
-				-- Keep Z transparent and use Neofusion's ice accent as text.
-				color = { fg = require("neofusion.palette").light0, bg = "NONE", gui = "bold" },
+				-- Keep Z transparent and use the selected foreground color.
+				color = { fg = require("config.appearance").colors.foreground, bg = "NONE", gui = "bold" },
 				symbols = {
 					spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
 					done = "✓",
