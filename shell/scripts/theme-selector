@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+"""Copy named themes to stable theme.* files. Requires only Python 3."""
+
+import os
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+
+
+ROOT = Path(__file__).resolve().parents[2]
+THEMES = ROOT / "themes"
+
+
+def inventory():
+    groups = {}
+    for source in sorted(THEMES.rglob("*")):
+        if not source.is_file() or source.name.startswith(".") or source.suffix == ".md":
+            continue
+        relative = source.relative_to(THEMES)
+        if relative.parts[0] == "server":
+            target = ROOT / "server/config" / relative.relative_to("server")
+        else:
+            target = ROOT / "config" / relative
+        target = target.with_name("theme" + source.suffix)
+        groups.setdefault(target, {})[source.stem] = source
+    return groups
+
+
+def label(target):
+    return str(target.relative_to(ROOT))
+
+
+def copy_theme(source, target):
+    # Replace the destination itself, including any old symlink.
+    target.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(prefix=".theme-", dir=target.parent)
+    try:
+        with os.fdopen(fd, "wb") as output, source.open("rb") as input_file:
+            shutil.copyfileobj(input_file, output)
+        os.chmod(temporary, 0o644)
+        os.replace(temporary, target)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+def main():
+    args = sys.argv[1:]
+    if not (args == ["list"] or len(args) == 2 and args[0] == "change"):
+        print("用法：theme-selector list | theme-selector change <主题名>", file=sys.stderr)
+        return 2
+
+    groups = inventory()
+    names = sorted({name for sources in groups.values() for name in sources})
+    if args[0] == "list":
+        for name in names:
+            print(name)
+        return 0
+
+    name = args[1]
+    if not re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_-]*", name) or name not in names:
+        print(f"未知主题：{name}；请运行 theme-selector list 查看。", file=sys.stderr)
+        return 1
+
+    selected = [(target, sources[name]) for target, sources in groups.items() if name in sources]
+    # Read every source before writing any destination.
+    for _, source in selected:
+        with source.open("rb") as input_file:
+            input_file.read()
+    for target, source in selected:
+        copy_theme(source, target)
+        print(f"已复制：{source.relative_to(ROOT)} → {label(target)}")
+    bat = shutil.which("bat")
+    if bat:
+        result = subprocess.run([bat, "cache", "--build"])
+        if result.returncode:
+            print("主题文件已复制，但 bat 缓存重建失败。", file=sys.stderr)
+            return result.returncode
+    print("主题文件已更新；请重载或重启对应软件。")
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except OSError as error:
+        print(f"切换失败：{error}", file=sys.stderr)
+        sys.exit(1)

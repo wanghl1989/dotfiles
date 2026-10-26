@@ -37,6 +37,23 @@ os_kernel=$(uname -s)
 ITEMS=("zed" "nvim" "kitty" "uv" "ruff" "starship.toml" "tmux" "ghostty" "lazygit" "bat" "yazi" "btop" "lazydocker" "herdr" "eza" "newsboat" "pip" "fastfetch" "dict" "fish" "alacritty" "sesh")
 BASE_ROOT=$(dirname $(dirname "$SCRIPT_PATH"))
 
+# 初始化未跟踪的主题文件。已有文件保持不变，保留本机选择。
+python3 - "$BASE_ROOT" <<'PY'
+from pathlib import Path
+import runpy
+import sys
+
+root = Path(sys.argv[1])
+selector = runpy.run_path(str(root / "shell/scripts/theme-selector"))
+for target, sources in selector["inventory"]().items():
+    if not target.exists():
+        default = "neofusion" if "neofusion" in sources else sorted(sources)[0]
+        selector["copy_theme"](sources[default], target)
+PY
+if [ ! -f "$BASE_ROOT/config/btop/btop.conf" ]; then
+  cp "$BASE_ROOT/config/btop/btop.conf.default" "$BASE_ROOT/config/btop/btop.conf"
+fi
+
 DEST_DIR="$HOME/.config"
 
 mkdir -p "$DEST_DIR"

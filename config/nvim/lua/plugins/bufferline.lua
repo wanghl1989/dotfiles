@@ -7,11 +7,8 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 	once = true,
 	callback = function()
 		local bufferline = require("bufferline")
-		local colors = require('material.colors')
-		-- active 背景:用调色板里真实存在的 editor.border,
-		-- 比 editor.bg(#0F111A)明显亮一档,确保选中项可见。
-		-- 注意:旧配置用的 colors.bg0 在 material 里不存在,会是 nil。
-		local active_bg = colors.editor.border
+		local colors = require("config.appearance").colors
+		local active_bg = colors.surface
 
 		bufferline.setup({
 			options = {
@@ -37,18 +34,18 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 			highlights = {
 				-- 选中的 buffer:白色文字 + 明显背景,确保可见
 				buffer_selected = {
-					fg = colors.white,
+					fg = colors.accent,
 					bg = active_bg,
 					bold = true,
 				},
 				-- 未选中的 tab(标签页)
 				tab = {
 					bg = "none",
-					fg = colors.editor.fg_dark,
+					fg = colors.muted,
 				},
 				-- 选中的 tab:与选中 buffer 相同的背景
 				tab_selected = {
-					fg = colors.white,
+					fg = colors.accent,
 					bg = active_bg,
 					bold = true,
 				},
@@ -61,12 +58,12 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 					fg = active_bg,
 				},
 				close_button_selected = {
-					fg = colors.white,
+					fg = colors.accent,
 					bg = active_bg,
 				},
 				-- 分隔符:fg 设为背景色以融入背景;选中项旁的分隔符融入 active 背景
 				separator = {
-					fg = colors.editor.bg,
+					fg = colors.background,
 					bg = "none",
 				},
 				separator_selected = {
@@ -74,21 +71,21 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 					bg = "none",
 				},
 				separator_visible = {
-					fg = colors.editor.bg,
+					fg = colors.background,
 					bg = "none",
 				},
 				indicator_selected = {
-					fg = colors.green,
+					fg = colors.foreground,
 					bg = active_bg,
 				},
 				modified = {
-					fg = colors.red,
+					fg = colors.error,
 				},
 				modified_visible = {
-					fg = colors.red,
+					fg = colors.error,
 				},
 				modified_selected = {
-					fg = colors.red,
+					fg = colors.error,
 					bg = active_bg,
 				},
 			},
