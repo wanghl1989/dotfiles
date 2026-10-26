@@ -87,7 +87,7 @@ require("material").setup({
 	disable = {
 		colored_cursor = false, -- Disable the colored cursor
 		borders = false, -- Disable borders between vertically split windows
-		background = true, -- Prevent the theme from setting the background (NeoVim then uses your terminal background)
+		background = true, -- Keep the editor transparent and use the terminal background
 		term_colors = false, -- Prevent the theme from setting terminal colors
 		eob_lines = false, -- Hide the end-of-buffer lines
 	},
@@ -109,7 +109,7 @@ require("material").setup({
 		local highlights = {
 			-- Noice displays the search count at the right edge of the line.
 			NoiceVirtualText = { fg = "#ffb3b3" },
-			Visual = { bg = "#392f41"},
+			Visual = { bg = "#392f41" },
 			-- material.nvim links attributes to DiffChange, which gives Python
 			-- decorators such as @dataclass an unrelated diff background.
 			["@attribute"] = { fg = colors.main.cyan },
@@ -124,7 +124,7 @@ require("material").setup({
 			},
 			CursorLine = {
 				bg = "#232637",
-			         },
+			},
 			LspInlayHint = {
 				bg = colors.editor.active,
 				fg = colors.editor.fg_dark,
@@ -158,3 +158,46 @@ require("material").setup({
 
 vim.g.material_style = "deep ocean"
 vim.cmd("colorscheme material")
+
+local colors = {
+	bg = "#0F111A",
+	bg_alt = "#090B10",
+	fg = "#A6ACCD",
+	title = "#EEFFFF",
+	selection = "#1F2233",
+	disabled = "#464B5D",
+	accent = "#84FFFF",
+	green = "#C3E88D",
+	purple = "#C792EA",
+	red = "#F07178",
+	yellow = "#FFCB6B",
+}
+
+return {
+	normal = {
+		a = { fg = colors.bg, bg = colors.accent, gui = "bold" },
+		b = { fg = colors.title, bg = "NONE" },
+		c = { fg = colors.fg, bg = "NONE" },
+	},
+	insert = {
+		a = { fg = colors.bg, bg = colors.green, gui = "bold" },
+		b = { fg = colors.title, bg = "NONE" },
+	},
+	visual = {
+		a = { fg = colors.bg, bg = colors.purple, gui = "bold" },
+		b = { fg = colors.title, bg = "NONE" },
+	},
+	replace = {
+		a = { fg = colors.bg, bg = colors.red, gui = "bold" },
+		b = { fg = colors.title, bg = "NONE" },
+	},
+	command = {
+		a = { fg = colors.bg, bg = colors.yellow, gui = "bold" },
+		b = { fg = colors.title, bg = "NONE" },
+	},
+	inactive = {
+		a = { fg = colors.disabled, bg = "NONE" },
+		b = { fg = colors.disabled, bg = "NONE" },
+		c = { fg = colors.disabled, bg = "NONE" },
+	},
+}

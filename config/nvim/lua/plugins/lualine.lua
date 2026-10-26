@@ -9,10 +9,11 @@ vim.pack.add({
 require("lualine").setup({
 	options = {
 		icons_enabled = true,
-		theme = "material-nvim",
+		theme = require("plugins.theme"),
 		disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter" } },
-		component_separators = { left = "", right = "" },
-		section_separators = { left = "|", right = "|" },
+		-- component_separators = { left = "", right = "" },
+        component_separators  = { left = "|", right = "|" },
+		section_separators = { left = "", right = "" },
 		ignore_focus = {},
 		always_divide_middle = true,
 		always_show_tabline = true,
@@ -94,6 +95,8 @@ require("lualine").setup({
 			{
 				"lsp_status",
 				icon = false,
+				-- Keep Z transparent and use its former accent background as text.
+				color = { fg = "#84FFFF", bg = "NONE", gui = "bold" },
 				symbols = {
 					spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
 					done = "✓",
