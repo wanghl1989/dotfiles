@@ -46,10 +46,12 @@ cp themes/kitty/themes/neofusion.conf themes/kitty/themes/my_theme.conf
 | `eza/<name>.yml` | `config/eza/theme.yml` |
 | `ghostty/themes/<name>.conf` | `config/ghostty/themes/theme.conf` |
 | `kitty/themes/<name>.conf` | `config/kitty/themes/theme.conf` |
+| `kitty/grab/<name>.conf` | `config/kitty/grab/theme.conf` |
 | `lazydocker/<name>.yml` | `config/lazydocker/theme.yml` |
 | `lazygit/<name>.yml` | `config/lazygit/theme.yml` |
 | `nvim/lua/plugins/<name>.lua` | `config/nvim/lua/plugins/theme.lua` |
 | `server/tmux/<name>.conf` | `server/config/tmux/theme.conf` |
+| `shell/<name>.zsh` | `config/shell/theme.zsh` |
 | `starship/<name>.toml` | `config/starship/theme.toml` |
 | `tmux/<name>.conf` | `config/tmux/theme.conf` |
 | `yazi/<name>.tmTheme` | `config/yazi/theme.tmTheme` |
@@ -118,13 +120,31 @@ theme = require("plugins.theme"),
 ```sh
 ./shell/scripts/theme-selector list
 ./shell/scripts/theme-selector change my_theme
+./shell/scripts/theme-selector change 2
+./shell/scripts/theme-selector change
 git status --short
 ```
 
-`list` 只输出主题名称。`change` 会输出实际复制的文件；如果安装了 `bat`，复制完成后会
+`list` 按主题名称排序，显示从 1 开始的编号。`change` 可以传主题名称或对应编号；
+不带参数时会列出主题，输入编号或名称后回车切换，直接回车取消。
+编号取决于当前列表，新增或删除主题后可能变化；脚本中固定选择主题时建议使用名称。
+`change` 会输出实际复制的文件；如果安装了 `bat`，复制完成后会
 自动执行 `bat cache --build`。若缓存重建失败，主题文件已经复制，可以修复后单独重跑该命令。
 
-切换后重载或重启对应软件。Starship 会在下一次绘制提示符时读取配置。
+复制后会尝试重载已安装的 Kitty 和 tmux 配置：
+
+- Kitty：通过 `KITTY_LISTEN_ON` 或本机属于当前用户的 `/tmp/kitty*` socket 重载。
+  沿用主配置中的 `allow_remote_control` 和 `listen_on` 设置，不会启动新的 Kitty。
+  tab bar 配色来自 `kitty/themes/theme.conf`，抓取工具在下次打开时读取 `kitty/grab/theme.conf`。
+- tmux：在 tmux 内重载当前实例，在外部重载默认实例；没有运行时跳过。
+  仅在已安装的 `~/.config/tmux/theme.conf`（或 `$XDG_CONFIG_HOME` 下的对应路径）
+  指向本次更新的文件时执行，不会连接远程服务器。
+- Zsh：公共 `.zshrc_plugin` 在启动及每次提示符刷新前加载 `config/shell/theme.zsh`，
+  应用 fzf-tab 和自动建议配色。首次升级公共配置时需执行一次 `source ~/.zshrc_plugin`，
+  或新开一个 Zsh；之后切换主题不必重新 source。
+
+自动重载失败会提示，但已复制的文件会保留。其他软件按需重载或重启。
+Starship 会在下一次绘制提示符时读取配置。
 检查各软件的显示效果，确认源文件中引用的插件、主题名和额外资源都存在。
 
 活动文件 `config/**/theme.*` 和 `server/config/**/theme.*` 已被 Git 忽略。

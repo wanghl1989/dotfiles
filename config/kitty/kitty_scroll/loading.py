@@ -4,9 +4,6 @@ import sys
 import time
 import os
 
-# Previous colors: '#ffffff', '#A6ACCD'
-default_color = '#E0D9C7'
-
 
 def hex_to_fg_color(hex):
     h = hex.lstrip('#')
@@ -15,8 +12,8 @@ def hex_to_fg_color(hex):
 
 
 def env_to_fg_color(name):
-    hex_color = os.environ.get(name, default_color)
-    return hex_to_fg_color(hex_color)
+    hex_color = os.environ.get(name)
+    return hex_to_fg_color(hex_color) if hex_color else '\x1b[39m'
 
 
 style_simple = os.environ.get('KITTY_SCROLLBACK_NVIM_STYLE_SIMPLE',

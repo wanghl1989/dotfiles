@@ -1,30 +1,18 @@
 # pyright: reportMissingImports=false
 
 from kitty.boss import get_boss
-from kitty.fast_data_types import Screen, get_options
+from kitty.fast_data_types import Screen
 from kitty.tab_bar import (
     DrawData,
     ExtraData,
     Formatter,
     TabBarData,
-    as_rgb,
     draw_attributed_string,
     draw_title,
 )
-from kitty.utils import color_as_int
 
 # GLOBAL STATE!
 right_status_length = -1
-
-opts = get_options()
-
-ICON = "   Kitty Tabs"
-icon_fg = as_rgb(color_as_int(opts.color4))
-icon_bg = as_rgb(color_as_int(opts.tab_bar_background))
-
-# Bottom decoration bar
-decoration_fg = as_rgb(color_as_int(opts.color4))
-decoration_bg = as_rgb(color_as_int(opts.tab_bar_background))
 
 
 def _draw_left_status(

@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+import stat
 import subprocess
 import sys
 import tempfile
@@ -47,20 +48,86 @@ def copy_theme(source, target):
             os.unlink(temporary)
 
 
+def reload_themes(targets):
+    """Reload only installed configurations updated by this invocation."""
+    config = Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config")))
+
+    def run(command, name):
+        try:
+            result = subprocess.run(command, capture_output=True, text=True, timeout=10)
+            if result.returncode:
+                print(f"{name} 重载失败；主题文件已更新，请手动重载。", file=sys.stderr)
+            else:
+                print(f"已重载：{name}")
+        except (OSError, subprocess.TimeoutExpired):
+            print(f"{name} 重载失败；主题文件已更新，请手动重载。", file=sys.stderr)
+
+    tmux = shutil.which("tmux")
+    tmux_theme = config / "tmux/theme.conf"
+    if tmux and tmux_theme.resolve() in targets:
+        # Inside tmux this selects the current server, including custom sockets.
+        # Outside tmux it checks the default server without starting one.
+        try:
+            running = subprocess.run([tmux, "has-session"], capture_output=True, timeout=3)
+            if running.returncode == 0:
+                run([tmux, "source-file", str(tmux_theme)], "tmux")
+        except (OSError, subprocess.TimeoutExpired):
+            pass
+
+    kitten = shutil.which("kitten")
+    if kitten and (config / "kitty/themes/theme.conf").resolve() in targets:
+        addresses = set()
+        address = os.environ.get("KITTY_LISTEN_ON")
+        if address:
+            addresses.add(address)
+        # kitty appends a PID to the configured /tmp/kitty socket name.
+        for path in Path("/tmp").glob("kitty*"):
+            try:
+                info = path.lstat()
+            except OSError:
+                continue  # The instance may have exited during discovery.
+            if stat.S_ISSOCK(info.st_mode) and info.st_uid == os.getuid():
+                addresses.add("unix:" + str(path))
+        for address in sorted(addresses):
+            run([kitten, "@", "--to", address, "load-config"], "Kitty")
+
+
 def main():
     args = sys.argv[1:]
-    if not (args == ["list"] or len(args) == 2 and args[0] == "change"):
-        print("用法：theme-selector list | theme-selector change <主题名>", file=sys.stderr)
+    if not (args == ["list"] or len(args) in (1, 2) and args[0] == "set"):
+        print("用法：theme-selector list | theme-selector set [主题名或编号]", file=sys.stderr)
         return 2
 
     groups = inventory()
     names = sorted({name for sources in groups.values() for name in sources})
+    if args[0] == "list" or len(args) == 1:
+        for number, name in enumerate(names, 1):
+            print(f"{number}. {name}")
     if args[0] == "list":
-        for name in names:
-            print(name)
         return 0
 
-    name = args[1]
+    if not names:
+        print("没有可用主题。", file=sys.stderr)
+        return 1
+    if len(args) == 1:
+        try:
+            name = input("请选择主题编号或名称（回车取消）：").strip()
+        except EOFError:
+            return 0
+        except KeyboardInterrupt:
+            print()
+            return 130
+        if not name:
+            return 0
+    else:
+        name = args[1]
+
+    if name.isascii() and name.isdecimal():
+        numbered = {str(number): theme for number, theme in enumerate(names, 1)}
+        if name not in numbered:
+            print(f"无效编号：{name}；可选范围为 1–{len(names)}。", file=sys.stderr)
+            return 1
+        name = numbered[name]
     if not re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_-]*", name) or name not in names:
         print(f"未知主题：{name}；请运行 theme-selector list 查看。", file=sys.stderr)
         return 1
@@ -73,13 +140,14 @@ def main():
     for target, source in selected:
         copy_theme(source, target)
         print(f"已复制：{source.relative_to(ROOT)} → {label(target)}")
+    reload_themes({target.resolve() for target, _ in selected})
     bat = shutil.which("bat")
     if bat:
         result = subprocess.run([bat, "cache", "--build"])
         if result.returncode:
             print("主题文件已复制，但 bat 缓存重建失败。", file=sys.stderr)
             return result.returncode
-    print("主题文件已更新；请重载或重启对应软件。")
+    print("主题文件已更新；Zsh 在下一次提示符刷新时应用，其余软件请按需重载或重启。")
     return 0
 
 

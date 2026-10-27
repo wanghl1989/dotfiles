@@ -365,6 +365,9 @@ def load_config(*paths: str, overrides: Optional[Iterable[str]] = None) -> Optio
     configs = list(resolve_config('/etc/xdg/kitty/grab.conf',
                                   os.path.join(config_dir, 'grab.conf'),
                                   config_files_on_cmd_line=[]))
+    theme = os.path.join(config_dir, 'grab', 'theme.conf')
+    if os.path.isfile(theme):
+        configs.append(theme)
     overrides = tuple(overrides) if overrides is not None else ()
     opts_dict, paths = _load_config(defaults, parse_config, merge_result_dicts, *configs, overrides=overrides)
     opts = Options(opts_dict)
