@@ -1,0 +1,67 @@
+# Cendre; matches the Ghostty terminal palette.
+
+[colors.primary]
+background = "#171311"
+foreground = "#e6d5c2"
+dim_foreground = "#e6d5c2"
+bright_foreground = "#e6d5c2"
+
+[colors.cursor]
+text = "#171311"
+cursor = "#e6d5c2"
+
+[colors.vi_mode_cursor]
+text = "#171311"
+cursor = "#20c9cb"
+
+[colors.search.matches]
+foreground = "#171311"
+background = "#e6d5c2"
+
+[colors.search.focused_match]
+foreground = "#171311"
+background = "#20c9cb"
+
+[colors.footer_bar]
+foreground = "#171311"
+background = "#e6d5c2"
+
+[colors.hints.start]
+foreground = "#171311"
+background = "#d25780"
+
+[colors.hints.end]
+foreground = "#171311"
+background = "#e6d5c2"
+
+[colors.selection]
+text = "#e6d5c2"
+background = "#2f1e17"
+
+[colors.normal]
+black = "#201b19"
+red = "#d1766e"
+green = "#99af6b"
+yellow = "#fcba81"
+blue = "#58bdff"
+magenta = "#9480ba"
+cyan = "#4e89a2"
+white = "#a09384"
+
+[colors.bright]
+black = "#73665b"
+red = "#d25780"
+green = "#43b16a"
+yellow = "#f4a21c"
+blue = "#8bcfff"
+magenta = "#a692cd"
+cyan = "#20c9cb"
+white = "#e6d5c2"
+
+[[colors.indexed_colors]]
+index = 16
+color = "#fcba81"
+
+[[colors.indexed_colors]]
+index = 17
+color = "#f4a21c"

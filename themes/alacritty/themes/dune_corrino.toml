@@ -1,0 +1,67 @@
+# Dune corrino; matches the Ghostty terminal palette.
+
+[colors.primary]
+background = "#1D1318"
+foreground = "#F2E2B8"
+dim_foreground = "#F2E2B8"
+bright_foreground = "#F2E2B8"
+
+[colors.cursor]
+text = "#1D1318"
+cursor = "#EFB63B"
+
+[colors.vi_mode_cursor]
+text = "#1D1318"
+cursor = "#87A0AD"
+
+[colors.search.matches]
+foreground = "#1D1318"
+background = "#F2E2B8"
+
+[colors.search.focused_match]
+foreground = "#1D1318"
+background = "#87A0AD"
+
+[colors.footer_bar]
+foreground = "#1D1318"
+background = "#F2E2B8"
+
+[colors.hints.start]
+foreground = "#1D1318"
+background = "#CE5B6B"
+
+[colors.hints.end]
+foreground = "#1D1318"
+background = "#F2E2B8"
+
+[colors.selection]
+text = "#F2E2B8"
+background = "#5A4526"
+
+[colors.normal]
+black = "#2A1C22"
+red = "#CE5B6B"
+green = "#99A75E"
+yellow = "#D4A63F"
+blue = "#7290D9"
+magenta = "#A188CC"
+cyan = "#87A0AD"
+white = "#CFBC96"
+
+[colors.bright]
+black = "#9A8781"
+red = "#CE5B6B"
+green = "#99A75E"
+yellow = "#D4A63F"
+blue = "#7290D9"
+magenta = "#A188CC"
+cyan = "#87A0AD"
+white = "#F2E2B8"
+
+[[colors.indexed_colors]]
+index = 16
+color = "#EFB63B"
+
+[[colors.indexed_colors]]
+index = 17
+color = "#D4A63F"

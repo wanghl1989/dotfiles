@@ -1,0 +1,67 @@
+# OneDark Dark; matches the Ghostty terminal palette.
+
+[colors.primary]
+background = "#000000"
+foreground = "#abb2bf"
+dim_foreground = "#abb2bf"
+bright_foreground = "#abb2bf"
+
+[colors.cursor]
+text = "#000000"
+cursor = "#abb2bf"
+
+[colors.vi_mode_cursor]
+text = "#000000"
+cursor = "#2bbac5"
+
+[colors.search.matches]
+foreground = "#000000"
+background = "#abb2bf"
+
+[colors.search.focused_match]
+foreground = "#000000"
+background = "#2bbac5"
+
+[colors.footer_bar]
+foreground = "#000000"
+background = "#abb2bf"
+
+[colors.hints.start]
+foreground = "#000000"
+background = "#ef596f"
+
+[colors.hints.end]
+foreground = "#000000"
+background = "#abb2bf"
+
+[colors.selection]
+text = "#abb2bf"
+background = "#212121"
+
+[colors.normal]
+black = "#000000"
+red = "#ef596f"
+green = "#89ca78"
+yellow = "#e5c07b"
+blue = "#61afef"
+magenta = "#d55fde"
+cyan = "#2bbac5"
+white = "#abb2bf"
+
+[colors.bright]
+black = "#434852"
+red = "#ff5f76"
+green = "#a3f08f"
+yellow = "#ffd689"
+blue = "#67bbff"
+magenta = "#f56dff"
+cyan = "#33deeb"
+white = "#abb2bf"
+
+[[colors.indexed_colors]]
+index = 16
+color = "#d19a66"
+
+[[colors.indexed_colors]]
+index = 17
+color = "#e5c07b"

@@ -1,0 +1,350 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# format = """
+
+# [ ┌─](bold green)\
+# $os\
+# $directory\
+# $git_branch\
+# $git_status\
+# $git_commit\
+# $fill\
+# $package\
+# $c\
+# $cpp\
+# $rust\
+# ${custom.cargo_version}\
+# $golang\
+# $nodejs\
+# $python\
+# $conda\
+# $docker_context\
+# $time\n\
+
+# [ └─](bold green)\
+# $character\
+# """
+
+
+format = """
+[░▒▓](fg:cyan)\
+$os\
+[](fg:cyan bg:comment)\
+$directory\
+[ ](fg:comment)\
+$git_branch\
+$git_status\
+$git_commit\
+$fill\
+$c\
+$cpp\
+$rust\
+${custom.cargo_version}\
+$golang\
+$nodejs\
+$python\
+$conda\
+$docker_context\
+$time\
+$line_break\
+$character\
+"""
+palette = 'dune_corrino'
+
+right_format = """
+$cmd_duration\
+"""
+
+add_newline = true
+continuation_prompt = "[▸▹ ](dimmed white)"
+
+
+[os]
+disabled = false
+
+style = "bg:cyan fg:background"
+format = '[ $symbol ]($style)'
+# format = '[$symbol ]($style)'
+
+[username]
+disabled = false
+
+style_user = "bold bg:green fg:background"
+format = '[$user ]($style)'
+show_always = true
+
+[directory]
+# read_only = "[󰌾]"
+# home_symbol = ""
+truncation_length = 9
+truncation_symbol = ""
+style = "bold fg:foreground bg:comment"
+format = "[ $path ]($style)"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+
+[bun]
+symbol = " "
+
+[line_break]
+disabled = false
+
+[c]
+symbol = " "
+style = "bold fg:blue"
+format = '[ $symbol($version(-$name) )]($style)'
+
+[cpp]
+symbol = " "
+style = "bold fg:blue"
+format = '[ $symbol($version(-$name) )]($style)'
+
+[custom.up_left]
+
+style = "bold fg:green"
+when = true
+format = '[ ┌─]($style)'
+
+[custom.down_left]
+
+style = "bold fg:green"
+when = true
+format = '[ └─]($style)'
+
+[custom.up_right]
+
+style = "bold fg:green"
+when = true
+format = '[ ─┐]($style)'
+
+[custom.down_right]
+
+style = "bold fg:green"
+when = true
+format = '[ ─┘]($style)'
+
+
+[fill]
+symbol = ' '
+
+
+[cmake]
+symbol = " "
+format = '[ $symbol($version )]($style)'
+
+
+
+
+[deno]
+symbol = " "
+
+
+
+[docker_context]
+symbol = " "
+style = "bold fg:orange"
+format = '[$symbol$context]($style) '
+
+
+[custom.zvm]
+symbol = " "
+command = "echo $ZVM_MODE"
+style = "bold fg:magenta"
+format = '[$symbol ($output)]($style) '
+
+[git_branch]
+
+symbol = " "
+style = "bold fg:orange"
+format = '[$symbol$branch(:$remote_branch) ]($style)'
+# format = '[ $symbol $branch]($style)'
+
+[git_status]
+style = "bold fg:orange"
+format = '[\[($all_status$ahead_behind)\] ]($style)'
+
+[git_commit]
+style = "bold fg:orange"
+tag_symbol = ' '
+
+[golang]
+symbol = " "
+style = "bold fg:cyan"
+format = '[$symbol($version )]($style)'
+
+[guix_shell]
+symbol = " "
+
+[haskell]
+symbol = " "
+
+[haxe]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[hostname]
+ssh_symbol = " "
+
+[java]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[kotlin]
+symbol = " "
+
+[lua]
+symbol = " "
+
+[memory_usage]
+symbol = "󰍛 "
+
+
+[nix_shell]
+symbol = " "
+
+[nodejs]
+symbol = " "
+style = "bold fg:blue"
+format = '[$symbol($version )]($style)'
+
+
+[os.symbols]
+Alpaquita = ""
+Alpine = ""
+AlmaLinux = ""
+Amazon = ""
+Android = ""
+Arch = ""
+Artix = ""
+CachyOS = ""
+CentOS = ""
+Debian = ""
+DragonFly = ""
+Emscripten = ""
+EndeavourOS = ""
+Fedora = ""
+FreeBSD = ""
+Garuda = "󰛓"
+Gentoo = ""
+HardenedBSD = "󰞌"
+Illumos = "󰈸"
+Kali = ""
+Linux = ""
+Mabox = ""
+Macos = ""
+Manjaro = ""
+Mariner = ""
+MidnightBSD = ""
+Mint = ""
+NetBSD = ""
+NixOS = ""
+Nobara = ""
+OpenBSD = "󰈺"
+openSUSE = ""
+OracleLinux = "󰌷"
+Pop = ""
+Raspbian = ""
+Redhat = ""
+RedHatEnterprise = ""
+RockyLinux = ""
+Redox = "󰀘"
+Solus = "󰠳 "
+SUSE = ""
+Ubuntu = ""
+Unknown = ""
+Void = ""
+Windows = "󰍲"
+
+[package]
+symbol = "󰏗 "
+style = "bold fg:orange"
+format = '[$symbol$version]($style) '
+
+[conda]
+symbol = " "
+
+style = 'bold green'
+format = '[$symbol$environment ]($style)'
+ignore_base = false
+
+[python]
+symbol = " "
+
+style = 'bold fg:green'
+format = '[${symbol}${pyenv_prefix}(${version})(\($virtualenv\)) ]($style)'
+
+[ruby]
+symbol = " "
+
+[rust]
+symbol = "󱘗 "
+style = "bold fg:red"
+format = '[ $symbol($version)]($style)'
+
+
+[character]
+disabled = false
+format = '$symbol '
+
+success_symbol = '[󰜴](bold cyan)'
+error_symbol = '[󰜴](bold red)'
+vimcmd_symbol = '[\$](bold cyan)'
+vimcmd_replace_one_symbol = '[](bold green)'
+vimcmd_replace_symbol = '[](bold green)'
+vimcmd_visual_symbol = '[󰜷](bold yellow)'
+
+
+[time]
+disabled = false
+style = "bold fg:yellow"
+format = '[ $time]($style) '
+time_format = "%H:%M"
+
+[cmd_duration]
+show_milliseconds = true
+format = "[󰗕 in $duration ]($style)"
+style = "fg:foreground"
+disabled = false
+show_notifications = true
+min_time_to_notify = 45000
+
+[custom.cargo_version]
+command = 'cat Cargo.toml|grep version|head -1|cut -f2 -d\"'
+detect_extensions = ['rs']
+detect_files = ['Cargo.toml']
+style = "bold fg:orange"
+
+[custom.emoji]
+description = "Displays a (pseudo) random emoji for each prompt"
+# change the content of the EMOJIS array to your liking and replace the
+# number 12 with the number of items in the array, minus one
+command = "EMOJIS=(⛵️ 🛰 🪐 🚀 🧡 🔭 🌍 💫 ☄️ ✨ 🌠 🌌 ⭐️); EMOJI_INDEX=$(( $RANDOM % 12 + 0 )); echo ${EMOJIS[$EMOJI_INDEX]}"
+# if you are on windows, replace "true" with "1"
+when = "true"
+shell = ["bash", "--noprofile", "--norc"]
+format = " $output"
+
+[palettes.dune_corrino]
+background = "#1D1318"
+foreground = "#F2E2B8"
+black = "#9A8781"
+red = "#CE5B6B"
+green = "#99A75E"
+orange = "#EFB63B"
+yellow = "#D4A63F"
+blue = "#7290D9"
+magenta = "#A188CC"
+cyan = "#87A0AD"
+white = "#F2E2B8"
+grey = "#2A1C22"
+comment = "#9A8781"
+inactive = "#1D1318"
+dark = "#9A8781"

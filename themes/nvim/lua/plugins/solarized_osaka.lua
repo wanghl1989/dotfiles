@@ -14,6 +14,12 @@ require("solarized-osaka").setup({
 		floats = "transparent",
 	},
 	on_highlights = function(hl, c)
+		-- Keep sticky declarations, line numbers and their separator transparent.
+		hl.TreesitterContext = { bg = "NONE" }
+		hl.TreesitterContextLineNumber = { fg = c.error, bg = "NONE" }
+		hl.TreesitterContextSeparator = { fg = c.base01, bg = "NONE" }
+		hl.TreesitterContextBottom = { bg = "NONE" }
+		hl.TreesitterContextLineNumberBottom = { fg = c.error, bg = "NONE" }
 		hl.NoiceVirtualText = { fg = c.orange }
 		hl.Visual = { bg = c.base02 }
 		hl.MiniPickMatchCurrent = { bg = c.bg_highlight, bold = true }

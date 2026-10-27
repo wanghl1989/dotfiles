@@ -86,7 +86,7 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 			},
 
 			-- Which character to use for drawing scope indicator
-			symbol = "╎",
+			symbol = "│",
 		})
 
 		require("mini.cursorword").setup({

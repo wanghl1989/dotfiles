@@ -1,0 +1,118 @@
+colourful: true
+
+filekinds:
+  normal: { foreground: "#F2E2B8" }
+  directory: { foreground: "#7290D9", is_bold: true }
+  symlink: { foreground: "#87A0AD" }
+  pipe: { foreground: "#EFB63B" }
+  block_device: { foreground: "#EFB63B", is_bold: true }
+  char_device: { foreground: "#EFB63B", is_bold: true }
+  socket: { foreground: "#CE5B6B", is_bold: true }
+  special: { foreground: "#EFB63B" }
+  executable: { foreground: "#99A75E", is_bold: true }
+  mount_point: { foreground: "#7290D9", is_bold: true, is_underline: true }
+
+perms:
+  user_read: { foreground: "#EFB63B", is_bold: true }
+  user_write: { foreground: "#CE5B6B", is_bold: true }
+  user_execute_file:
+    { foreground: "#99A75E", is_bold: true, is_underline: true }
+  user_execute_other: { foreground: "#99A75E", is_bold: true }
+  group_read: { foreground: "#EFB63B" }
+  group_write: { foreground: "#CE5B6B" }
+  group_execute: { foreground: "#99A75E" }
+  other_read: { foreground: "#EFB63B" }
+  other_write: { foreground: "#CE5B6B" }
+  other_execute: { foreground: "#99A75E" }
+  special_user_file: { foreground: "#A188CC" }
+  special_other: { foreground: "#A188CC" }
+  attribute: { foreground: "#F2E2B8" }
+
+size:
+  major: { foreground: "#99A75E", is_bold: true }
+  minor: { foreground: "#99A75E" }
+  number_byte: { foreground: "#99A75E", is_bold: true }
+  number_kilo: { foreground: "#99A75E", is_bold: true }
+  number_mega: { foreground: "#99A75E", is_bold: true }
+  number_giga: { foreground: "#99A75E", is_bold: true }
+  number_huge: { foreground: "#99A75E", is_bold: true }
+  unit_byte: { foreground: "#99A75E" }
+  unit_kilo: { foreground: "#99A75E" }
+  unit_mega: { foreground: "#99A75E" }
+  unit_giga: { foreground: "#99A75E" }
+  unit_huge: { foreground: "#99A75E" }
+
+users:
+  user_you: { foreground: "#EFB63B", is_bold: true }
+  user_root: { foreground: "#F2E2B8" }
+  user_other: { foreground: "#F2E2B8" }
+  group_yours: { foreground: "#EFB63B", is_bold: true }
+  group_other: { foreground: "#F2E2B8" }
+  group_root: { foreground: "#F2E2B8" }
+
+links:
+  normal: { foreground: "#CE5B6B", is_bold: true }
+  multi_link_file: { foreground: "#CE5B6B", background: "#EFB63B" }
+
+git:
+  new: { foreground: "#99A75E" }
+  modified: { foreground: "#7290D9" }
+  deleted: { foreground: "#CE5B6B" }
+  renamed: { foreground: "#EFB63B" }
+  typechange: { foreground: "#A188CC" }
+  ignored: { foreground: "#F2E2B8", is_dimmed: true }
+  conflicted: { foreground: "#CE5B6B" }
+
+git_repo:
+  branch_main: { foreground: "#99A75E" }
+  branch_other: { foreground: "#EFB63B" }
+  git_clean: { foreground: "#99A75E" }
+  git_dirty: { foreground: "#EFB63B" }
+
+security_context:
+  colon: { foreground: "#F2E2B8", is_dimmed: true }
+  user: { foreground: "#7290D9" }
+  role: { foreground: "#99A75E" }
+  typ: { foreground: "#EFB63B" }
+  range: { foreground: "#87A0AD" }
+
+file_type:
+  image: { foreground: "#A188CC" }
+  video: { foreground: "#A188CC", is_bold: true }
+  music: { foreground: "#87A0AD" }
+  lossless: { foreground: "#87A0AD", is_bold: true }
+  crypto: { foreground: "#99A75E", is_bold: true }
+  document: { foreground: "#99A75E" }
+  compressed: { foreground: "#CE5B6B" }
+  temp: { foreground: "#F2E2B8" }
+  compiled: { foreground: "#EFB63B" }
+  build: { foreground: "#EFB63B", is_bold: true, is_underline: true }
+  source: { foreground: "#EFB63B", is_bold: true }
+
+punctuation: { foreground: "#9A8781", is_bold: true }
+date: { foreground: "#7290D9" }
+inode: { foreground: "#A188CC" }
+blocks: { foreground: "#87A0AD" }
+header: { foreground: "#F2E2B8", is_underline: true }
+octal: { foreground: "#A188CC" }
+flags: { foreground: "#F2E2B8" }
+
+symlink_path: { foreground: "#87A0AD" }
+control_char: { foreground: "#CE5B6B" }
+broken_symlink: { foreground: "#CE5B6B" }
+broken_path_overlay: { foreground: "#F2E2B8", is_underline: true }
+
+filenames:
+  # Custom filename-based overrides
+  Cargo.toml: { icon: { glyph: 🦀 } }
+  # "*.py": { icon: { glyph:  } }
+  # "*.c": { icon: { glyph:  } }
+  # "*.cpp": { icon: { glyph:  } }
+  # "*.js": { icon: { glyph:  } }
+  # "*.ts": { icon: { glyph:  } }
+  # "*.yml": { icon: { glyph:  } }
+  # "*.yaml": { icon: { glyph:  } }
+
+extensions:
+  # Custom extension-based overrides
+  rs: { filename: { foreground: "#CE5B6B" }, icon: { glyph: 🦀 } }

@@ -23,7 +23,6 @@ themes/
   starship/neofusion.toml
   lazygit/neofusion.yml
   lazydocker/neofusion.yml
-  zellij/neofusion.kdl
   nvim/lua/plugins/neofusion.lua
   yazi/neofusion.toml
   yazi/neofusion.tmTheme
@@ -49,7 +48,7 @@ themes/
 保留原样并静默跳过。Neovim 的状态栏、标签栏随选中的主题使用相应配色。
 bat/yazi 的语法主题和 yazi 的界面主题是分别复制的文件。
 
-Starship、Lazygit、Lazydocker 和 Zellij 的主配置通过相对软链接指向活动的
+Starship、Lazygit 和 Lazydocker 的主配置通过相对软链接指向活动的
 `theme.*` 文件，它们的主题源文件包含完整配置；修改提示符布局、快捷键等通用
 设置时，需要同步修改两个主题版本。Starship 在下一次绘制提示符时读取新主题；
 已经打开的 TUI 软件需要重启。Zed 仍使用自身的主题设置，未接入此切换脚本；
@@ -76,7 +75,6 @@ herdr 使用终端配色。
 - `neovim`: use `LazyVim` for basic configure package
 - `starship`: terminal prompt
 - `tmux`: terminal multiplier, and use `tpm` for plugin management
-- `zellij`: a new terminal multiplier write in Rust
 - `zsh`: use `zinit` for plugin management
 - `lsd`: better `ls` command
 - `eza`: another better `ls` command

@@ -365,10 +365,19 @@ def load_config(*paths: str, overrides: Optional[Iterable[str]] = None) -> Optio
     configs = list(resolve_config('/etc/xdg/kitty/grab.conf',
                                   os.path.join(config_dir, 'grab.conf'),
                                   config_files_on_cmd_line=[]))
-    theme = os.path.join(config_dir, 'grab', 'theme.conf')
+    # Share Kitty's selection and cursor colors without parsing its other options
+    # as grab settings. Explicit grab command-line overrides still take priority.
+    theme = os.path.join(config_dir, 'themes', 'theme.conf')
+    theme_overrides = ()
     if os.path.isfile(theme):
-        configs.append(theme)
-    overrides = tuple(overrides) if overrides is not None else ()
+        with open(theme, encoding='utf-8') as theme_file:
+            theme_overrides = tuple(
+                line for line in theme_file
+                if line.split() and line.split()[0] in {
+                    'selection_foreground', 'selection_background', 'cursor'
+                }
+            )
+    overrides = theme_overrides + (tuple(overrides) if overrides is not None else ())
     opts_dict, paths = _load_config(defaults, parse_config, merge_result_dicts, *configs, overrides=overrides)
     opts = Options(opts_dict)
     opts.config_paths = paths

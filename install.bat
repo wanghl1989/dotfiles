@@ -41,7 +41,7 @@ echo ========================================================================
 echo.
 
 REM List of configurations to symlink
-set "ITEMS=nvim zed wezterm uv starship.toml lazygit bat yazi btop lazydocker lsd zellij eza newsboat"
+set "ITEMS=nvim zed wezterm uv starship.toml lazygit bat yazi btop lazydocker lsd eza newsboat"
 
 REM Process each item
 for %%i in (%ITEMS%) do (

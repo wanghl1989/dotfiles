@@ -6,8 +6,11 @@
 - `neofusion`
 - `solarized_osaka`：来自 [Solarized Osaka](https://github.com/craftzdog/solarized-osaka.nvim)。
 - `oasis_mirage`：来自 [Oasis 的 Mirage (Dark)](https://github.com/uhs-robert/oasis.nvim)，固定使用暗色版本。
+- `dune_corrino`、`dune_tleilaxu`：来自 [Dune](https://github.com/jonestristand/dune.nvim) 的 Corrino 和 Tleilaxu。
+- `cendre`：来自 [Cendre](https://github.com/Aejkatappaja/cendre)，使用默认的 `hard` 背景。
+- `onedark_dark`：来自 [OneDarkPro](https://github.com/olimorris/onedarkpro.nvim) 的同名暗色变体。
 
-新增两套主题的其他软件配色按上游调色板适配，保留本仓库现有配置布局。
+其他软件配色按上游调色板适配，保留本仓库现有配置布局。
 Neovim 在首次加载时通过 `vim.pack.add` 安装对应插件，需要网络连接。
 
 切换脚本会把选中的源文件复制到固定的 `theme.<扩展名>`，软件配置始终读取这个固定文件。
@@ -20,7 +23,7 @@ Neovim 在首次加载时通过 `vim.pack.add` 安装对应插件，需要网络
 cp themes/kitty/themes/neofusion.conf themes/kitty/themes/my_theme.conf
 # 编辑 themes/kitty/themes/my_theme.conf，替换配色
 ./shell/scripts/theme-selector list
-./shell/scripts/theme-selector change my_theme
+./shell/scripts/theme-selector set my_theme
 ```
 
 不需要修改脚本或注册主题。只要添加一个主题文件，`list` 就会显示它的名字。
@@ -29,7 +32,7 @@ cp themes/kitty/themes/neofusion.conf themes/kitty/themes/my_theme.conf
 - 名字只能包含字母、数字、下划线和连字符，且以字母或数字开头，例如 `my_theme`。
 - 同一个主题在不同软件中的文件名必须一致，仅扩展名不同。
 - 可以只适配部分软件；切换时，没有同名源文件的软件会保留当前配置，并静默跳过。
-- 脚本仅复制文件，不会合并配置，也不会替换文件内容中的主题名称或路径。
+- 切换时仅复制文件，不会合并配置，也不会替换文件内容中的主题名称或路径。
 
 ## 目录和目标文件
 
@@ -46,7 +49,6 @@ cp themes/kitty/themes/neofusion.conf themes/kitty/themes/my_theme.conf
 | `eza/<name>.yml` | `config/eza/theme.yml` |
 | `ghostty/themes/<name>.conf` | `config/ghostty/themes/theme.conf` |
 | `kitty/themes/<name>.conf` | `config/kitty/themes/theme.conf` |
-| `kitty/grab/<name>.conf` | `config/kitty/grab/theme.conf` |
 | `lazydocker/<name>.yml` | `config/lazydocker/theme.yml` |
 | `lazygit/<name>.yml` | `config/lazygit/theme.yml` |
 | `nvim/lua/plugins/<name>.lua` | `config/nvim/lua/plugins/theme.lua` |
@@ -56,12 +58,11 @@ cp themes/kitty/themes/neofusion.conf themes/kitty/themes/my_theme.conf
 | `tmux/<name>.conf` | `config/tmux/theme.conf` |
 | `yazi/<name>.tmTheme` | `config/yazi/theme.tmTheme` |
 | `yazi/<name>.toml` | `config/yazi/theme.toml` |
-| `zellij/<name>.kdl` | `config/zellij/theme.kdl` |
 
 Yazi 的界面主题（`.toml`）和语法主题（`.tmTheme`）是两个独立文件，需要分别准备。
 Bat 的主题文件也使用 `.tmTheme`，注意扩展名大小写。
 
-Starship、Lazygit、Lazydocker 和 Zellij 的源文件包含完整配置，其入口通过符号链接指向
+Starship、Lazygit 和 Lazydocker 的源文件包含完整配置，其入口通过符号链接指向
 生成的活动文件。添加主题时应复制现有版本，再修改配色，保留提示符布局、快捷键等设置。
 修改这些通用设置时，也需要同步维护各个主题版本。
 
@@ -119,23 +120,25 @@ theme = require("plugins.theme"),
 
 ```sh
 ./shell/scripts/theme-selector list
-./shell/scripts/theme-selector change my_theme
-./shell/scripts/theme-selector change 2
-./shell/scripts/theme-selector change
+./shell/scripts/theme-selector set my_theme
+./shell/scripts/theme-selector set 2
+./shell/scripts/theme-selector set
 git status --short
 ```
 
-`list` 按主题名称排序，显示从 1 开始的编号。`change` 可以传主题名称或对应编号；
+`list` 按主题名称排序，显示从 1 开始的编号。`set` 可以传主题名称或对应编号；
 不带参数时会列出主题，输入编号或名称后回车切换，直接回车取消。
 编号取决于当前列表，新增或删除主题后可能变化；脚本中固定选择主题时建议使用名称。
-`change` 会输出实际复制的文件；如果安装了 `bat`，复制完成后会
+`set` 会输出实际复制的文件；如果安装了 `bat`，复制完成后会
 自动执行 `bat cache --build`。若缓存重建失败，主题文件已经复制，可以修复后单独重跑该命令。
 
 复制后会尝试重载已安装的 Kitty 和 tmux 配置：
 
 - Kitty：通过 `KITTY_LISTEN_ON` 或本机属于当前用户的 `/tmp/kitty*` socket 重载。
   沿用主配置中的 `allow_remote_control` 和 `listen_on` 设置，不会启动新的 Kitty。
-  tab bar 配色来自 `kitty/themes/theme.conf`，抓取工具在下次打开时读取 `kitty/grab/theme.conf`。
+  tab bar 和抓取工具共用 `kitty/themes/theme.conf`；抓取工具在下次打开时读取其中的
+  `selection_foreground`、`selection_background` 和 `cursor`，无需单独维护主题。
+  切换 Kitty 主题时会清理旧的 `kitty/grab/theme.conf` 活动文件。
 - tmux：在 tmux 内重载当前实例，在外部重载默认实例；没有运行时跳过。
   仅在已安装的 `~/.config/tmux/theme.conf`（或 `$XDG_CONFIG_HOME` 下的对应路径）
   指向本次更新的文件时执行，不会连接远程服务器。
@@ -152,12 +155,24 @@ Starship 会在下一次绘制提示符时读取配置。
 主题目录中的 `.md` 文档和名称以 `.` 开头的文件不会参与切换。
 不要把备份或其他非主题文件放进主题目录，脚本会把其余文件当作主题源文件扫描。
 
+## 删除主题
+
+```sh
+./shell/scripts/theme-selector remove my_theme
+# 也可以使用 list 中的编号
+./shell/scripts/theme-selector remove 2
+```
+
+`remove` 直接删除该主题在 `themes/` 下所有软件的源文件，包括 `server/` 下的配色。
+它不会删除当前活动的 `theme.*`、重载软件或重建 Bat 缓存；如果正在使用该主题，
+现有配色会保留到下次切换。删除后，`list` 会重新编号。
+
 ## 新增软件
 
 1. 按软件在 `config/` 下的配置路径，在 `themes/` 下建立对应目录并添加主题文件。
 2. 让软件主配置读取固定的 `theme.<扩展名>` 文件；不支持拆分配置的软件，可以参照
    Starship 等现有配置，用完整主题配置配合符号链接接入。
-3. 运行 `change` 生成活动文件，并确认软件能正确读取。
+3. 运行 `set` 生成活动文件，并确认软件能正确读取。
 
 切换脚本会自动发现新目录，但不会自动修改软件入口配置或安装配置链接。
 Zed 目前使用自身的主题设置，尚未接入此脚本。

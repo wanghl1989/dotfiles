@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>name</key>
+  <string>Dune corrino</string>
+  <key>author</key>
+  <string>Adapted from jonestristand/dune.nvim</string>
+  <key>settings</key>
+  <array>
+    <dict>
+      <key>settings</key>
+      <dict>
+        <key>background</key><string>#1D1318</string>
+        <key>caret</key><string>#EFB63B</string>
+        <key>foreground</key><string>#F2E2B8</string>
+        <key>invisibles</key><string>#9A8781</string>
+        <key>lineHighlight</key><string>#2A1C22</string>
+        <key>selection</key><string>#5A4526</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Comments</string>
+      <key>scope</key><string>comment, punctuation.definition.comment</string>
+      <key>settings</key><dict><key>foreground</key><string>#9A8781</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Strings</string>
+      <key>scope</key><string>string, punctuation.definition.string</string>
+      <key>settings</key><dict><key>foreground</key><string>#53A874</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Constants and numbers</string>
+      <key>scope</key><string>constant, constant.numeric, constant.language</string>
+      <key>settings</key><dict><key>foreground</key><string>#EFB63B</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Keywords and storage</string>
+      <key>scope</key><string>keyword, storage, storage.type, storage.modifier</string>
+      <key>settings</key><dict><key>foreground</key><string>#EFB63B</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Functions</string>
+      <key>scope</key><string>entity.name.function, support.function, meta.function-call</string>
+      <key>settings</key><dict><key>foreground</key><string>#7290D9</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Types and classes</string>
+      <key>scope</key><string>entity.name.type, entity.name.class, support.type, support.class</string>
+      <key>settings</key><dict><key>foreground</key><string>#A188CC</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Parameters and properties</string>
+      <key>scope</key><string>variable.parameter, variable.other.property</string>
+      <key>settings</key><dict><key>foreground</key><string>#7290D9</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Operators</string>
+      <key>scope</key><string>keyword.operator, punctuation.separator</string>
+      <key>settings</key><dict><key>foreground</key><string>#87A0AD</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Tags</string>
+      <key>scope</key><string>entity.name.tag, punctuation.definition.tag</string>
+      <key>settings</key><dict><key>foreground</key><string>#CE5B6B</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Attributes</string>
+      <key>scope</key><string>entity.other.attribute-name</string>
+      <key>settings</key><dict><key>foreground</key><string>#D4A63F</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Links</string>
+      <key>scope</key><string>markup.underline.link</string>
+      <key>settings</key><dict><key>foreground</key><string>#EFB63B</string><key>fontStyle</key><string>underline</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Invalid</string>
+      <key>scope</key><string>invalid, invalid.illegal</string>
+      <key>settings</key><dict><key>foreground</key><string>#F2E2B8</string><key>background</key><string>#CE5B6B</string></dict>
+    </dict>
+  </array>
+  <key>uuid</key>
+  <string>e8c5fa67-fbaa-4a1c-ae24-5c23f8517a81</string>
+</dict>
+</plist>

@@ -27,11 +27,11 @@
 
 
 format = """
-[░▒▓](fg:cyan)\
+[░▒▓](fg:yellow)\
 $os\
-[](fg:cyan bg:comment)\
+[](fg:yellow bg:grey)\
 $directory\
-[ ](fg:comment)\
+[ ](fg:grey)\
 $git_branch\
 $git_status\
 $git_commit\
@@ -62,7 +62,7 @@ continuation_prompt = "[▸▹ ](dimmed white)"
 [os]
 disabled = false
 
-style = "bg:cyan fg:background"
+style = "bg:yellow fg:background"
 format = '[ $symbol ]($style)'
 # format = '[$symbol ]($style)'
 
@@ -78,7 +78,7 @@ show_always = true
 # home_symbol = ""
 truncation_length = 9
 truncation_symbol = ""
-style = "bold fg:foreground bg:comment"
+style = "bold fg:foreground bg:grey"
 format = "[ $path ]($style)"
 
 [directory.substitutions]
