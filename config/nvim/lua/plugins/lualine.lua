@@ -3,24 +3,13 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-lualine/lualine.nvim" },
 })
 
-local lualine_theme = vim.deepcopy(require("config.appearance").lualine)
-for _, mode in pairs(lualine_theme) do
-	-- Preserve the existing layout: only A is solid; B/C (and therefore Y/X)
-	-- use the terminal background. Z is overridden on the component below.
-	for _, section in ipairs({ "b", "c" }) do
-		if mode[section] then
-			mode[section].bg = "NONE"
-		end
-	end
-end
-
 -- vim.api.nvim_set_hl(0, "StatusLine", { bg = "NONE" })
 
 require("lualine").setup({
 	options = {
 		icons_enabled = true,
 		-- Selected theme with the existing transparent B/C sections.
-		theme = lualine_theme,
+		theme = require("plugins.theme"),
 		disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter" } },
 		-- component_separators = { left = "", right = "" },
 		component_separators = { left = "|", right = "|" },

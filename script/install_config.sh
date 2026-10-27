@@ -34,7 +34,7 @@ os_kernel=$(uname -s)
 
 # 在 ~/.config中的配置
 # macos linux通用
-ITEMS=("zed" "nvim" "kitty" "uv" "ruff" "starship.toml" "tmux" "ghostty" "lazygit" "bat" "yazi" "btop" "lazydocker" "herdr" "eza" "newsboat" "pip" "fastfetch" "dict" "fish" "alacritty" "sesh")
+ITEMS=("zed" "nvim" "kitty" "uv" "ruff" "starship.toml" "tmux" "ghostty" "lazygit" "bat" "yazi" "btop" "lazydocker" "herdr" "eza" "pip" "fastfetch" "dict" "fish" "alacritty" "sesh")
 BASE_ROOT=$(dirname $(dirname "$SCRIPT_PATH"))
 
 # 初始化未跟踪的主题文件。已有文件保持不变，保留本机选择。

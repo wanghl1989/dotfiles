@@ -1,0 +1,45 @@
+gui:
+  theme:
+    activeBorderColor:
+      - "#FF7979"
+    inactiveBorderColor:
+      - "#439789"
+    searchingActiveBorderColor:
+      - "#7FCF78"
+    selectedLineBgColor:
+      - "#738281"
+    cherryPickedCommitBgColor:
+      - "#C695FF"
+    cherryPickedCommitFgColor:
+      - "#81C0FF"
+    unstagedChangesColor:
+      - "#F8B471"
+    defaultFgColor:
+      - "#F5F5DC"
+    optionsTextColor:
+      - "#81C0FF"
+    authorColors:
+      "*": "#F0E68C"
+  showBottomLine: true
+  border: rounded
+  nerdFontsVersion: "3"
+  language: en
+  sidePanels:
+    - [status]
+    - [files, worktrees, submodules]
+    - [branches, remotes, tags]
+    - [commits, reflog]
+    - [stash]
+  spiner:
+    frames:
+      - ⣾
+      - ⣽
+      - ⣻
+      - ⢿
+      - ⡿
+      - ⣟
+      - ⣯
+      - ⣷
+os:
+  edit: "nvim"
+

@@ -32,7 +32,7 @@ require("config.appearance").set({
 	foreground = colors.main.white,
 	accent = colors.editor.accent,
 	error = colors.main.red,
-}, require("lualine.themes.material"))
+})
 
 local diagnostic_colors = {
 	Error = colors.main.red,
@@ -68,3 +68,15 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 		vim.schedule(disable_italics)
 	end,
 })
+
+-- Export the selected lualine theme, keeping B/C (and X/Y) transparent.
+local lualine_theme = vim.deepcopy(require("lualine.themes.material"))
+for _, mode in pairs(lualine_theme) do
+	for _, section in ipairs({ "b", "c" }) do
+		if mode[section] then
+			mode[section].bg = "NONE"
+		end
+	end
+end
+
+return lualine_theme

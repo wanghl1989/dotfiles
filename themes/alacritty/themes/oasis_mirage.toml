@@ -1,0 +1,67 @@
+# Oasis Mirage (Dark); matches the Ghostty terminal palette.
+
+[colors.primary]
+background = "#111C22"
+foreground = "#F5F5DC"
+dim_foreground = "#F5F5DC"
+bright_foreground = "#F5F5DC"
+
+[colors.cursor]
+text = "#111C22"
+cursor = "#F0E68C"
+
+[colors.vi_mode_cursor]
+text = "#111C22"
+cursor = "#69C3AA"
+
+[colors.search.matches]
+foreground = "#111C22"
+background = "#F5F5DC"
+
+[colors.search.focused_match]
+foreground = "#111C22"
+background = "#69C3AA"
+
+[colors.footer_bar]
+foreground = "#111C22"
+background = "#F5F5DC"
+
+[colors.hints.start]
+foreground = "#111C22"
+background = "#FF7979"
+
+[colors.hints.end]
+foreground = "#111C22"
+background = "#F5F5DC"
+
+[colors.selection]
+text = "#FFFFF0"
+background = "#21333B"
+
+[colors.normal]
+black = "#111C22"
+red = "#FF7979"
+green = "#7FCF78"
+yellow = "#F0E68C"
+blue = "#81C0FF"
+magenta = "#C695FF"
+cyan = "#69C3AA"
+white = "#F5F5DC"
+
+[colors.bright]
+black = "#587270"
+red = "#FFA0A0"
+green = "#A3E39A"
+yellow = "#F8B471"
+blue = "#87CEEB"
+magenta = "#D2ADFF"
+cyan = "#8AD3BE"
+white = "#FFFFF0"
+
+[[colors.indexed_colors]]
+index = 16
+color = "#F8B471"
+
+[[colors.indexed_colors]]
+index = 17
+color = "#F0E68C"

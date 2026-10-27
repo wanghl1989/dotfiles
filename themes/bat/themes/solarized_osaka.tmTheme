@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>name</key>
+  <string>Solarized Osaka</string>
+  <key>author</key>
+  <string>Adapted from craftzdog/solarized-osaka.nvim</string>
+  <key>settings</key>
+  <array>
+    <dict>
+      <key>settings</key>
+      <dict>
+        <key>background</key><string>#001419</string>
+        <key>caret</key><string>#b28500</string>
+        <key>foreground</key><string>#839395</string>
+        <key>gutter</key><string>#001419</string>
+        <key>gutterForeground</key><string>#576d74</string>
+        <key>invisibles</key><string>#576d74</string>
+        <key>lineHighlight</key><string>#002c38</string>
+        <key>selection</key><string>#063540</string>
+      </dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Comments</string>
+      <key>scope</key><string>comment, punctuation.definition.comment</string>
+      <key>settings</key><dict><key>foreground</key><string>#576d74</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Strings</string>
+      <key>scope</key><string>string, punctuation.definition.string</string>
+      <key>settings</key><dict><key>foreground</key><string>#849900</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Constants and numbers</string>
+      <key>scope</key><string>constant, constant.numeric, constant.language</string>
+      <key>settings</key><dict><key>foreground</key><string>#c94c16</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Keywords and storage</string>
+      <key>scope</key><string>keyword, storage, storage.type, storage.modifier</string>
+      <key>settings</key><dict><key>foreground</key><string>#d23681</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Functions</string>
+      <key>scope</key><string>entity.name.function, support.function, meta.function-call</string>
+      <key>settings</key><dict><key>foreground</key><string>#268bd3</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Types and classes</string>
+      <key>scope</key><string>entity.name.type, entity.name.class, support.type, support.class</string>
+      <key>settings</key><dict><key>foreground</key><string>#d23681</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Parameters and properties</string>
+      <key>scope</key><string>variable.parameter, variable.other.property</string>
+      <key>settings</key><dict><key>foreground</key><string>#268bd3</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Operators</string>
+      <key>scope</key><string>keyword.operator, punctuation.separator</string>
+      <key>settings</key><dict><key>foreground</key><string>#29a298</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Tags</string>
+      <key>scope</key><string>entity.name.tag, punctuation.definition.tag</string>
+      <key>settings</key><dict><key>foreground</key><string>#db302d</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Attributes</string>
+      <key>scope</key><string>entity.other.attribute-name</string>
+      <key>settings</key><dict><key>foreground</key><string>#b28500</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Markup headings</string>
+      <key>scope</key><string>markup.heading, entity.name.section</string>
+      <key>settings</key><dict><key>foreground</key><string>#d23681</string><key>fontStyle</key><string>bold</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Markup bold</string>
+      <key>scope</key><string>markup.bold</string>
+      <key>settings</key><dict><key>foreground</key><string>#b28500</string><key>fontStyle</key><string>bold</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Markup italic</string>
+      <key>scope</key><string>markup.italic</string>
+      <key>settings</key><dict><key>foreground</key><string>#29a298</string><key>fontStyle</key><string>italic</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Links</string>
+      <key>scope</key><string>markup.underline.link</string>
+      <key>settings</key><dict><key>foreground</key><string>#29a298</string><key>fontStyle</key><string>underline</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Diff inserted</string>
+      <key>scope</key><string>markup.inserted, meta.diff.header.to-file</string>
+      <key>settings</key><dict><key>foreground</key><string>#849900</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Diff changed</string>
+      <key>scope</key><string>markup.changed</string>
+      <key>settings</key><dict><key>foreground</key><string>#268bd3</string></dict>
+    </dict>
+    <dict>
+      <key>name</key><string>Diff deleted and invalid</string>
+      <key>scope</key><string>markup.deleted, meta.diff.header.from-file, invalid, invalid.illegal</string>
+      <key>settings</key><dict><key>foreground</key><string>#db302d</string></dict>
+    </dict>
+  </array>
+  <key>uuid</key>
+  <string>cab22c61-af72-4913-b6de-d316d6aedc3d</string>
+</dict>
+</plist>

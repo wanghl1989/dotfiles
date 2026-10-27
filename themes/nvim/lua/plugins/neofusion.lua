@@ -11,7 +11,7 @@ require("config.appearance").set({
 	foreground = palette.light0,
 	accent = palette.bright_aqua,
 	error = palette.bright_red,
-}, require("neofusion.lualine"))
+})
 
 local overrides = {
 	-- Keep the search counter readable without introducing a background.
@@ -112,3 +112,15 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 		vim.schedule(disable_italics)
 	end,
 })
+
+-- Export the selected lualine theme, keeping B/C (and X/Y) transparent.
+local lualine_theme = vim.deepcopy(require("neofusion.lualine"))
+for _, mode in pairs(lualine_theme) do
+	for _, section in ipairs({ "b", "c" }) do
+		if mode[section] then
+			mode[section].bg = "NONE"
+		end
+	end
+end
+
+return lualine_theme
