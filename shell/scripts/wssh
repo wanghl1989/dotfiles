@@ -1,0 +1,584 @@
+#!/usr/bin/env python3
+"""Manage SSH hosts without replacing existing private keys or unrelated options.
+
+Requires Python 3.9+, OpenSSH, and (for add) ssh-copy-id. No pip dependencies.
+"""
+
+import argparse
+import contextlib
+import fcntl
+import glob
+import os
+from pathlib import Path
+import pwd
+import re
+import shlex
+import shutil
+import signal
+import stat
+import subprocess
+import sys
+import tempfile
+import uuid
+from dataclasses import dataclass
+
+
+MARKER = "# Managed by sshnm v2\n"
+ALIAS = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]*\Z")
+FIELDS = {"hostname", "user", "port", "identityfile", "identitiesonly"}
+CARRY_OPTIONS = ("proxyjump", "proxycommand", "hostkeyalias", "userknownhostsfile",
+                 "globalknownhostsfile", "stricthostkeychecking")
+
+
+class Error(Exception):
+    pass
+
+
+def quote(value):
+    if any(c in value for c in '\n\r\0"\\'):
+        raise Error("配置值包含不支持的换行、引号或反斜杠")
+    return '"' + value + '"'
+
+
+def tokens(line):
+    """Tokenize declarations; only the keyword/value separator accepts '='."""
+    line = line.lstrip()
+    if not line or line.startswith("#"):
+        return []
+    line = re.sub(r"^([^\s=]+)\s*=\s*", r"\1 ", line, count=1)
+    try:
+        return shlex.split(line, comments=True, posix=True)
+    except ValueError as exc:
+        raise Error("无法安全解析配置行: " + str(exc)) from exc
+
+
+def regular(path):
+    if path.exists() and not path.is_file():
+        raise Error("路径不是普通文件: " + str(path))
+    if path.is_symlink() and not path.exists():
+        raise Error("路径是失效软链接: " + str(path))
+
+
+def read(path):
+    regular(path)
+    if not path.exists():
+        return ""
+    with path.open(newline="") as source:
+        return source.read()
+
+
+def atomic_write(path, data):
+    """Resolve the link, then replace its target in the same filesystem."""
+    regular(path)
+    target = path.resolve()
+    fd, name = tempfile.mkstemp(prefix=".sshnm-write-", dir=target.parent)
+    try:
+        with os.fdopen(fd, "w", newline="") as out:
+            os.fchmod(out.fileno(), 0o600)
+            out.write(data)
+            out.flush()
+            os.fsync(out.fileno())
+        os.replace(name, target)
+    finally:
+        if os.path.exists(name):
+            os.unlink(name)
+
+
+class Transaction:
+    def __init__(self):
+        self.changes = []
+
+    def add(self, path, old, new):
+        if old != new:
+            self.changes.append((path, path.exists(), old, new, path.resolve()))
+
+    def commit(self):
+        # Detect edits by programs which do not participate in our flock.
+        for path, existed, old, _, target in self.changes:
+            if path.resolve() != target or path.exists() != existed or read(path) != old:
+                raise Error("配置已被其他程序修改，请重试: " + str(path))
+        completed = []
+        try:
+            for path, existed, old, new, target in self.changes:
+                # Block termination only during replacement and bookkeeping.
+                with defer_signals():
+                    atomic_write(path, new)
+                    completed.append((target, existed, old))
+        except BaseException:
+            for target, existed, old in reversed(completed):
+                try:
+                    if existed:
+                        atomic_write(target, old)
+                    else:
+                        target.unlink()
+                except (OSError, Error) as exc:
+                    print("回滚失败，请检查 %s: %s" % (target, exc), file=sys.stderr)
+            raise
+
+
+@contextlib.contextmanager
+def defer_signals():
+    signals = {signal.SIGINT, signal.SIGHUP, signal.SIGTERM}
+    previous = signal.pthread_sigmask(signal.SIG_BLOCK, signals)
+    try:
+        yield
+    finally:
+        signal.pthread_sigmask(signal.SIG_SETMASK, previous)
+
+
+@dataclass
+class Block:
+    path: Path
+    start: int
+    end: int
+    names: list
+    lines: list
+    editable: bool = True
+
+    def values(self, key):
+        return [parts[1:] for line in self.lines[1:]
+                if (parts := tokens(line)) and parts[0].lower() == key]
+
+    def first(self, key, default=""):
+        values = self.values(key)
+        return values[0][0] if values and values[0] else default
+
+    def raw_value(self, key):
+        for line in self.lines[1:]:
+            parts = tokens(line)
+            if parts and parts[0].lower() == key:
+                return re.sub(r"^\s*[^\s=]+(?:\s*=\s*|\s+)", "", line).rstrip("\r\n")
+        return ""
+
+
+class Manager:
+    def __init__(self, home=None):
+        self.directory = Path(home or os.environ["HOME"]) / ".ssh"
+        self.config = self.directory / "config"
+        self.managed = self.directory / "sshnm.conf"
+        self.keys = self.directory / "sshnm-keys"
+        self.snapshots = {}
+        self.blocks = []
+
+    @contextlib.contextmanager
+    def lock(self):
+        self.directory.mkdir(mode=0o700, parents=True, exist_ok=True)
+        lock_path = self.directory / ".sshnm.lock"
+        fd = os.open(lock_path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+        try:
+            if not stat.S_ISREG(os.fstat(fd).st_mode):
+                raise Error("锁文件不是普通文件")
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError as exc:
+                raise Error("另一个 sshnm 正在运行，请稍后重试") from exc
+            yield
+        finally:
+            os.close(fd)
+
+    def load(self):
+        self.snapshots = {}
+        self.blocks = []
+        visited = set()
+
+        def visit(path, depth=0, conditional=False):
+            if depth > 16:
+                raise Error("Include 嵌套过深")
+            resolved = path.resolve()
+            if resolved == self.managed.resolve():
+                path = self.managed
+            if resolved in visited:
+                return
+            visited.add(resolved)
+            data = read(path)
+            self.snapshots[path] = data
+            lines = data.splitlines(keepends=True)
+            current = None
+            conditional_include = conditional
+            for index, line in enumerate(lines):
+                parts = tokens(line)
+                if not parts:
+                    continue
+                keyword = parts[0].lower()
+                if keyword in ("host", "match"):
+                    if current is not None:
+                        start, names = current
+                        self.blocks.append(Block(path, start, index, names, lines[start:index], not conditional))
+                    current = (index, parts[1:]) if keyword == "host" else None
+                    conditional_include = conditional or not (keyword == "host" and parts[1:] == ["*"])
+                if keyword == "include":
+                    for pattern in parts[1:]:
+                        pattern = pattern.replace("%d", str(self.directory.parent))
+                        pattern = os.path.expandvars(os.path.expanduser(pattern))
+                        if "%" in pattern or "$" in pattern:
+                            raise Error("Include 含无法静态解析的 token，请手动处理: " + pattern)
+                        if not os.path.isabs(pattern):
+                            pattern = str(self.directory / pattern)
+                        for name in sorted(glob.glob(pattern)):
+                            visit(Path(name), depth + 1, conditional_include)
+            if current is not None:
+                start, names = current
+                self.blocks.append(Block(path, start, len(lines), names, lines[start:], not conditional))
+
+        if self.config.resolve() == self.managed.resolve():
+            raise Error("config 与 sshnm.conf 不能指向同一个文件")
+        visit(self.config)
+        visit(self.managed)
+        managed = self.snapshots[self.managed]
+        if managed and not managed.startswith(MARKER):
+            raise Error("sshnm.conf 不含托管标记，拒绝覆盖: " + str(self.managed))
+        if self.snapshots[self.config].startswith("# sshnm include v2\n"):
+            if not self.snapshots[self.config].startswith(self.include_prefix()):
+                raise Error("sshnm Include 入口已被修改，请先恢复入口或移除其标记")
+
+    def include_prefix(self):
+        return ("# sshnm include v2\nInclude " + quote(str(self.managed))
+                + "\nHost *\n")
+
+    def find(self, name):
+        found = [block for block in self.blocks if name in block.names]
+        if len(found) > 1:
+            raise Error("存在重复 Host，拒绝自动更新: " + name)
+        if found and found[0].names != [name]:
+            raise Error("别名属于多名称 Host 块，请先拆分: " + name)
+        if found and (not found[0].editable or found[0].values("include")):
+            raise Error("Host 涉及条件 Include，无法安全迁移或删除，请先手动拆分: " + name)
+        return found[0] if found else None
+
+    def effective(self, target, port=None):
+        command = ["ssh", "-G"] + self.config_args()
+        if port is not None:
+            command += ["-p", str(port)]
+        command.append(target)
+        result = run(command, capture=True, timeout=20)
+        if result.returncode:
+            raise Error("SSH 配置解析失败: " + result.stderr.strip())
+        values = {}
+        for line in result.stdout.splitlines():
+            key, _, value = line.partition(" ")
+            values.setdefault(key, []).append(value)
+        return values
+
+    def config_args(self):
+        # OpenSSH resolves ~ via passwd, independently of HOME. Its default
+        # invocation also reads /etc/ssh/ssh_config; explicit -F skips that file.
+        default = Path(pwd.getpwuid(os.getuid()).pw_dir) / ".ssh" / "config"
+        if self.config == default:
+            return []
+        return ["-F", str(self.config) if self.config.exists() else "/dev/null"]
+
+    def plan(self, name, block, body):
+        """Migrate one exact block, preserving everything outside its boundaries."""
+        contents = dict(self.snapshots)
+        if block:
+            lines = contents[block.path].splitlines(keepends=True)
+            contents[block.path] = "".join(lines[:block.start] + lines[block.end:])
+        if body is not None:
+            contents[self.managed] = (contents[self.managed] or MARKER).rstrip("\n") + "\n\n" + body
+        # A dedicated include at the very beginning takes precedence over defaults.
+        # Reset Host after the include so the last managed host cannot scope the
+        # original global options. Keep the original file bytes beneath the prefix.
+        if contents.get(self.managed) and not contents[self.config].startswith(
+                "# sshnm include v2\n"):
+            contents[self.config] = self.include_prefix() + contents[self.config]
+        transaction = Transaction()
+        # Write the managed file first, then the main file; rollback on failure.
+        paths = [self.managed] + [p for p in contents if p != self.managed]
+        for path in paths:
+            transaction.add(path, self.snapshots[path], contents[path])
+        return transaction
+
+    def key(self, block, rotate, temporary):
+        identities = block.values("identityfile") if block else []
+        if identities and not rotate:
+            value = identities[0][0]
+            value = value.replace("%d", str(self.directory.parent))
+            value = os.path.expandvars(os.path.expanduser(value))
+            if "%" in value or "$" in value or not os.path.isabs(value):
+                raise Error("现有 IdentityFile 路径无法安全复用；请使用 --rotate")
+            private = Path(value)
+            regular(private)
+            if not private.is_file():
+                raise Error("现有私钥不存在；请修复路径或使用 --rotate: " + str(private))
+            public = Path(str(private) + ".pub")
+            regular(public)
+            if not public.exists():
+                public = Path(temporary) / "reused.pub"
+                result = run(["ssh-keygen", "-y", "-f", str(private)], capture=True)
+                if result.returncode:
+                    raise Error("无法从现有私钥导出公钥")
+                public.write_text(result.stdout)
+            return private, public, False
+        self.keys.mkdir(mode=0o700, exist_ok=True)
+        if self.keys.is_symlink():
+            raise Error("托管密钥目录不能是软链接")
+        private = self.keys / ("key-" + uuid.uuid4().hex)
+        try:
+            result = run(["ssh-keygen", "-q", "-t", "ed25519", "-N", "", "-C",
+                          "sshnm:" + private.name, "-f", str(private)])
+            if result.returncode:
+                raise Error("生成密钥失败")
+        except BaseException:
+            private.unlink(missing_ok=True)
+            Path(str(private) + ".pub").unlink(missing_ok=True)
+            raise
+        return private, Path(str(private) + ".pub"), True
+
+    def verify(self, name, key, options, temporary, git=False):
+        # Isolate the destination identity, but retain the original config for
+        # jump hosts. Disable multiplexing: an existing session proves no key.
+        alias = "sshnm-verify-" + uuid.uuid4().hex
+        lines = ["Host " + alias, "    IdentityFile " + quote(str(key)),
+                 "    IdentitiesOnly yes", "    IdentityAgent none",
+                 "    ControlMaster no", "    ControlPath none",
+                 "    PreferredAuthentications publickey", "    PasswordAuthentication no",
+                 "    KbdInteractiveAuthentication no"]
+        for option in ("hostname", "user", "port", "proxyjump", "proxycommand",
+                       "hostkeyalias", "userknownhostsfile", "globalknownhostsfile",
+                       "stricthostkeychecking", "checkhostip", "hostkeyalgorithms",
+                       "pubkeyacceptedalgorithms", "kexalgorithms", "ciphers", "macs",
+                       "hostkeyagent", "verifyhostkeydns", "knownhostscommand",
+                       "bindaddress", "bindinterface", "addressfamily",
+                       "revokedhostkeys", "requiredrsasize", "casignaturealgorithms"):
+            if option in options:
+                value = options[option][0]
+                # ssh -G emits compound values already in SSH syntax.
+                if any(c in value for c in "\n\r\0"):
+                    raise Error("无效 SSH 配置值")
+                lines.append("    " + option + " " + value)
+        if self.config.exists():
+            lines += ["Host * !" + alias, "    Include " + quote(str(self.config))]
+        if not self.config_args():
+            lines += ["Host * !" + alias, "    Include /etc/ssh/ssh_config"]
+        config = Path(temporary) / "verify.conf"
+        config.write_text("\n".join(lines) + "\n")
+        command = ["ssh", "-F", str(config), "-o", "ConnectTimeout=10"]
+        if not sys.stdin.isatty():
+            command += ["-o", "BatchMode=yes"]
+        command += ["-T", alias]
+        if not git:
+            command += ["true"]
+        result = run(command, capture=True, timeout=45)
+        output = result.stdout + result.stderr
+        if git and output.strip():
+            print(output.strip())
+        success = result.returncode == 0
+        if git and result.returncode == 1:
+            success = bool(re.search(r"successfully authenticated|Welcome to GitLab|"
+                                     r"successfully logged into|logged in as", output, re.I))
+        if not success:
+            raise Error("新密钥验证失败，原配置和原私钥已保留。\n" + output.strip()
+                        + "\n首次连接请先通过 ssh 确认服务器指纹，再重试。")
+
+
+def run(command, capture=False, timeout=None):
+    try:
+        return subprocess.run(command, text=True, capture_output=capture, timeout=timeout)
+    except FileNotFoundError as exc:
+        raise Error("缺少依赖命令: " + command[0]) from exc
+    except subprocess.TimeoutExpired as exc:
+        raise Error("命令超时: " + command[0]) from exc
+
+
+def updated_body(name, block, values, kind, route):
+    body = ["Host " + name + "\n", "    # sshnm-kind: " + kind + "\n"]
+    for key, value in values.items():
+        body.append("    " + key + " " + quote(str(value)) + "\n")
+    if block:
+        for line in block.lines[1:]:
+            parts = tokens(line)
+            if (parts and parts[0].lower() in FIELDS) or line.strip().startswith("# sshnm-kind:"):
+                continue
+            body.append(line)
+    for option in CARRY_OPTIONS:
+        if option in route and route[option][0] != "none" and not (block and block.values(option)):
+            body.append("    " + option + " " + route[option][0] + "\n")
+    return "".join(body).rstrip("\n") + "\n"
+
+
+def copy_public_key(public):
+    candidates = (("pbcopy",), ("wl-copy",), ("xclip", "-selection", "clipboard"))
+    for command in candidates:
+        if shutil.which(command[0]):
+            try:
+                with public.open() as source:
+                    result = subprocess.run(command, stdin=source, timeout=5)
+                if result.returncode == 0:
+                    print("公钥已复制到剪贴板")
+                    return
+            except (OSError, subprocess.TimeoutExpired):
+                pass
+    print("请手动复制上面的公钥")
+
+
+def add(manager, args):
+    git = args.command == "git"
+    if git:
+        host = args.address
+        if not ALIAS.fullmatch(host):
+            raise Error("Git 地址应为主机名或 IPv4 地址")
+        name = args.name or "git-" + host
+        user = "git"
+    else:
+        if args.server.count("@") != 1:
+            raise Error("服务器地址应为 user@host")
+        user, host = args.server.split("@")
+        name = args.name
+        if not re.fullmatch(r"[A-Za-z0-9_][A-Za-z0-9_.-]*", user):
+            raise Error("SSH 用户名格式不正确")
+        host = host.removeprefix("[").removesuffix("]")
+        if not re.fullmatch(r"[A-Za-z0-9_][A-Za-z0-9_.:%-]*", host):
+            raise Error("SSH 主机名或 IP 格式不正确")
+    if not ALIAS.fullmatch(name):
+        raise Error("别名只允许字母、数字、点、下划线、连字符，且必须以字母或数字开头")
+    if args.port is not None and not re.fullmatch(r"[0-9]{1,5}", args.port):
+        raise Error("端口必须为 1-65535")
+    port = int(args.port) if args.port is not None else None
+    if port is not None and not 1 <= port <= 65535:
+        raise Error("端口必须为 1-65535")
+    manager.load()
+    block = manager.find(name)
+    if block and block.path == manager.managed:
+        existing_kind = "git" if any(line.strip() == "# sshnm-kind: git" for line in block.lines) else "add"
+        if existing_kind != args.command:
+            raise Error("别名已被其他类型的配置使用，请选择其他名称")
+    options = manager.effective(user + "@" + host, port)
+    # An explicit user always wins; the destination can be an existing SSH alias.
+    options["user"] = [user]
+    if block:
+        for option in CARRY_OPTIONS:
+            if block.values(option):
+                options[option] = [block.raw_value(option)]
+    private = public = None
+    created = committed = verified = False
+    with tempfile.TemporaryDirectory(prefix="sshnm-") as temporary:
+        try:
+            private, public, created = manager.key(block, args.rotate, temporary)
+            if git:
+                print("公钥内容:\n" + public.read_text())
+                copy_public_key(public)
+                try:
+                    input("请在 %s 添加公钥，完成后按 Enter 继续（Ctrl-C 取消）: " % host)
+                except EOFError as exc:
+                    raise Error("未收到确认，已取消") from exc
+            else:
+                needs_install = True
+                if not created:
+                    try:
+                        manager.verify(name, private, options, temporary)
+                        needs_install = False
+                        verified = True
+                    except Error:
+                        pass
+                if needs_install:
+                    # ssh-copy-id's normal probe can authenticate with an old
+                    # IdentityFile inherited from the bootstrap alias, falsely
+                    # concluding that the new key is already installed.
+                    result = run(["ssh-copy-id", "-f"] + manager.config_args() + [
+                                  "-i", str(public), "-p", options["port"][0],
+                                  "-o", "ControlMaster=no", "-o", "ControlPath=none",
+                                  "-o", "ConnectTimeout=10", user + "@" + host])
+                    if result.returncode:
+                        raise Error("安装公钥失败，原配置和原私钥已保留")
+            if not verified:
+                manager.verify(name, private, options, temporary, git=git)
+            values = {"HostName": options["hostname"][0], "User": user,
+                      "Port": options["port"][0], "IdentityFile": str(private),
+                      "IdentitiesOnly": "yes"}
+            body = updated_body(name, block, values, args.command, options)
+            with defer_signals():
+                manager.plan(name, block, body).commit()
+                committed = True
+        finally:
+            if created and not committed:
+                for path in (private, public):
+                    if path is not None:
+                        path.unlink(missing_ok=True)
+    print("配置成功: ssh " + name)
+    if args.rotate:
+        print("旧私钥及服务器上的旧公钥均已保留；确认其他引用后可手动清理。")
+    if git:
+        print("git clone git@%s:user/repo.git" % name)
+
+
+def list_hosts(manager, args):
+    manager.load()
+    names = sorted({name for block in manager.blocks for name in block.names if ALIAS.fullmatch(name)})
+    if not names:
+        print("尚未添加任何服务器")
+        return
+    print("以下为 SSH 最终生效配置（包含 Include、Host * 和 Match）：")
+    rows = [["Name", "Address", "Port", "Key"]]
+    for name in names:
+        values = manager.effective(name)
+        rows.append([name, values["user"][0] + "@" + values["hostname"][0],
+                     values["port"][0], ", ".join(values.get("identityfile", []))])
+    widths = [max(len(row[i]) for row in rows) for i in range(4)]
+    for row in rows:
+        print("  ".join(value.ljust(width) for value, width in zip(row, widths)).rstrip())
+
+
+def remove(manager, args):
+    manager.load()
+    if not ALIAS.fullmatch(args.name):
+        raise Error("无效别名")
+    block = manager.find(args.name)
+    if not block:
+        raise Error("未找到单一 Host: " + args.name)
+    print("删除 Host %s 的配置；密钥文件将保留。" % args.name)
+    try:
+        answer = input("确认删除? [y/N] ")
+    except EOFError:
+        answer = ""
+    if answer.lower() != "y":
+        print("已取消")
+        return
+    manager.plan(args.name, block, None).commit()
+    print("已删除配置，密钥文件及远程 authorized_keys 均已保留。")
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="SSH config 与密钥管理工具（Python 3.9+）")
+    commands = parser.add_subparsers(dest="command", required=True)
+    command = commands.add_parser("add", help="添加或更新服务器，默认复用已有密钥")
+    command.add_argument("server", help="user@host，也可使用已有 SSH 别名作为 host")
+    command.add_argument("name")
+    command.add_argument("port", nargs="?")
+    command.add_argument("--rotate", action="store_true", help="生成新密钥，验证后切换，保留旧密钥")
+    command.set_defaults(handler=add)
+    command = commands.add_parser("git", help="配置 Git SSH；默认别名 git-<address>")
+    command.add_argument("address")
+    command.add_argument("port", nargs="?")
+    command.add_argument("--name", help="指定别名，支持同一服务配置多个账户")
+    command.add_argument("--rotate", action="store_true")
+    command.set_defaults(handler=add)
+    command = commands.add_parser("list", help="列出 SSH 最终生效配置")
+    command.set_defaults(handler=list_hosts)
+    command = commands.add_parser("remove", help="删除配置，保留密钥")
+    command.add_argument("name")
+    command.set_defaults(handler=remove)
+    if argv is None:
+        argv = sys.argv[1:]
+    if argv == ["help"]:
+        argv = ["--help"]
+    args = parser.parse_args(argv)
+    manager = Manager()
+    try:
+        with manager.lock():
+            args.handler(manager, args)
+    except (Error, OSError, UnicodeError) as exc:
+        print("错误: " + str(exc), file=sys.stderr)
+        return 1
+    except KeyboardInterrupt:
+        print("\n操作已取消，原私钥已保留。", file=sys.stderr)
+        return 130
+    return 0
+
+
+if __name__ == "__main__":
+    def interrupted(signum, frame):
+        raise KeyboardInterrupt
+
+    for signum in (signal.SIGHUP, signal.SIGTERM):
+        signal.signal(signum, interrupted)
+    sys.exit(main())
