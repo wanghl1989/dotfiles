@@ -4,6 +4,7 @@ vim.pack.add({
 	{ src = "https://github.com/mikesmithgh/kitty-scrollback.nvim" },
 	{ src = "https://github.com/christoomey/vim-tmux-navigator" },
 	{ src = "https://github.com/bojackduy/nvim-herdr-navigation" },
+    { src = 'https://github.com/baggiponte/rex-navigator.nvim' }
 })
 
 if vim.env.HERDR_PANE_ID == nil and vim.env.TMUX ~= nil and vim.env.TMUX ~= "" then
@@ -29,4 +30,5 @@ if vim.env.HERDR_PANE_ID ~= nil then
 	end)
 end
 
+require('rex-navigator').setup()
 require("kitty-scrollback").setup()

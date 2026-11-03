@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """List, apply and remove named themes. Requires only Python 3."""
 
+import json
 import os
 from pathlib import Path
 import re
@@ -53,14 +54,16 @@ def reload_themes(targets):
     config = Path(os.environ.get("XDG_CONFIG_HOME", str(Path.home() / ".config")))
 
     def run(command, name):
+        failure = ("Rex 主题导入失败；请开启 Remote Control 后重试，或手动导入 rex/theme.ghostty。"
+                   if name == "Rex" else f"{name} 重载失败；主题文件已更新，请手动重载。")
         try:
             result = subprocess.run(command, capture_output=True, text=True, timeout=10)
             if result.returncode:
-                print(f"{name} 重载失败；主题文件已更新，请手动重载。", file=sys.stderr)
+                print(failure, file=sys.stderr)
             else:
                 print(f"已重载：{name}")
         except (OSError, subprocess.TimeoutExpired):
-            print(f"{name} 重载失败；主题文件已更新，请手动重载。", file=sys.stderr)
+            print(failure, file=sys.stderr)
 
     tmux = shutil.which("tmux")
     tmux_theme = config / "tmux/theme.conf"
@@ -90,6 +93,38 @@ def reload_themes(targets):
                 addresses.add("unix:" + str(path))
         for address in sorted(addresses):
             run([kitten, "@", "--to", address, "load-config"], "Kitty")
+
+    rex_theme = config / "rex/theme.ghostty"
+    if sys.platform == "darwin" and rex_theme.resolve() in targets:
+        rex = shutil.which("rex")
+        if not rex:
+            # Rex may be installed without its CLI on PATH.
+            for candidate in (
+                Path.home() / "Library/Application Support/com.superlogical.rex/RexServer/Versions/Current/Rex Server.app/Contents/MacOS/rex",
+                Path("/Applications/Rex Beta.app/Contents/Helpers/Rex Server.rex/Contents/MacOS/rex"),
+            ):
+                if candidate.is_file() and os.access(candidate, os.X_OK):
+                    rex = str(candidate)
+                    break
+        socket = Path.home() / "Library/Application Support/rex/server.sock"
+        if rex and socket.exists():
+            # Always use the local server, regardless of REX_SERVER/REX_CLIENT.
+            command = [rex, "--autostart=false", "-S", socket.as_uri().replace("file:", "unix:", 1)]
+            try:
+                result = subprocess.run(command + ["client", "ls", "--json"],
+                                        capture_output=True, text=True, timeout=10)
+                if result.returncode:
+                    raise ValueError("Cannot list Rex clients")
+                clients = json.loads(result.stdout)["clients"]
+                for client in clients:
+                    info = client.get("info", {})
+                    if (info.get("kind") == "app" and info.get("platform") == "macos"
+                            and client.get("principal", {}).get("transport") == "unix"
+                            and client.get("connection_state") == "connected"):
+                        run(command + ["-C", client["client_id"], "do", "client.theme.import",
+                                       "path=" + str(rex_theme.resolve())], "Rex")
+            except (OSError, subprocess.TimeoutExpired, ValueError, KeyError, TypeError):
+                print("Rex 重载失败；主题文件已更新，请手动导入 rex/theme.ghostty。", file=sys.stderr)
 
 
 def main():

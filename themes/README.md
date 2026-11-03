@@ -52,6 +52,7 @@ cp themes/kitty/themes/neofusion.conf themes/kitty/themes/my_theme.conf
 | `lazydocker/<name>.yml` | `config/lazydocker/theme.yml` |
 | `lazygit/<name>.yml` | `config/lazygit/theme.yml` |
 | `nvim/lua/plugins/<name>.lua` | `config/nvim/lua/plugins/theme.lua` |
+| `rex/<name>.ghostty` | `config/rex/theme.ghostty` |
 | `server/tmux/<name>.conf` | `server/config/tmux/theme.conf` |
 | `shell/<name>.zsh` | `config/shell/theme.zsh` |
 | `starship/<name>.toml` | `config/starship/theme.toml` |
@@ -132,7 +133,7 @@ git status --short
 `set` 会输出实际复制的文件；如果安装了 `bat`，复制完成后会
 自动执行 `bat cache --build`。若缓存重建失败，主题文件已经复制，可以修复后单独重跑该命令。
 
-复制后会尝试重载已安装的 Kitty 和 tmux 配置：
+复制后会尝试重载已安装的 Kitty、tmux 和 Rex 配置：
 
 - Kitty：通过 `KITTY_LISTEN_ON` 或本机属于当前用户的 `/tmp/kitty*` socket 重载。
   沿用主配置中的 `allow_remote_control` 和 `listen_on` 设置，不会启动新的 Kitty。
@@ -142,6 +143,12 @@ git status --short
 - tmux：在 tmux 内重载当前实例，在外部重载默认实例；没有运行时跳过。
   仅在已安装的 `~/.config/tmux/theme.conf`（或 `$XDG_CONFIG_HOME` 下的对应路径）
   指向本次更新的文件时执行，不会连接远程服务器。
+- Rex（macOS）：通过本机 Rex CLI 的 `client.theme.import` 导入并应用
+  `config/rex/theme.ghostty`，无需修改 `init.lua`。需在 Rex 设置中开启 Remote Control。
+  仅在已安装的 `rex/theme.ghostty` 指向本次更新的文件时执行，连接本机默认 socket，
+  只向通过 Unix socket 连接的 Mac App 应用，不启动服务或操作远程客户端。
+  未运行时跳过；若未开启 Remote Control 或导入失败，会提示手动导入活动文件。
+  Rex 的 Vim 复制浮层也会在下次打开时读取这份主题。
 - Zsh：公共 `.zshrc_plugin` 在启动及每次提示符刷新前加载 `config/shell/theme.zsh`，
   应用 fzf-tab 和自动建议配色。首次升级公共配置时需执行一次 `source ~/.zshrc_plugin`，
   或新开一个 Zsh；之后切换主题不必重新 source。
@@ -154,6 +161,12 @@ Starship 会在下一次绘制提示符时读取配置。
 应编辑并提交 `themes/` 中的源文件；直接修改活动文件会在下次切换时被覆盖。
 主题目录中的 `.md` 文档和名称以 `.` 开头的文件不会参与切换。
 不要把备份或其他非主题文件放进主题目录，脚本会把其余文件当作主题源文件扫描。
+
+Rex 使用 Ghostty 格式的 `.ghostty` 文件，包含 `background`、`foreground`、
+`cursor-color`、`cursor-text`、`selection-background`、`selection-foreground`，
+以及 `palette = 0=#......` 到 `palette = 15=#......` 的 16 个 ANSI 颜色。
+现有 Rex 配色与对应 Kitty 主题一致，包括 Solarized Osaka 已调整的亮黑色。
+后续修改时应编辑 `themes/rex/<name>.ghostty`，无需改动切换脚本。
 
 ## 删除主题
 

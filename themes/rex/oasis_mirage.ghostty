@@ -1,0 +1,26 @@
+# oasis_mirage — Rex (Ghostty format)
+# Same terminal palette as the corresponding Kitty theme.
+
+background = #111C22
+foreground = #F5F5DC
+cursor-color = #F0E68C
+cursor-text = #111C22
+selection-background = #21333B
+selection-foreground = #FFFFF0
+
+palette = 0=#111C22
+palette = 1=#FF7979
+palette = 2=#7FCF78
+palette = 3=#F0E68C
+palette = 4=#81C0FF
+palette = 5=#C695FF
+palette = 6=#69C3AA
+palette = 7=#F5F5DC
+palette = 8=#587270
+palette = 9=#FFA0A0
+palette = 10=#A3E39A
+palette = 11=#F8B471
+palette = 12=#87CEEB
+palette = 13=#D2ADFF
+palette = 14=#8AD3BE
+palette = 15=#FFFFF0
