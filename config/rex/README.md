@@ -39,7 +39,7 @@ Use native Cmd+V to paste.
 
 ## Vim copy overlay
 
-Ctrl+W then `v` captures the focused terminal’s text and opens isolated Neovim in a floating layer. Requires local Rex Beta at the path above, `/opt/homebrew/bin/nvim`, and macOS `pbcopy`.
+Ctrl+W then `v` captures the focused terminal’s text and opens isolated Neovim in a floating layer. Requires local Rex, Neovim on the user's login-shell PATH, and macOS `pbcopy`. Capture uses Rex's native API, including chunked reads for long scrollback. The overlay loads the user's default login shell to find `nvim`, so Rex and Neovim installation paths do not need to be hardcoded.
 
 - `h/j/k/l`, `w/b`, `0/$`, `gg/G`, Ctrl+U / Ctrl+D: move.
 - `v`: character selection; `V`: line selection; Ctrl+V: block selection.
@@ -48,7 +48,7 @@ Ctrl+W then `v` captures the focused terminal’s text and opens isolated Neovim
 - Starts at the bottom of the captured buffer, rather than Kitty’s exact cursor/viewport.
 - Plain text snapshot; terminal colors and live updates are not preserved. Wrapped terminal lines are joined.
 - The temporary capture has mktemp’s private permissions and is deleted after Neovim loads it. If Neovim fails to start, a `rex-grab.*` file may remain in the macOS temporary directory.
-- This setup targets local terminals on this Mac; remote servers need their own paths and clipboard integration.
+- This setup targets local terminals on macOS; remote servers and other operating systems need their own clipboard integration.
 
 ## Appearance
 

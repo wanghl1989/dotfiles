@@ -1,9 +1,9 @@
 patch:
-  show_notifications_when: always # 状态通知，可设为全开（always）全关（never）
+  show_notifications: true # 对应鼠须管的 always，显示状态通知
 
   # 皮肤主题名称输入在下方，分为浅色和深色
   # 浅色主题
-  style/color_scheme: wechat_dark
+  style/color_scheme: mac_light
   # 深色主题
   style/color_scheme_dark: mac_dark
 
@@ -398,7 +398,7 @@ patch:
       hilited_text_color: 0x6EC8F5 # 高亮拼音 (需要开启内嵌编码)
       text_color: 0x78E8F0 # 拼音等提示文字颜色
 
-  # 特定App默认中/英文输入
+  # 特定App默认中/英文输入；Windows 使用进程名，macOS Bundle ID 不适用
   app_options:
     firefox.exe:
       inline_preedit: true # 行内显示预编辑区：规避 <https://github.com/rime/weasel/issues/946>
@@ -424,6 +424,15 @@ patch:
       ascii_mode: true
     powershell.exe:
       ascii_mode: true
+    rex.exe: # Rex，按 Windows 客户端进程名匹配
+      ascii_mode: true
+    termius.exe: # Termius
+      ascii_mode: true
+    idea64.exe: # IntelliJ IDEA
+      ascii_mode: true
+    wezterm-gui.exe: # WezTerm
+      ascii_mode: true
+      vim_mode: true
     # mintty.exe:
     #   ascii_mode: true
     # nvim-qt.exe:
@@ -432,3 +441,6 @@ patch:
     code.exe:
       ascii_mode: true
       vim_mode: true # vim 模式, Esc <C-c> <C-[> 切换到 ascii 状态
+    codebuddy.exe: # CodeBuddy
+      ascii_mode: true
+      vim_mode: true

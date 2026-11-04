@@ -5,12 +5,20 @@ vim.pack.add({
 })
 
 require("smear_cursor").setup({
-	stiffness = 0.5,
-	trailing_stiffness = 0.2,
-	trailing_exponent = 5,
-	damping = 0.6,
-	hide_target_hack = true, -- same
-	min_distance_emit_particles = 0,
+	-- Fast, short trails without bounce. Higher stiffness means faster tracking.
+	stiffness = 0.8,
+	trailing_stiffness = 0.6,
+	damping = 0.95,
+	anticipation = 0,
+	distance_stop_animating = 0.5,
+	max_length = 12,
+
+	-- Keep typing and window/command-line navigation visually quiet.
+	smear_insert_mode = false,
+	smear_between_buffers = false,
+	smear_to_cmd = false,
+	particles_enabled = false,
+	hide_target_hack = false,
 })
 
 vim.api.nvim_create_autocmd({ "UIEnter" }, {

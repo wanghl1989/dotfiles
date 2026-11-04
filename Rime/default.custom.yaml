@@ -15,7 +15,8 @@ patch:
   # inline_ascii 切换到临时英文模式，按回车上屏后回到中文状态
   # noop         屏蔽快捷键，不切换中英，但不要屏蔽 CapsLock
   ascii_composer/switch_key:
-    Caps_Lock: clear # Caps 键
+    Caps_Lock: noop # Caps 键
+    Eisu_toggle: clear # 清除未上屏内容，再切换中英文
     # Shift_L: commit_code # 左 Shift，切换中英文
     # Shift_R: commit_code # 右 Shift，切换中英文
     Control_L: noop # 左 Control，屏蔽该切换键
@@ -32,6 +33,7 @@ patch:
     - { when: paging, accept: bracketleft, send: Page_Up } # "[" 上一页
     - { when: has_menu, accept: bracketright, send: Page_Down } # "]" 下一页
     # 快捷键
+    - { when: always, accept: Control+space, send: Eisu_toggle } # Ctrl+空格清码后切换中英文
     #- { when: has_menu, accept: semicolon, send: 2 }              # ":" (分号)选择第 2 个候选词
     #- { when: has_menu, accept: apostrophe, send: 3 }             # "'" (引号)选择第 3 个候选词
     #- { when: composing, accept: Shift+Tab, send: Shift+Left }    # "Shift+Tab" 键向左选拼音分词

@@ -30,5 +30,10 @@ if vim.env.HERDR_PANE_ID ~= nil then
 	end)
 end
 
-require('rex-navigator').setup()
+require('rex-navigator').setup({
+  mappings = true, -- install Ctrl-h/j/k/l in normal mode
+  terminal = true, -- also install terminal-mode navigation
+  wrap = true,     -- wrap around Rex panes at the outer layout edge
+  -- rex_cmd = '/absolute/path/to/rex', -- override automatic CLI discovery
+})
 require("kitty-scrollback").setup()

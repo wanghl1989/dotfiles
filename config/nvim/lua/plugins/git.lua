@@ -20,6 +20,8 @@ require("gitsigns").setup({
 		untracked = { text = "┆" },
 	},
 	signcolumn = true,
+	linehl = false,
+	word_diff = false,
 	current_line_blame = true,
 	current_line_blame_formatter = "		 <author_mail>, <author_time:%Y-%m-%d> • <summary> • <abbrev_sha>",
 	on_attach = function(bufnr)
@@ -45,6 +47,8 @@ require("gitsigns").setup({
 				gitsigns.nav_hunk("prev")
 			end
 		end, { desc = "[Gitsigns]: Previous Hunk" })
+
+		map("n", "<leader>hp", gitsigns.preview_hunk_inline, { desc = "[Gitsigns]: Preview Hunk Inline" })
 
 		map("n", "<leader>hb", function()
 			gitsigns.blame_line({ full = true })
