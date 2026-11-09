@@ -25,6 +25,9 @@ oil.setup({
 	show_ignored_files = true,
     watch_for_changes = false,
 	keymaps = {
+		-- Let global window/pane navigation handle these keys.
+		["<C-h>"] = false,
+		["<C-l>"] = false,
 		["g?"] = { "actions.show_help", mode = "n" },
 		["<CR>"] = "actions.select",
 		["<S-l>"] = "actions.select",
