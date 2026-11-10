@@ -34,6 +34,32 @@ class Error(Exception):
     pass
 
 
+class SSHError(Error):
+    def __init__(self, stage, output):
+        message = output.lower()
+        self.authentication_denied = "permission denied" in message
+        if "no route to host" in message or "network is unreachable" in message:
+            hint = "网络不可达：请检查目标是否在线、局域网/VPN、路由和防火墙。此错误与 known_hosts 无关。"
+        elif "connection refused" in message:
+            hint = "连接被拒绝：请检查 SSH 端口、sshd 服务和防火墙。"
+        elif "timed out" in message or "connection timeout" in message:
+            hint = "连接超时：请检查目标地址、网络和防火墙。"
+        elif "could not resolve hostname" in message:
+            hint = "无法解析主机名：请检查主机名、DNS 或 SSH 别名配置。"
+        elif "too many authentication failures" in message:
+            hint = "认证失败次数超限：请检查登录密钥；跳板机也需单独限制认证密钥。不要通过清空 known_hosts 处理。"
+        elif "remote host identification has changed" in message:
+            hint = "服务器指纹发生变化：请先核实服务器身份，再更新对应 known_hosts 记录。"
+        elif "host key verification failed" in message:
+            hint = "服务器指纹验证失败：请先通过 ssh 核对并确认目标服务器指纹，再重试。"
+        elif self.authentication_denied:
+            hint = "认证被拒绝：安装公钥时请检查用户名、密码以及服务器是否允许密码/交互认证；验证时请检查公钥是否正确安装。"
+        else:
+            hint = "请根据下面的 SSH 原始错误检查连接配置。"
+        super().__init__(stage + "，原配置和原私钥已保留。\n" + hint
+                         + ("\n" + output.strip() if output.strip() else ""))
+
+
 def quote(value):
     if any(c in value for c in '\n\r\0"\\'):
         raise Error("配置值包含不支持的换行、引号或反斜杠")
@@ -367,12 +393,30 @@ class Manager:
             success = bool(re.search(r"successfully authenticated|Welcome to GitLab|"
                                      r"successfully logged into|logged in as", output, re.I))
         if not success:
-            raise Error("新密钥验证失败，原配置和原私钥已保留。\n" + output.strip()
-                        + "\n首次连接请先通过 ssh 确认服务器指纹，再重试。")
+            raise SSHError("新密钥验证失败", output)
 
 
-def run(command, capture=False, timeout=None):
+def run(command, capture=False, timeout=None, stream_errors=False):
     try:
+        if stream_errors:
+            # Keep stdin/stdout attached to the terminal for interactive login,
+            # while retaining stderr for actionable diagnostics. Stream even
+            # prompts without a newline instead of waiting for process exit.
+            process = subprocess.Popen(command, stderr=subprocess.PIPE)
+            chunks = []
+            try:
+                while chunk := os.read(process.stderr.fileno(), 4096):
+                    chunks.append(chunk)
+                    sys.stderr.write(chunk.decode(errors="replace"))
+                    sys.stderr.flush()
+                return subprocess.CompletedProcess(command, process.wait(),
+                                                   stderr=b"".join(chunks).decode(errors="replace"))
+            except BaseException:
+                process.terminate()
+                process.wait()
+                raise
+            finally:
+                process.stderr.close()
         return subprocess.run(command, text=True, capture_output=capture, timeout=timeout)
     except FileNotFoundError as exc:
         raise Error("缺少依赖命令: " + command[0]) from exc
@@ -468,18 +512,27 @@ def add(manager, args):
                         manager.verify(name, private, options, temporary)
                         needs_install = False
                         verified = True
-                    except Error:
-                        pass
+                    except SSHError as exc:
+                        if not exc.authentication_denied:
+                            raise
                 if needs_install:
                     # ssh-copy-id's normal probe can authenticate with an old
                     # IdentityFile inherited from the bootstrap alias, falsely
                     # concluding that the new key is already installed.
-                    result = run(["ssh-copy-id", "-f"] + manager.config_args() + [
+                    destination = user + "@" + host
+                    # -i selects the public key to install, not the identity
+                    # used to log in. Always install using a password or an
+                    # interactive password prompt, without offering public keys.
+                    bootstrap = manager.config_args() + [
+                        "-o", "PubkeyAuthentication=no", "-o", "IdentityAgent=none",
+                        "-o", "PasswordAuthentication=yes", "-o", "KbdInteractiveAuthentication=yes",
+                        "-o", "PreferredAuthentications=keyboard-interactive,password"]
+                    result = run(["ssh-copy-id", "-f"] + bootstrap + [
                                   "-i", str(public), "-p", options["port"][0],
                                   "-o", "ControlMaster=no", "-o", "ControlPath=none",
-                                  "-o", "ConnectTimeout=10", user + "@" + host])
+                                  "-o", "ConnectTimeout=10", destination], stream_errors=True)
                     if result.returncode:
-                        raise Error("安装公钥失败，原配置和原私钥已保留")
+                        raise SSHError("安装公钥失败", result.stderr)
             if not verified:
                 manager.verify(name, private, options, temporary, git=git)
             values = {"HostName": options["hostname"][0], "User": user,

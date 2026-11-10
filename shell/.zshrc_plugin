@@ -114,6 +114,8 @@ ZVM_READKEY_ENGINE=$ZVM_READKEY_ENGINE_ZLE # nex engine
 
 function after_zvm_init() {
   [ -f ~/.fzf ] && source ~/.fzf
+  bindkey -M viins '^U' backward-kill-line # Ctrl+U cuts back to the start of the line
+  bindkey -M viins '^Y' yank # Ctrl+Y restores the cut text
   bindkey -M viins '^[[Z' autosuggest-accept # Shift+Tab accepts the suggestion
 }
 
