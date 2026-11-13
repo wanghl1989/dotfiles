@@ -1,4 +1,4 @@
-font pango:GoogleSansCode Nerd Font Mono 14
+font pango:BlexMono Nerd Font Mono 14
 # use win key
 set $mod Mod4
 # define names for workspaces

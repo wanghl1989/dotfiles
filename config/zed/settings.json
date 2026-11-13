@@ -104,9 +104,9 @@
   "cursor_shape": "block",
   "vim_mode": true,
   "ui_font_size": 16,
-  "ui_font_family": "ZedMono Nerd Font Mono",
+  "ui_font_family": "BlexMono Nerd Font Mono",
   "buffer_font_size": 16,
-  "buffer_font_family": "ZedMono Nerd Font Mono",
+  "buffer_font_family": "BlexMono Nerd Font Mono",
   "buffer_font_weight": 500,
   "agent_ui_font_size": 16,
   "ui_font_features": {
@@ -241,7 +241,7 @@
   ],
   "terminal": {
     "blinking": "on",
-    "font_family": "ZedMono Nerd Font Mono",
+    "font_family": "BlexMono Nerd Font Mono",
     "font_size": 16,
     "toolbar": {
       "breadcrumbs": true,

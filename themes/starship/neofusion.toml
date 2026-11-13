@@ -1,37 +1,12 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# format = """
-
-# [ ┌─](bold green)\
-# $os\
-# $directory\
-# $git_branch\
-# $git_status\
-# $git_commit\
-# $fill\
-# $package\
-# $c\
-# $cpp\
-# $rust\
-# ${custom.cargo_version}\
-# $golang\
-# $nodejs\
-# $python\
-# $conda\
-# $docker_context\
-# $time\n\
-
-# [ └─](bold green)\
-# $character\
-# """
-
-
+# Floating Powerline segments; palette values are unchanged.
 format = """
-[░▒▓](fg:cyan)\
+[](fg:cyan)\
 $os\
-[](fg:cyan bg:comment)\
+[](fg:cyan bg:comment)\
 $directory\
-[ ](fg:comment)\
+[](fg:comment) \
 $git_branch\
 $git_status\
 $git_commit\
@@ -51,13 +26,10 @@ $character\
 """
 palette = 'neofusion'
 
-right_format = """
-$cmd_duration\
-"""
+right_format = "$cmd_duration"
 
 add_newline = true
-continuation_prompt = "[▸▹ ](dimmed white)"
-
+continuation_prompt = "[  ┆ ](dimmed white)"
 
 [os]
 disabled = false
@@ -79,7 +51,7 @@ show_always = true
 truncation_length = 9
 truncation_symbol = ""
 style = "bold fg:foreground bg:comment"
-format = "[ $path ]($style)"
+format = '[ 󰉋 $path ]($style)'
 
 [directory.substitutions]
 "Documents" = "󰈙 "
@@ -129,6 +101,7 @@ format = '[ ─┘]($style)'
 
 
 [fill]
+# Leave breathing room between the left segments and right-hand context.
 symbol = ' '
 
 
@@ -160,12 +133,12 @@ format = '[$symbol ($output)]($style) '
 
 symbol = " "
 style = "bold fg:orange"
-format = '[$symbol$branch(:$remote_branch) ]($style)'
+format = '[  $branch(:$remote_branch) ]($style)'
 # format = '[ $symbol $branch]($style)'
 
 [git_status]
 style = "bold fg:orange"
-format = '[\[($all_status$ahead_behind)\] ]($style)'
+format = '([‹$all_status$ahead_behind› ]($style))'
 
 [git_commit]
 style = "bold fg:orange"
@@ -294,8 +267,8 @@ format = '[ $symbol($version)]($style)'
 disabled = false
 format = '$symbol '
 
-success_symbol = '[󰜴](bold cyan)'
-error_symbol = '[󰜴](bold red)'
+success_symbol = '[❯](bold cyan)'
+error_symbol = '[❯](bold red)'
 vimcmd_symbol = '[\$](bold cyan)'
 vimcmd_replace_one_symbol = '[](bold green)'
 vimcmd_replace_symbol = '[](bold green)'
@@ -305,12 +278,12 @@ vimcmd_visual_symbol = '[󰜷](bold yellow)'
 [time]
 disabled = false
 style = "bold fg:yellow"
-format = '[ $time]($style) '
+format = '[](fg:yellow)[  $time ](bold fg:background bg:yellow)[](fg:yellow)'
 time_format = "%H:%M"
 
 [cmd_duration]
 show_milliseconds = true
-format = "[󰗕 in $duration ]($style)"
+format = '[󰔟 $duration ]($style)'
 style = "fg:foreground"
 disabled = false
 show_notifications = true

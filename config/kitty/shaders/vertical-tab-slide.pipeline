@@ -1,0 +1,8 @@
+# Corner radius as a fraction of the tab height; 0.0 gives square corners.
+var float CORNER_RADIUS 0.45
+# Space between the window's left edge and each tab, relative to row height.
+var float LEFT_PADDING 0.4
+startgroup
+    animation_step 0
+    shaders vertical-tab-slide
+endgroup
