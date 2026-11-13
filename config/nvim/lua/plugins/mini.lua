@@ -13,7 +13,10 @@ vim.pack.add({
 })
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 	group = vim.api.nvim_create_augroup("SetupMini", { clear = true }),
+	once = true,
 	callback = function()
+		-- A once autocmd is registered separately for each event. Clear both.
+		vim.api.nvim_clear_autocmds({ group = "SetupMini" })
 		-- Mini
 		require("mini.bracketed").setup()
 		require("mini.hipatterns").setup({
@@ -30,8 +33,8 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 		})
 		require("mini.ai").setup({
 			mappings = {
-				goto_left = "[",
-				got_right = "]",
+				goto_left = "g[",
+				goto_right = "g]",
 			},
 		})
 

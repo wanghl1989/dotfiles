@@ -45,18 +45,16 @@ map("n", "<leader>|", ":vsplit<CR>", { desc = "Split Window Right", remap = true
 
 -- safe file and quit
 map("n", "<Leader>wc", "<C-W>w", { noremap = true, silent = true, desc = "Switch windows" })
-map("n", "<Leader>ww", ":update<CR>", { noremap = true, desc = "Save windows" })
-map("n", "<Leader>wq", ":bdelete<CR>", { noremap = true, desc = "Quit windows" })
+map("n", "<Leader>ww", ":update<CR>", { noremap = true, desc = "Save current file" })
+map("n", "<Leader>wq", ":bdelete<CR>", { noremap = true, desc = "Delete current buffer" })
 
 map("n", "<Leader>qa", ":qa<CR>", { noremap = true, desc = "Quit all" })
 map("n", "<Leader>qq", ":q<CR>", { noremap = true, desc = "Quit current" })
 
 -- line operate
-map("n", "gl", "$", opts)
-map("n", "gh", "^", opts)
+map({ "n", "x" }, "gl", "$", { desc = "End of line" })
+map({ "n", "x" }, "gh", "^", { desc = "First non-blank character" })
 
-map("v", "gl", "$", opts)
-map("v", "gh", "^", opts)
 
 map("n", "dL", "d$", { noremap = true, silent = true, desc = "Delete to end of line" })
 map("n", "dH", "d^", { noremap = true, silent = true, desc = "Delete to start of line" })
@@ -81,13 +79,13 @@ map("v", "K", "<NOP>", opts)
 map({ "i", "n", "x" }, "<A-u>", "<NOP>", opts)
 
 -- mark
-map("n", "<leader>ml", ":marks<cr>", { noremap = true, silent = true, desc = "Show all marks" })
+map("n", "<leader>mM", ":marks<cr>", { noremap = true, silent = true, desc = "Show all marks" })
 map("n", "<leader>md", ":delmarks ", { noremap = true, silent = true, desc = "Delete mark" })
 map("n", "<leader>ma", ":delmarks a-zA-Z0-9<CR>", { noremap = true, silent = true, desc = "Delete all marks" })
 
 map("n", "<S-j>", function()
 	vim.diagnostic.open_float()
-end, opts)
+end, { desc = "Show line diagnostics" })
 
 map("v", "<", "<gv", { desc = "Indent code in visual mode" })
 map("v", ">", ">gv", { desc = "Indent code in visual mode" })

@@ -29,8 +29,24 @@ require("gitsigns").setup({
 		local function map(mode, l, r, opts)
 			opts = opts or {}
 			opts.buffer = bufnr
+			opts.silent = true
 			vim.keymap.set(mode, l, r, opts)
 		end
+
+		-- Git menu aliases keep all Git actions discoverable under <leader>g.
+		map("n", "<leader>gj", function() gitsigns.nav_hunk("next") end, { desc = "Next Git hunk" })
+		map("n", "<leader>gk", function() gitsigns.nav_hunk("prev") end, { desc = "Previous Git hunk" })
+		map("n", "<leader>gp", gitsigns.preview_hunk, { desc = "Preview Git hunk" })
+		map("n", "<leader>gb", function() gitsigns.blame_line({ full = true }) end, { desc = "Blame current line" })
+		map("n", "<leader>gd", gitsigns.diffthis, { desc = "Diff against Git index" })
+		map("n", "<leader>gq", gitsigns.setqflist, { desc = "List file hunks in quickfix" })
+		map("n", "<leader>gs", gitsigns.stage_hunk, { desc = "Stage / unstage Git hunk" })
+		map("x", "<leader>gs", function()
+			gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+		end, { desc = "Stage / unstage selected lines" })
+		map("n", "<leader>gr", gitsigns.reset_hunk, { desc = "Reset Git hunk" })
+		map({ "o", "x" }, "ih", gitsigns.select_hunk, { desc = "Select Git hunk" })
+
 		-- Navigation
 		map("n", "]h", function()
 			if vim.wo.diff then
@@ -55,3 +71,14 @@ require("gitsigns").setup({
 		end, { desc = "[Gitsigns]: Show Blame Line" })
 	end,
 })
+
+-- Project-wide pickers are global, including buffers without Gitsigns attached.
+vim.keymap.set("n", "<leader>gh", function()
+	require("mini.extra").pickers.git_hunks({ scope = "unstaged" })
+end, { desc = "Search project Git hunks (unstaged)" })
+vim.keymap.set("n", "<leader>gH", function()
+	require("mini.extra").pickers.git_hunks({ scope = "staged" })
+end, { desc = "Search project Git hunks (staged)" })
+vim.keymap.set("n", "<leader>gu", function()
+	require("mini.extra").pickers.git_files({ scope = "untracked" })
+end, { desc = "Search untracked Git files" })

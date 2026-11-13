@@ -133,7 +133,7 @@ format = '[$symbol ($output)]($style) '
 
 symbol = " "
 style = "bold fg:orange"
-format = '[  $branch(:$remote_branch) ]($style)'
+format = '[ $branch(:$remote_branch) ]($style)'
 # format = '[ $symbol $branch]($style)'
 
 [git_status]

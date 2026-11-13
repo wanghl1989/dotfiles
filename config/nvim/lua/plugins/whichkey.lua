@@ -4,41 +4,29 @@ vim.pack.add({
 
 require("which-key").setup({
 	preset = "helix",
-	defaults = {},
 	spec = {
-		{
-			mode = { "n", "x" },
-			-- { "<leader><tab>", group = "tabs" },
-			{ "<leader>c", group = " code" },
-			-- { "<leader>d", group = "debug" },
-			-- { "<leader>dp", group = "profiler" },
-			{ "<leader>f", group = "󰈞 file/find" },
-			{ "<leader>g", group = " git" },
-			{ "<leader>q", group = "quit/session" },
-			{ "<leader>s", group = "󰈞 search" },
-			-- { "<leader>u", group = "ui" },
-			-- { "<leader>x", group = "diagnostics/quickfix" },
-			{ "[", group = "prev" },
+		{ mode = { "n", "x" },
+			{ "<leader>b", group = "buffers" },
+			{ "<leader>c", group = "code / LSP" },
+			{ "<leader>f", group = "files / format" },
+			{ "<leader>g", group = "git" },
+			{ "<leader>h", group = "git hunks" },
+			{ "<leader>m", group = "multicursor / marks" },
+			{ "<leader>n", group = "notifications / highlights" },
+			{ "<leader>q", group = "quit" },
+			{ "<leader>s", group = "search" },
+			{ "<leader>v", group = "surround" },
+			{ "<leader>vf", group = "find surrounding" },
+			{ "<leader>w", group = "windows / save" },
+			{ "[", group = "previous" },
 			{ "]", group = "next" },
 			{ "g", group = "goto" },
-			{ "<leader>v", group = "surround" },
-			{ "<leader>m", group = "multicusor" },
-			{ "z", group = "fold" },
-			{
-				"<leader>b",
-				group = "buffer",
-				expand = function()
-					return require("which-key.extras").expand.buf()
-				end,
-			},
-			{
-				"<leader>w",
-				group = "save/quit",
-			},
+			{ "z", group = "folds / view" },
 		},
 	},
 })
 
-vim.keymap.set({ "n", "x", "v" }, "<leader>?", function()
-	require("which-key").show({ global = false })
-end, { desc = "Open which-key" })
+-- Include both global mappings and mappings for the current buffer.
+vim.keymap.set({ "n", "x" }, "<leader>?", function()
+	require("which-key").show({ global = true })
+end, { desc = "Show all available keymaps" })
