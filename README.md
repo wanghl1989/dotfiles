@@ -9,6 +9,33 @@ Steps:
 - run `install.sh` to set configure for each tool,
 - run `script/install_font.sh` to install font.
 
+### Windows
+
+先启用 Windows「开发者模式」，或使用管理员 PowerShell，以便创建配置软链接。
+运行 `install.bat`，或执行：
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+安装脚本通过 Scoop 安装 Neovim、Lazygit、Starship、eza、bat、Python/pip、uv
+和 Miniconda，并自动添加所需的 `extras` bucket。只需要链接配置时，可执行
+`.\install.ps1 -SkipTools`。
+tmux 没有原生 Windows 版本，请在 WSL 中安装；PowerShell 配置在检测到 tmux
+时也会提供 `tm`、`tl`、`ta`、`tk`、`tn` 别名。
+
+PowerShell 别名包括 `v`/`nvimdiff`、`lzg`、`st`、`ls`/`ll`/`la`、
+`b`、`pi`/`pu`/`pl`、`uva`/`uvr`/`uvs` 和
+`ca`/`cda`/`cenv`。配置会复制到 `~/.powershell.ps1`，已有 Profile
+不会被覆盖，只会添加或更新一行加载语句。
+
+脚本会把 `themes/kitty/themes/` 中的全部配色以 `Kitty - <主题名>`
+添加到 Windows Terminal，不会自动切换当前配色，也不会覆盖其他设置。
+已有同名配色会保留；修改 settings.json 前会创建带时间戳的备份。
+重启 PowerShell 后加载别名，在 Windows Terminal 配色方案中选择所需主题。
+
+已有配置文件和目录在替换前会备份为 `*.dotfiles-backup-<时间戳>`。
+
 ## Theme selector
 
 主题源文件集中在 `themes/`，目前仅保留 `material_deep_ocean` 和 `neofusion`，
